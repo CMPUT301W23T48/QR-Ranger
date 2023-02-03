@@ -2,5 +2,6 @@ Cmput 301 Group members:
   benjami2 LostLittleKiddo
   aboman ajboman
   jefferso JFong5
- hluong1 minhalo113
+  hluong1 minhalo113
   raymond6 fuzzydomo
+  cusimano ncusimano

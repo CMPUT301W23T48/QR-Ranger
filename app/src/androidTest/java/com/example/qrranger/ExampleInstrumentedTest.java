@@ -1,4 +1,4 @@
-package com.example.qr_ranger;
+package com.example.qrranger;
 
 import android.content.Context;
 
@@ -21,6 +21,6 @@ public class ExampleInstrumentedTest {
     public void useAppContext() {
         // Context of the app under test.
         Context appContext = InstrumentationRegistry.getInstrumentation().getTargetContext();
-        assertEquals("com.example.qr_ranger", appContext.getPackageName());
+        assertEquals("com.example.qrranger", appContext.getPackageName());
     }
 }

@@ -1,4 +1,4 @@
-package com.example.qr_ranger;
+package com.example.qrranger;
 
 import org.junit.Test;
 

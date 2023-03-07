@@ -1,12 +1,15 @@
 package com.example.qrranger;
 
+
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.os.Bundle;
+import android.view.View;
+import android.widget.Button;
 
-import com.google.firebase.firestore.CollectionReference;
 
-import java.util.Collection;
+import java.util.Map;
+
 
 public class MainActivity extends AppCompatActivity {
 
@@ -15,8 +18,5 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        Database db = new Database(MainActivity.this);
-        CollectionReference player_collection = db.getCollection("players");
-        player_collection.add("Test");
     }
 }

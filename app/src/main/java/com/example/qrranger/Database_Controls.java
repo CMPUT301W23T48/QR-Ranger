@@ -17,7 +17,6 @@ public abstract class Database_Controls {
     // add
     abstract void create(Map values);
 
-
     // get
     abstract void read(String username, Consumer<Map<String, Object>> onSuccess, Consumer<Exception> onError);
 

@@ -9,14 +9,17 @@ public class Database {
 
     private FirebaseFirestore db;
 
+    // init
     private Database(){
         db = FirebaseFirestore.getInstance();
     }
 
+    // returns the collection with the given name
     public CollectionReference getCollection(String collection_name){
         return db.collection(collection_name);
     }
 
+    // returns the instance of the database
     public static synchronized Database getInstance()
     {
         if (single_instance == null)

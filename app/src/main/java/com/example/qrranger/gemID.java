@@ -5,8 +5,7 @@ import java.util.Random;
 public class gemID {
     private String bgColor;
     private String boarder;
-    private String gemShape;
-    private String gemColor;
+    private String gemType;
     private int lusterLevel;
 
     public gemID() {
@@ -22,15 +21,10 @@ public class gemID {
         randomIndex = generator.nextInt(boarder.length);
         setBoarder(boarder[randomIndex]);
 
-        //Randomly assign gem shape to Gem
-        String[] gemShape = new String[]{"Diamond", "Square", "Triangle", "Hexagon", "Circular"};
-        randomIndex = generator.nextInt(gemShape.length);
-        setGemShape(gemShape[randomIndex]);
-
-        //Randomly assign gem color to Gem
-        String[] gemColor = new String[]{"Blue", "Green", "Red", "Purple", "Yellow"};
-        randomIndex = generator.nextInt(gemColor.length);
-        setGemColor(gemColor[randomIndex]);
+        //Randomly assign gem type to Gem
+        String[] gemType = new String[]{"Diamond", "Square", "Triangle", "Hexagon", "Circular"};
+        randomIndex = generator.nextInt(gemType.length);
+        setGemType(gemType[randomIndex]);
 
         //Randomly assign luster level to Gem
         randomIndex = generator.nextInt(3)+1;
@@ -43,11 +37,8 @@ public class gemID {
     public String getBoarder() {
         return boarder;
     }
-    public String getGemShape() {
-        return gemShape;
-    }
-    public String getGemColor() {
-        return gemColor;
+    public String getGemType() {
+        return gemType;
     }
     public int getLusterLevel() {
         return lusterLevel;
@@ -60,12 +51,7 @@ public class gemID {
     public void setBoarder(String boarder) {
         this.boarder = boarder;
     }
-    public void setGemShape(String gemShape) {
-        this.gemShape = gemShape;
-    }
-    public void setGemColor(String gemColor) {
-        this.gemColor = gemColor;
-    }
+    public void setGemType(String gemType) { this.gemType = gemType;}
     public void setLusterLevel(int lusterLevel) {
         this.lusterLevel = lusterLevel;
     }

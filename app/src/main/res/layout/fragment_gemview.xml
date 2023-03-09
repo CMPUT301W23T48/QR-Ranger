@@ -61,22 +61,7 @@
         tools:srcCompat="@drawable/goldborder" />
 
     <ImageView
-        android:id="@+id/gemColor"
-        android:layout_width="150dp"
-        android:layout_height="150dp"
-        android:background="#007C7777"
-        android:contentDescription="@string/app_name"
-        android:cropToPadding="false"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.498"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.126"
-        tools:srcCompat="@drawable/gempurple" />
-
-    <ImageView
-        android:id="@+id/gemShape"
+        android:id="@+id/gem"
         android:layout_width="150dp"
         android:layout_height="150dp"
         android:background="#007C7777"

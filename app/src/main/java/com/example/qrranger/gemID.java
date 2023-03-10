@@ -17,17 +17,17 @@ public class gemID {
         setBgColor(bgColor[randomIndex]);
 
         //Randomly assign boarder to Gem
-        String[] boarder = new String[]{"None", "Black", "Bronze", "Silver", "Gold"};
+        String[] boarder = new String[]{"Gem", "Black", "Bronze", "Silver", "Gold", "Book"};
         randomIndex = generator.nextInt(boarder.length);
         setBoarder(boarder[randomIndex]);
 
         //Randomly assign gem type to Gem
-        String[] gemType = new String[]{"Diamond", "Square", "Triangle", "Hexagon", "Circular"};
+        String[] gemType = new String[]{"bluegem1", "bluegem2", "bluegem3", "greengem1", "greengem2", "greengem3", "purplegem1", "purplegem2", "purplegem3", "yellowgem1", "yellowgem2", "yellowgem3"};
         randomIndex = generator.nextInt(gemType.length);
         setGemType(gemType[randomIndex]);
 
         //Randomly assign luster level to Gem
-        randomIndex = generator.nextInt(3)+1;
+        randomIndex = generator.nextInt(4)+1;
         setLusterLevel(randomIndex);
     }
     //Getters for gem representation

@@ -3,9 +3,11 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:id="@+id/SearchFragment"
     tools:context=".SearchFragment">
 
     <LinearLayout
+        android:id="@+id/SearchLL1"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:orientation="vertical">
@@ -16,10 +18,11 @@
             android:layout_height="wrap_content"
             android:text="Search: "
             android:textStyle="bold"
+            android:textColor="@color/black"
             android:layout_marginBottom="0dp"/>
 
         <SearchView
-            android:id="@+id/map_searchbar"
+            android:id="@+id/SearchSearchBar"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="5dp"
@@ -29,6 +32,7 @@
     </LinearLayout>
 
     <LinearLayout
+        android:id="@+id/SearchLL2"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical"
@@ -40,11 +44,12 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="100dp"
             android:layout_marginBottom="0dp"
-            android:text="@string/result"
+            android:text="Rank:"
+            android:textColor="@color/black"
             android:textStyle="bold" />
 
         <ListView
-            android:id="@+id/search_users_list"
+            android:id="@+id/SearchUserList"
             android:layout_width="match_parent"
             android:layout_height="wrap_content" />
     </LinearLayout>

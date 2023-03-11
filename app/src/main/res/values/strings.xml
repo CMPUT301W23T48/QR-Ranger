@@ -1,5 +1,13 @@
 <resources>
     <string name="app_name">QR Ranger</string>
-    <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="username">Ben</string>
+    <string name="user_email">benjai2@ualberta.ca</string>
+    <string name="rank">Gold</string>
+    <string name="total_score">999</string>
+    <string name="numQR">144</string>
+    <string name="Highest_QR">Highest_QR</string>
+    <string name="Lowest_QR">Lowest_QR</string>
+    <string name="result">Rank:</string>
+    <string name="leaderboard">Leaderboard</string>
 </resources>

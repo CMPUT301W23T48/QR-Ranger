@@ -3,7 +3,6 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/purple_200"
     tools:context=".SearchFragment">
 
     <LinearLayout
@@ -17,47 +16,37 @@
             android:layout_height="wrap_content"
             android:text="Search: "
             android:textStyle="bold"
-            android:textColor="@color/white"
-            android:layout_marginLeft="0dp"
-            android:layout_marginRight="20dp"
-            android:layout_marginTop="10dp"
             android:layout_marginBottom="0dp"/>
 
         <SearchView
             android:id="@+id/map_searchbar"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginHorizontal="16dp"
             android:layout_marginTop="5dp"
-            android:layout_marginBottom="16dp"
             android:background="@drawable/search_search"
             android:iconifiedByDefault="false"
             android:queryHint="Enter username" />
     </LinearLayout>
-    
+
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical"
-        android:layout_marginHorizontal="1dp"
-        android:layout_marginTop="10dp"
         android:layout_margin="1dp">
+
         <TextView
             android:id="@+id/result_view"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Result: "
-            android:textStyle="bold"
-            android:textColor="@color/white"
-            android:layout_marginLeft="0dp"
-            android:layout_marginRight="20dp"
             android:layout_marginTop="100dp"
-            android:layout_marginBottom="0dp"/>
+            android:layout_marginBottom="0dp"
+            android:text="@string/result"
+            android:textStyle="bold" />
+
         <ListView
             android:id="@+id/search_users_list"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            />
+            android:layout_height="wrap_content" />
     </LinearLayout>
 
 </FrameLayout>

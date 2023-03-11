@@ -1,23 +1,55 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:orientation="vertical"
     android:background="@color/purple_200">
-
-    <Button
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Back"
-        android:background="@color/purple_200"
-        android:textColor="@color/white" />
-    <TextView
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:textSize="40dp"
-        android:textStyle="bold"
-        android:text="OtherPlayerName"
-        android:gravity="center"/>
+        android:orientation="horizontal">
+
+        <ImageView
+            android:id="@+id/imageView"
+            android:layout_width="98dp"
+            android:layout_height="112dp"
+            android:src ="@drawable/other_user_pf" />
+
+        <LinearLayout
+            android:layout_width="237dp"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <TextView
+                android:id="@+id/NameView"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_margin="10dp"
+                android:text="Name:"
+                android:textStyle="bold" />
+
+            <TextView
+                android:id="@+id/emailView"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_margin="10dp"
+                android:text="Email:"
+                android:textStyle="bold" />
+
+
+        </LinearLayout>
+
+        <Button
+            android:id="@+id/OU_back_button"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Back">
+
+        </Button>
+
+    </LinearLayout>
 
     <LinearLayout
         android:id="@+id/Left_OU_stat"
@@ -107,5 +139,20 @@
 
         </LinearLayout>
     </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_marginTop="20dp"
+        android:orientation="vertical">
+        <ListView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:id="@+id/QR_image_view">
+        </ListView>
+
+    </LinearLayout>
+    
+
 
 </LinearLayout>

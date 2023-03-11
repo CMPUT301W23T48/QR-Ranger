@@ -1,24 +1,31 @@
 package com.example.qrranger;
 
+import android.app.Activity;
+import android.content.Intent;
 import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
+import androidx.fragment.app.FragmentTransaction;
 
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.widget.SearchView;
 
-public class SearchFragment extends Fragment {
+import java.util.ArrayList;
+
+public class SearchFragment extends Fragment{
     SearchView SearchUser;
     ListView Users;
     ArrayAdapter<String> UserAdapter;
-    // just test delete when database connected
-    String[] random = {"a", "b"};
-    public SearchFragment() {
-    }
+    ArrayList<String> dataList = new ArrayList<String>();
+
+
+    Activity OU_result;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -26,10 +33,14 @@ public class SearchFragment extends Fragment {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_search, container, false);
         Users = (ListView) view.findViewById(R.id.search_users_list);
-        UserAdapter = new ArrayAdapter<>(getActivity(), android.R.layout.simple_list_item_1,random);
+        UserAdapter = new ArrayAdapter<>(getActivity(), android.R.layout.simple_list_item_1,dataList);
         Users.setAdapter(UserAdapter);
         return view;
+    }
+    public void onStart(){
+        super.onStart();
 
     }
+
 
 }

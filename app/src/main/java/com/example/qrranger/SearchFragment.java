@@ -30,7 +30,7 @@ public class SearchFragment extends Fragment{
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_search, container, false);
-        Users = (ListView) view.findViewById(R.id.search_users_list);
+        Users = (ListView) view.findViewById(R.id.SearchUserList);
         UserAdapter = new ArrayAdapter<>(getActivity(), android.R.layout.simple_list_item_1,dataList);
         Users.setAdapter(UserAdapter);
         return view;

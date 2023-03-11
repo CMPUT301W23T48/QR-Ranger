@@ -1,6 +1,188 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:id="@+id/OtherUserLL1">
+    <LinearLayout
+        android:id="@+id/OtherUserLL2"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical">
+        <LinearLayout
+            android:id="@+id/OtherUserLL3"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
 
+            <ImageView
+                android:id="@+id/OUImage"
+                android:layout_width="65dp"
+                android:layout_height="match_parent"
+                android:src="@drawable/other_user_pf" />
+
+            <LinearLayout
+                android:id="@+id/OtherUserLL4"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
+
+                <TextView
+                    android:id="@+id/OUName"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="10dp"
+                    android:text="Name:"
+                    android:textStyle="bold" />
+
+                <TextView
+                    android:id="@+id/OUEmail"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="10dp"
+                    android:text="Email:"
+                    android:textStyle="bold" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/OULL5"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:orientation="vertical">
+
+                <TextView
+                    android:id="@+id/OUUserName"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="10dp"
+                    android:text="@string/username"
+                    android:textStyle="bold" />
+
+                <TextView
+                    android:id="@+id/OUUserEmail"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="10dp"
+                    android:text="@string/user_email"
+                    android:textStyle="bold" />
+            </LinearLayout>
+
+            <Button
+                android:id="@+id/OUBackButton"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="2"
+                android:text="@string/Back" />
+        </LinearLayout>
+
+
+        <LinearLayout
+            android:id="@+id/OtherUserLL6"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:layout_marginBottom="20dp"
+            android:layout_marginHorizontal="30dp">
+
+            <LinearLayout
+                android:id="@+id/OtherUserLL7"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:orientation="vertical">
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="Username:"
+                    android:textSize="15dp"
+                    android:textStyle="bold" />
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="Rank:"
+                    android:textSize="15dp"
+                    android:textStyle="bold" />
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="Total Score:"
+                    android:textSize="15dp"
+                    android:textStyle="bold" />
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="Number of QR scanned:"
+                    android:textSize="15dp"
+                    android:textStyle="bold" />
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/OtherUserLL8"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="vertical">
+
+                <TextView
+                    android:id="@+id/OUUserName2"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="@string/username"
+                    android:textSize="15dp"
+                    android:textStyle="bold"
+                    android:gravity="right"/>
+
+                <TextView
+                    android:id="@+id/OURank"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="@string/rank"
+                    android:textSize="15dp"
+                    android:textStyle="bold"
+                    android:gravity="right"/>
+
+                <TextView
+                    android:id="@+id/OUTS"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="@string/total_score"
+                    android:textSize="15dp"
+                    android:textStyle="bold"
+                    android:gravity="right"/>
+
+                <TextView
+                    android:id="@+id/OUQRNum"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="@string/numQR"
+                    android:textSize="15dp"
+                    android:textStyle="bold"
+                    android:gravity="right"/>
+            </LinearLayout>
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/OtherUserLL9"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/ShowQR"
+                android:textStyle="bold">
+            </TextView>
+            <ListView
+                android:id="@+id/OUQR_image_view"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
+            </ListView>
+        </LinearLayout>
+    </LinearLayout>
 </LinearLayout>

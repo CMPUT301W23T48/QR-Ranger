@@ -1,6 +1,98 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:id="@+id/ConfirmLL1">
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textAlignment="center"
+        android:textSize="30dp"
+        android:textColor="@color/black"
+        android:text="@string/QRName"/>
+    <LinearLayout
+        android:id="@+id/ConfirmLL2"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+
+        <ImageView
+            android:id="@+id/Confirm_QRProfilePic"
+            android:layout_width="209dp"
+            android:layout_height="238dp"
+            android:src="@drawable/showqr_qr_profile" />
+        <ImageView
+            android:id="@+id/Confirm_QRPic"
+            android:layout_width="match_parent"
+            android:layout_height="238dp"
+            android:src="@drawable/sample_qr" />
+    </LinearLayout>
+    <LinearLayout
+        android:id="@+id/ConfirmLL3"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+
+        <TextView
+            android:layout_width="210dp"
+            android:layout_height="wrap_content"
+            android:text="@string/Points"
+            android:textAlignment="viewEnd"
+            android:textColor="@color/black"
+            android:textSize="20dp" />
+        <TextView
+            android:id="@+id/ConfirmPoints"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textAlignment="viewStart"
+            android:textSize="20dp"
+            android:textColor="@color/black"
+            android:text="99999"/>
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/ConfirmLL4"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+
+        <TextView
+            android:layout_width="210dp"
+            android:layout_height="wrap_content"
+            android:text="@string/ScannedBy"
+            android:textAlignment="viewEnd"
+            android:textColor="@color/black"
+            android:textSize="20dp" />
+        <TextView
+            android:id="@+id/ConfirmScannedBy"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textAlignment="viewStart"
+            android:textSize="20dp"
+            android:textColor="@color/black"
+            android:text="Adam, Steve"/>
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/ConfirmLL5"
+        android:layout_width="match_parent"
+        android:layout_height="57dp"
+        android:layout_weight="1"
+        android:orientation="horizontal">
+        <Button
+            android:id="@+id/ConfirmQRYesButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="@string/Yes"/>
+
+        <Button
+            android:id="@+id/ConfirmNoButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="@string/No" />
+    </LinearLayout>
 
 </LinearLayout>

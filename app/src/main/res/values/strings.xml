@@ -10,4 +10,17 @@
     <string name="Lowest_QR">Lowest_QR</string>
     <string name="result">Rank:</string>
     <string name="leaderboard">Leaderboard</string>
+    <string name="QRName">SexyMF</string>
+    <string name="Points">Points:</string>
+    <string name="ScannedBy">ScannedBy: </string>
+    <string name="Comment">Comments:</string>
+    <string name="numComment">2</string>
+    <string name="ChangeUsername">ChangeUsername:</string>
+    <string name="NewContract">New Contract:</string>
+    <string name="GeolocationSetting">Enable Geo Location Recording</string>
+    <string name="Back">Back</string>
+    <string name="Delete">Delete</string>
+    <string name="ShowQR">All QR:</string>
+    <string name="Yes">Yes</string>
+    <string name="No">No</string>
 </resources>

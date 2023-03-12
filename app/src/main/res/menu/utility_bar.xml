@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <item
+        android:id="@+id/map"
+        android:title="Map"
+        android:icon="@drawable/ub_map"/>
+
+    <item
+        android:id="@+id/search"
+        android:title="Search"
+        android:icon="@drawable/ub_search"/>
+
+    <item
+        android:id="@+id/add"
+        android:title="Add"
+        android:icon="@drawable/ub_add"/>
+
+    <item
+        android:id="@+id/stat"
+        android:title="Stat"
+        android:icon="@drawable/ub_stats"/>
+
+    <item
+        android:id="@+id/profile"
+        android:title="Profile"
+        android:icon="@drawable/ub_profile"/>
+</menu>

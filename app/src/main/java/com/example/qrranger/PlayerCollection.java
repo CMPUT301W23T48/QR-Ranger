@@ -7,6 +7,8 @@ import android.util.Log;
 import androidx.annotation.NonNull;
 
 import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentReference;
@@ -236,4 +238,35 @@ public class PlayerCollection extends Database_Controls{
             }
         });
     }
+
+    public CompletableFuture<Integer> getPlayerRank(String userID) {
+        CompletableFuture<Integer> futureRank = new CompletableFuture<>();
+
+        // Get the player document with the given playerId
+        collection.document(userID).get().addOnSuccessListener(documentSnapshot -> {
+            // Get the player's totalScore
+            Long playerScore = documentSnapshot.getLong("totalScore");
+            if (playerScore == null)
+            {
+                playerScore = (long) 0;
+            }
+            System.out.println("totalScore" + playerScore);
+
+            // Query for all players with a higher totalScore
+            Query query = collection.whereGreaterThan("totalScore", playerScore);
+
+            // Count the number of players with a higher totalScore to determine the rank
+            query.get().addOnSuccessListener(queryDocumentSnapshots -> {
+                int rank = queryDocumentSnapshots.size() + 1;
+                futureRank.complete(rank);
+            }).addOnFailureListener(e -> {
+                futureRank.completeExceptionally(e);
+            });
+        }).addOnFailureListener(e -> {
+            futureRank.completeExceptionally(e);
+        });
+
+        return futureRank;
+    }
+
 }

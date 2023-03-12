@@ -18,6 +18,7 @@ import androidx.fragment.app.Fragment;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Locale;
 import java.util.Map;
 import java.util.Objects;
 import java.util.concurrent.CompletableFuture;
@@ -32,6 +33,7 @@ public class ProfileFragment extends Fragment {
     private TextView playerPhoneNumb;
     private TextView playerTotalScore;
     private TextView playerTotalQRCodes;
+    private TextView profileRank;
     private ImageView myAvatar;
     private ImageButton mySettButton;
     private Intent data;
@@ -65,6 +67,7 @@ public class ProfileFragment extends Fragment {
         playerTotalScore = view.findViewById(R.id.ProfileTS);
         playerTotalQRCodes = view.findViewById(R.id.ProfileQRNum);
         mySettButton = view.findViewById(R.id.ProfileSettingButton);
+        profileRank = view.findViewById(R.id.ProfileRank);
 
         UserState us = UserState.getInstance();
         String userID = us.getUserID();
@@ -104,6 +107,7 @@ public class ProfileFragment extends Fragment {
             myUser.setGeoLocationSett((Boolean) data.get("geolocation_setting"));
             myUser.setPlayerId(userID);
             myUser.setQrCodeCollection((ArrayList<QRCode>) data.get("qr_code_ids"));
+            getAndSetRank(userID);
             System.out.println("Setting views");
             setViews();
             }, error -> {
@@ -126,5 +130,16 @@ public class ProfileFragment extends Fragment {
         Intent intent = new Intent(getActivity(), SettingActivity.class);
         intent.putExtra("myUser", myUser); // pass the user data to the settings activity
         startSettingsForResult.launch(intent);
+    }
+
+    public void getAndSetRank(String userID){
+        CompletableFuture<Integer> rankFuture = myPlayerCollection.getPlayerRank(userID);
+        rankFuture.thenAccept(rank -> {
+            System.out.println("Player rank: " + rank);
+            profileRank.setText(rank.toString());
+        }).exceptionally(e -> {
+            System.err.println("Failed to get player rank: " + e.getMessage());
+            return null;
+        });
     }
 }

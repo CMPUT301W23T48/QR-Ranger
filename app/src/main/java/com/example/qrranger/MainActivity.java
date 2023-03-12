@@ -9,8 +9,15 @@ import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 
 import android.os.Bundle;
+
+import android.view.View;
+import android.widget.Button;
+import android.widget.ImageView;
+import android.widget.TextView;
+
 import android.util.Log;
 import android.widget.Toast;
+
 
 import com.example.qrranger.R;
 import com.example.qrranger.databinding.ActivityMainBinding;
@@ -27,13 +34,17 @@ import java.util.concurrent.CompletableFuture;
 public class MainActivity extends AppCompatActivity {
 
     ActivityMainBinding binding;
+
     private FirebaseAuth mAuth;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         binding = ActivityMainBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
+
+
 
         // Initialize Firebase Auth
         mAuth = FirebaseAuth.getInstance();

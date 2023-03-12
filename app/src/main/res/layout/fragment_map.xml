@@ -3,13 +3,29 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/purple_200"
+    android:id="@+id/MapFragment"
     tools:context=".MapFragment">
-
-    <TextView
+    <LinearLayout
+        android:id="@+id/MapLL1"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:text="Map ?"
-        android:textColor="@color/white"/>
+        android:orientation="vertical">
+        <SearchView
+            android:id="@+id/MapSearchBar"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:queryHint="Enter location"
+            android:iconifiedByDefault="false"
+            android:layout_marginHorizontal="16dp"
+            android:layout_marginBottom="16dp"
+            android:background="@drawable/map_search"/>
+
+        <ImageView
+            android:id="@+id/MapView"
+            android:layout_width="356dp"
+            android:layout_height="535dp"
+            android:layout_gravity="center"
+            android:src="@drawable/map" />
+    </LinearLayout>
 
 </FrameLayout>

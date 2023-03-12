@@ -8,13 +8,13 @@ import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 
-import android.app.Activity;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.Toast;
 
+import com.example.qrranger.R;
 import com.example.qrranger.databinding.ActivityMainBinding;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
@@ -24,6 +24,7 @@ import com.google.firebase.auth.FirebaseUser;
 
 import java.util.Map;
 import java.util.concurrent.CompletableFuture;
+
 
 public class MainActivity extends AppCompatActivity {
 
@@ -54,7 +55,7 @@ public class MainActivity extends AppCompatActivity {
                     replaceFragment(new AddFragment());
                     break;
                 case R.id.stat:
-                    replaceFragment(new StatsFragment());
+                    replaceFragment(new LeaderboardFragment());
                     break;
                 case R.id.profile:
                     replaceFragment(new ProfileFragment());

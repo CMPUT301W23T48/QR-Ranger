@@ -3,8 +3,48 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/purple_200"
+    android:id="@+id/SearchFragment"
     tools:context=".SearchFragment">
 
+
+    <LinearLayout
+        android:id="@+id/SearchLL1"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:layout_gravity="center">
+
+        <TextView
+            android:id="@+id/search_view"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Search: "
+            android:textSize="25dp"
+            android:textStyle="bold"
+            android:textColor="@color/black"
+            android:layout_marginBottom="0dp"/>
+        <LinearLayout
+            android:id="@+id/SearchLL2"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="horizontal">
+
+            <EditText
+                android:id="@+id/SettingContactInput"
+                android:layout_width="362dp"
+                android:layout_height="45dp"
+                android:layout_marginTop="5dp"
+                android:background="@drawable/search_search"
+                android:iconifiedByDefault="false"
+                android:queryHint="Enter username" />
+
+            <ImageButton
+                android:id="@+id/SettingContactSubmitButton"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="0dp"
+                android:src="@drawable/search_button" />
+        </LinearLayout>
+    </LinearLayout>
 
 </FrameLayout>

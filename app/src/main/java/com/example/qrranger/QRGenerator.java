@@ -22,6 +22,13 @@ public class QRGenerator {
 
     private QRCode qr;
 
+    public QRGenerator() {
+        qrCollection = new QRCollection(null);
+        playerCollection = new PlayerCollection(null);
+        gemRepresentation = new gemID();
+        qr = new QRCode("None", "None", "None");
+    }
+
     /**
      * Checks if the QR exists in the database:
      * - If it does, pull it and populate the QR.

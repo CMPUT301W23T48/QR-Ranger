@@ -10,10 +10,8 @@ import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentReference;
-import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.Query;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
-import com.google.firebase.firestore.QuerySnapshot;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -57,10 +55,9 @@ public class PlayerCollection extends Database_Controls{
     }
 
     @Override
-    public void read(String userID, Consumer<Map<String, Object>> onSuccess, Consumer<Exception> onError) {
+    public void read(String PlayerId, Consumer<Map<String, Object>> onSuccess, Consumer<Exception> onError) {
         // returns
-        Query query = collection.whereEqualTo("username", userID);
-
+        Query query = collection.whereEqualTo("PlayerID", PlayerId);
         query.get().addOnCompleteListener(task -> {
             if (task.isSuccessful()) {
                 for (QueryDocumentSnapshot document : task.getResult()) {

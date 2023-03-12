@@ -18,9 +18,9 @@ public abstract class Database_Controls {
     abstract void create(Map values);
 
     // get
-    abstract void read(String username, Consumer<Map<String, Object>> onSuccess, Consumer<Exception> onError);
+    abstract void read(String userID, Consumer<Map<String, Object>> onSuccess, Consumer<Exception> onError);
 
-    abstract CompletableFuture<Void> update(String username, Map<String, Object> values);
+    abstract CompletableFuture<Void> update(String userID, Map<String, Object> values);
 
-    abstract void delete(String username);
+    abstract void delete(String userID);
 }

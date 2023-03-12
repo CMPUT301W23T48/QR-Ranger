@@ -17,6 +17,8 @@ import androidx.fragment.app.Fragment;
 import java.util.HashMap;
 import java.util.Map;
 
+import com.example.qrranger.R;
+
 public class ProfileFragment extends Fragment {
     Player myUser = new Player();
     TextView playerName;

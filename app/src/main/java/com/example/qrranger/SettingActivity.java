@@ -13,7 +13,7 @@ import com.google.android.material.snackbar.Snackbar;
 
 public class SettingActivity extends AppCompatActivity {
     Button backButton;
-    Button confirmButton;
+    Button confirmButton, confirmButton2;
     EditText editUserName ;
     EditText editContactInfo ;
     @Override
@@ -21,11 +21,13 @@ public class SettingActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_setting);
 
-        LinearLayout linearLayout = findViewById(R.id.my_layout1);
-        confirmButton = linearLayout.findViewById(R.id.button7);
+        LinearLayout linearLayout = findViewById(R.id.SettingLL3);
+        confirmButton = linearLayout.findViewById(R.id.SettingUsernameSubmitButton);
+        LinearLayout linearLayout1 = findViewById(R.id.SettingLL5);
+        confirmButton2 = linearLayout1.findViewById(R.id.SettingContactSubmitButton);
 
-        editContactInfo = findViewById(R.id.edit_text2);
-        editUserName = findViewById(R.id.edit_text1);
+        editContactInfo = findViewById(R.id.SettingContactInput);
+        editUserName = findViewById(R.id.SettingUsernameInput);
 
         Intent intent = getIntent();
         Player myUser = (Player) intent.getSerializableExtra("myUser");
@@ -36,12 +38,29 @@ public class SettingActivity extends AppCompatActivity {
         String phoneNumb = editContactInfo.getText().toString();
         String userName = editUserName.getText().toString();
 
-        confirmButton.setOnClickListener(new View.OnClickListener() {
+        confirmButton2.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 String phoneNumb = editContactInfo.getText().toString();
-                String userName = editUserName.getText().toString();
                 myUser.setPhoneNumber(phoneNumb);
+                Snackbar snackbar = Snackbar.make(view, "Saved", Snackbar.LENGTH_LONG);
+                // Add an action to the Snackbar
+                snackbar.setAction("OK", new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        // This is called when the "OK" button on the Snackbar is clicked
+                    }
+                });
+
+                // Show the Snackbar
+                snackbar.show();
+            }
+        });
+
+        confirmButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                String userName = editUserName.getText().toString();
                 myUser.setUserName(userName);
                 Snackbar snackbar = Snackbar.make(view, "Saved", Snackbar.LENGTH_LONG);
 
@@ -59,7 +78,7 @@ public class SettingActivity extends AppCompatActivity {
         });
 
 
-        backButton = findViewById(R.id.button3);
+        backButton = findViewById(R.id.SettingBackButton);
         backButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {

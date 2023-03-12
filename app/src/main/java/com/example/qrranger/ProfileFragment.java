@@ -16,12 +16,14 @@ import androidx.fragment.app.Fragment;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.concurrent.CompletableFuture;
 
 import com.example.qrranger.R;
 
 public class ProfileFragment extends Fragment {
     Player myUser = new Player();
     TextView playerName;
+    TextView playerEmail;
     Map<String, Object> value = new HashMap<>();
     TextView playerPhoneNumb;
     TextView playerTotalScore;
@@ -29,7 +31,6 @@ public class ProfileFragment extends Fragment {
     ImageButton mySettButton;
 
     PlayerCollection myPlayerCollection = new PlayerCollection(Database.getInstance());
-    ImageButton QRCodes;
 
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -37,41 +38,46 @@ public class ProfileFragment extends Fragment {
         View view = inflater.inflate(R.layout.fragment_profile, container, false);
 
 
-        Context my_context = getContext();
-        String deviceId = Settings.Secure.getString(my_context.getContentResolver(), Settings.Secure.ANDROID_ID);
+        playerEmail = view.findViewById(R.id.ProfileEmail);
+        playerName = view.findViewById(R.id.ProfileUserName);
+        //playerPhoneNumb = view.findViewById(R.id.textView2);
+        playerTotalScore = view.findViewById(R.id.ProfileTS);
 
-        playerName = view.findViewById(R.id.textView);
-        playerPhoneNumb = view.findViewById(R.id.textView2);
-        playerTotalScore = view.findViewById(R.id.textView3);
+        UserState us = UserState.getInstance();
+        String userID = us.getUserID();
 
+        CompletableFuture<Boolean> future = new CompletableFuture<>();
+        future.complete(true);
 
-        myPlayerCollection.read(deviceId, data -> {
-                    myUser.setUserName((String)data.get("UserName"));
-                    myUser.setEmail((String)data.get("Email"));
-                    myUser.setPhoneNumber((String)data.get("PhoneNumber"));
-                    myUser.setPlayerId((String)data.get("PlayerID"));
-                    myUser.setGeoLocationSett(((Boolean)data.get("Geolocation Setting")));
-                    playerName.setText(myUser.getUserName());
-                    playerPhoneNumb.setText(myUser.getPhoneNumber());
-                    System.out.println("Data for user1: " + data);},
-                error -> {
-                    myUser.setUserName((deviceId));
-                    myUser.setEmail("Please change your email in setting");
-                    myUser.setPhoneNumber("Please change your phone number in setting");
-                    myUser.setPlayerId(deviceId);
-                    myUser.setGeoLocationSett(false);
-                    value = myPlayerCollection.createValues(myUser.getUserName(), myUser.getPhoneNumber(), myUser.getEmail(), myUser.isGeoLocationSett(), 0,0);
-                    myPlayerCollection.create(value);
-                    playerName.setText(myUser.getUserName());
-                    playerPhoneNumb.setText(myUser.getPhoneNumber());
-                    System.out.println("Error getting player data: " + error);
-                });
+        //test
+        if(myPlayerCollection.checkUserExists(userID) == future) {
+            System.out.println("Data for user1: future = true");
+            myUser.setUserName((String) value.get("UserName"));
+            myUser.setEmail((String) value.get("Email"));
+            myUser.setPhoneNumber((String) value.get("PhoneNumber"));
+            myUser.setPlayerId((String) value.get("PlayerID"));
+            //myUser.setGeoLocationSett(((Boolean) value.get("Geolocation Setting")));
+            playerName.setText(myUser.getUserName());
+            //playerPhoneNumb.setText(myUser.getPhoneNumber());
+        }else {
+            System.out.println("system = false");
+            myUser.setUserName((userID));
+            myUser.setEmail("Please change your email in setting");
+            myUser.setPhoneNumber("Please change your phone number in setting");
+            myUser.setPlayerId(userID);
+            myUser.setGeoLocationSett(false);
+            value = myPlayerCollection.createValues(userID, myUser.getUserName(), myUser.getPhoneNumber(), myUser.getEmail(), myUser.isGeoLocationSett(), 0, 0);
+            myPlayerCollection.create(value);
+            playerName.setText(myUser.getUserName());
+            //playerPhoneNumb.setText(myUser.getPhoneNumber());
+        }
+        System.out.println(value.get("Email"));
+        //end test
 
+        playerTotalScore.setText("0");
 
-        playerTotalScore.setText("Your total score now is 0");
-
-        myAvatar = view.findViewById(R.id.imageView);
-        mySettButton = view.findViewById(R.id.imageButton);
+        myAvatar = view.findViewById(R.id.ProfileImage);
+        mySettButton = view.findViewById(R.id.ProfileSettingButton);
         mySettButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -81,23 +87,8 @@ public class ProfileFragment extends Fragment {
             }
         });
 
-        myAvatar.setImageDrawable(getResources().getDrawable(R.drawable.avatarpic));
-        mySettButton.setImageDrawable(getResources().getDrawable(R.drawable.setting_pic));
-
-        QRCodes = view.findViewById(R.id.imageButton3);
-        QRCodes.setImageDrawable(getResources().getDrawable(R.drawable.images));
-        QRCodes = view.findViewById(R.id.imageButton4);
-        QRCodes.setImageDrawable(getResources().getDrawable(R.drawable.images1));
-        ;
-        QRCodes = view.findViewById(R.id.imageButton6);
-        QRCodes.setImageDrawable(getResources().getDrawable(R.drawable.images2));
-
-        QRCodes = view.findViewById(R.id.imageButton5);
-        QRCodes.setImageDrawable(getResources().getDrawable(R.drawable.img_avatar2));
-        QRCodes = view.findViewById(R.id.imageButton7);
-        QRCodes.setImageDrawable(getResources().getDrawable(R.drawable.images));
-        QRCodes = view.findViewById(R.id.imageButton8);
-        QRCodes.setImageDrawable(getResources().getDrawable(R.drawable.images2));
+        myAvatar.setImageDrawable(getResources().getDrawable(R.drawable.ub_profile));
+        mySettButton.setImageDrawable(getResources().getDrawable(R.drawable.setting));
 
         return view;
     }
@@ -110,7 +101,7 @@ public class ProfileFragment extends Fragment {
             Player updatedUser = (Player) data.getSerializableExtra("myUser");
 
             playerName.setText(updatedUser.getUserName());
-            playerPhoneNumb.setText(updatedUser.getPhoneNumber());
+            //playerPhoneNumb.setText(updatedUser.getPhoneNumber());
 
             myUser.setUserName(updatedUser.getUserName());
             myUser.setPhoneNumber(updatedUser.getPhoneNumber());

@@ -2,6 +2,8 @@ package com.example.qrranger;
 
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
+import java.util.Map;
+import java.util.concurrent.CompletableFuture;
 
 public class QRGenerator {
     private QRCode qr;
@@ -10,12 +12,50 @@ public class QRGenerator {
     private String hash;
     private gemID gemRepresentation;
 
+    /**
+     * Checks if the QR exists in the database:
+     * - If it does, pull it and populate the QR.
+     * - If it does not, create a new QR and add it to the database.
+     *
+     * @param qrData
+     *
+     */
     public void generateQR(String qrData) {
+        qrCollection = new QRCollection(null);
+
+        // Generate a new QR if it doesn't already exist or pull the existing one from the db.
+        CompletableFuture<Boolean> future = qrCollection.checkQRExists(qrData);
+        future.thenAccept(qrExists -> {
+            if (qrExists) {
+                // Pull existing QR from the DB.
+                qrCollection.read(qrData, data -> {
+                    final Map values = data;
+                }, error -> {
+
+                });
+            }
+            else {
+                // QR doesn't exist, so generate a new one!
+                gemRepresentation = new gemID();
+
+                qr = new QRCode(qrData, qrData);
+
+                hash = SHA256Hash(qrData);
+                Integer score = calculateScore(hash);
+                qr.setPoints(score);
+            }
+        });
+
 
     }
 
-    public void addQRToAccount() {
+    public void addQRToAccount(String qrData) {
 
+
+        playerCollection = new PlayerCollection(null);
+        UserState state = UserState.getInstance();
+        String userID = state.getUserID();
+        playerCollection.add_QR_to_players(userID, qrData);
     }
 
     private static String SHA256Hash(String input) {

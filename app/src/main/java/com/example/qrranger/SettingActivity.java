@@ -11,11 +11,15 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import com.google.android.material.snackbar.Snackbar;
 
+import java.util.Map;
+
 public class SettingActivity extends AppCompatActivity {
     Button backButton;
     Button confirmButton, confirmButton2;
     EditText editUserName ;
     EditText editContactInfo ;
+    private Boolean settingsChanged = false;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -43,6 +47,14 @@ public class SettingActivity extends AppCompatActivity {
             public void onClick(View view) {
                 String phoneNumb = editContactInfo.getText().toString();
                 myUser.setPhoneNumber(phoneNumb);
+                settingsChanged = true;
+
+                // update database
+                PlayerCollection pc = new PlayerCollection(null);
+                UserState us = UserState.getInstance();
+                Map<String, Object> new_values = pc.createValues(us.getUserID(), myUser.getUserName(), myUser.getPhoneNumber(), myUser.getEmail(), myUser.getGeoLocationFlag(), Math.toIntExact(myUser.getTotalScore()), Math.toIntExact(myUser.getTotalQRCode()));
+                pc.update(us.getUserID(), new_values);
+
                 Snackbar snackbar = Snackbar.make(view, "Saved", Snackbar.LENGTH_LONG);
                 // Add an action to the Snackbar
                 snackbar.setAction("OK", new View.OnClickListener() {
@@ -62,6 +74,13 @@ public class SettingActivity extends AppCompatActivity {
             public void onClick(View view) {
                 String userName = editUserName.getText().toString();
                 myUser.setUserName(userName);
+                settingsChanged = true;
+                // update database
+                PlayerCollection pc = new PlayerCollection(null);
+                UserState us = UserState.getInstance();
+                Map<String, Object> new_values = pc.createValues(us.getUserID(), myUser.getUserName(), myUser.getPhoneNumber(), myUser.getEmail(), myUser.getGeoLocationFlag(), Math.toIntExact(myUser.getTotalScore()), Math.toIntExact(myUser.getTotalQRCode()));
+                pc.update(us.getUserID(), new_values);
+
                 Snackbar snackbar = Snackbar.make(view, "Saved", Snackbar.LENGTH_LONG);
 
                 // Add an action to the Snackbar
@@ -83,6 +102,7 @@ public class SettingActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 Intent returnIntent = new Intent();
+                returnIntent.putExtra("dataChanged", settingsChanged);
                 returnIntent.putExtra("myUser", myUser); // Pass the modified object back to the first activity
                 setResult(RESULT_OK, returnIntent);
                 finish();

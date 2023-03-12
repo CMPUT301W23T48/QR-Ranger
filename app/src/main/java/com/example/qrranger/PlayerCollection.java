@@ -77,6 +77,7 @@ public class PlayerCollection extends Database_Controls{
         // can be run with:
         // PlayerCollection pc = new PlayerCollection(null);
         // pc.read(userID, data -> {
+        //      // on success so code with data here
         //      System.out.println("Data for user1: " + data); },
         //      error -> {
         //      System.out.println("Error getting player data: " + error);});

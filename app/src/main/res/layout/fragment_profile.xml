@@ -66,7 +66,6 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_margin="10dp"
-                    android:text="@string/user_email"
                     android:textStyle="bold" />
             </LinearLayout>
 
@@ -152,7 +151,6 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:gravity="right"
-                    android:text="@string/total_score"
                     android:textSize="15dp"
                     android:textStyle="bold" />
 
@@ -161,7 +159,6 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:gravity="right"
-                    android:text="@string/numQR"
                     android:textSize="15dp"
                     android:textStyle="bold" />
             </LinearLayout>

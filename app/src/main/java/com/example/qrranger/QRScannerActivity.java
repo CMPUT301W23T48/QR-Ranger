@@ -59,6 +59,9 @@ public class QRScannerActivity extends AppCompatActivity{
             public void onClick(View v) {
                 Toast.makeText(getBaseContext(), "Take a picture of QR's location!", Toast.LENGTH_LONG);
                 takePhoto();
+                Intent returnIntent = new Intent(getBaseContext(), MainActivity.class);
+                returnIntent.putExtra("qr_code", scanResult);
+                returnIntent.putExtra("image", locationImage);
             }
         });
     }

@@ -10,12 +10,12 @@ import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentReference;
-import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.Query;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
-import com.google.firebase.firestore.QuerySnapshot;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.concurrent.CompletableFuture;
 import java.util.function.Consumer;
@@ -49,15 +49,15 @@ public class PlayerCollection extends Database_Controls{
         });
         // can be run with:
         // Map<String, Object> values;
+        // PlayerCollection pc = new PlayerCollection(null)
         // values = createValues(...) can put null values
-        // add(values)
+        // pc.create(values)
     }
 
     @Override
-    public void read(String username, Consumer<Map<String, Object>> onSuccess, Consumer<Exception> onError) {
+    public void read(String PlayerId, Consumer<Map<String, Object>> onSuccess, Consumer<Exception> onError) {
         // returns
-        Query query = collection.whereEqualTo("username", username);
-
+        Query query = collection.whereEqualTo("PlayerID", PlayerId);
         query.get().addOnCompleteListener(task -> {
             if (task.isSuccessful()) {
                 for (QueryDocumentSnapshot document : task.getResult()) {
@@ -68,8 +68,8 @@ public class PlayerCollection extends Database_Controls{
             }
         });
         // can be run with:
-        // PlayerCollection pc = new PlayerCollection();
-        // pc.read("user1", data -> {
+        // PlayerCollection pc = new PlayerCollection(null);
+        // pc.read(userID, data -> {
         //      System.out.println("Data for user1: " + data); },
         //      error -> {
         //      System.out.println("Error getting player data: " + error);});
@@ -77,17 +77,17 @@ public class PlayerCollection extends Database_Controls{
     }
 
     @Override
-    public CompletableFuture<Void> update(String username, Map<String, Object> newData) {
+    public CompletableFuture<Void> update(String userID, Map<String, Object> newData) {
         CompletableFuture<Void> future = new CompletableFuture<>();
         collection
-                .whereEqualTo("username", username)
+                .whereEqualTo("username", userID)
                 .get()
                 .addOnSuccessListener(queryDocumentSnapshots -> {
                     if (queryDocumentSnapshots.isEmpty()) {
-                        future.completeExceptionally(new Exception("No player found with username: " + username));
+                        future.completeExceptionally(new Exception("No player found with username: " + userID));
                     } else {
                         DocumentReference documentReference = queryDocumentSnapshots.getDocuments().get(0).getReference();
-                        newData.put("username", username); // Add the username to the HashMap
+                        newData.put("username", userID); // Add the username to the HashMap
                         documentReference.update(newData)
                                 .addOnSuccessListener(aVoid -> future.complete(null))
                                 .addOnFailureListener(e -> future.completeExceptionally(e));
@@ -96,10 +96,10 @@ public class PlayerCollection extends Database_Controls{
                 .addOnFailureListener(e -> future.completeExceptionally(e));
         return future;
         // can be run with:
-        // PlayerCollection pc = new PlayerCollection();
+        // PlayerCollection pc = new PlayerCollection(null);
         // Map<String, Object> values;
         // values = createValues(...) // can be null
-        // pc.update("user1", values, task -> {
+        // pc.update(userID, values, task -> {
         //    if (task.isSuccessful()) {
         //        System.out.println("Player data updated");
         //    } else {
@@ -109,10 +109,10 @@ public class PlayerCollection extends Database_Controls{
     }
 
     @Override
-    public void delete(String username) {
+    public void delete(String userID) {
         CollectionReference playerCollection = collection;
 
-        Query query = playerCollection.whereEqualTo("username", username);
+        Query query = playerCollection.whereEqualTo("username", userID);
 
         query.get().addOnCompleteListener(task -> {
             if (task.isSuccessful()) {
@@ -125,15 +125,16 @@ public class PlayerCollection extends Database_Controls{
         });
         // can be run with:
         // PlayerCollection pc = new PlayerCollection();
-        // pc.delete("user1");
+        // pc.delete(userID);
     }
 
     // returns a map to be used for adding and updating
-    public Map createValues(String username, String phoneNumber, String email, Boolean geolocation_setting, Integer totalScore, Integer totalQRCode)
+    public Map createValues(String userID, String username, String phoneNumber, String email, Boolean geolocation_setting, Integer totalScore, Integer totalQRCode)
     {
         // This represents the fields in the player collection
         // can add or remove fields here
         Map <String, Object> values = new HashMap<>();
+        values.put("userID", userID);
         values.put("username", username);
         values.put("phoneNumber", phoneNumber);
         values.put("email", email);
@@ -142,4 +143,39 @@ public class PlayerCollection extends Database_Controls{
         values.put("totalQRCode", totalQRCode);
         return values;
     }
+
+    public CompletableFuture<Boolean> checkUserExists(String userID) {
+        // returns true if a user exists, false otherwise
+        CompletableFuture<Boolean> future = new CompletableFuture<>();
+        Query query = collection.whereEqualTo("userID", userID);
+        query.get().addOnCompleteListener(task -> {
+            if (task.isSuccessful()) {
+                QuerySnapshot querySnapshot = task.getResult();
+                if (querySnapshot != null && !querySnapshot.isEmpty()) {
+                    future.complete(true);
+                } else {
+                    future.complete(false);
+                }
+            } else {
+                future.completeExceptionally(task.getException());
+            }
+        });
+        return future;
+    }
+
+    public CompletableFuture<String> generateUniqueUsername() {
+        CompletableFuture<String> future = new CompletableFuture<>();
+        collection.get().addOnCompleteListener(task -> {
+            if (task.isSuccessful()) {
+                QuerySnapshot snapshot = task.getResult();
+                int numPlayers = snapshot.size();
+                String uniqueUsername = "User" + (numPlayers + 1);
+                future.complete(uniqueUsername);
+            } else {
+                future.completeExceptionally(task.getException());
+            }
+        });
+        return future;
+    }
+
 }

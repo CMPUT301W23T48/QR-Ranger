@@ -143,10 +143,5 @@ public class Player implements Serializable {
 //    public QRCode getHighestScoring() {
 //        return highestScoring;
 //    }
-//    //give total score of player
-//    public int getScoreTotal() {
-//        return scoreTotal;
-//    }
-
 
 }

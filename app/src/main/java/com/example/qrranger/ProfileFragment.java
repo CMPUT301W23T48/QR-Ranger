@@ -61,7 +61,7 @@ public class ProfileFragment extends Fragment {
 
         playerEmail = view.findViewById(R.id.ProfileUserEmail);
         playerName = view.findViewById(R.id.ProfileUserName);
-        //playerPhoneNumb = view.findViewById(R.id.textView2);
+        playerPhoneNumb = view.findViewById(R.id.ProfileUserPhoneNumber);
         playerTotalScore = view.findViewById(R.id.ProfileTS);
         playerTotalQRCodes = view.findViewById(R.id.ProfileQRNum);
         mySettButton = view.findViewById(R.id.ProfileSettingButton);
@@ -117,7 +117,7 @@ public class ProfileFragment extends Fragment {
     public void setViews(){
         playerName.setText(myUser.getUserName());
         playerEmail.setText(myUser.getEmail());
-//        playerPhoneNumb.setText(myUser.getPhoneNumber());
+        playerPhoneNumb.setText(myUser.getPhoneNumber());
         playerTotalScore.setText(myUser.getTotalScore().toString());
         playerTotalQRCodes.setText(myUser.getTotalQRCode().toString());
     }

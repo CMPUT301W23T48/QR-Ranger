@@ -5,10 +5,15 @@ import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 
-import android.app.Activity;
 import android.os.Bundle;
 
+import com.example.qrranger.R;
 import com.example.qrranger.databinding.ActivityMainBinding;
+import com.example.qrranger.AddFragment;
+import com.example.qrranger.LeaderboardFragment;
+import com.example.qrranger.MapFragment;
+import com.example.qrranger.ProfileFragment;
+import com.example.qrranger.SearchFragment;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -35,7 +40,7 @@ public class MainActivity extends AppCompatActivity {
                     replaceFragment(new AddFragment());
                     break;
                 case R.id.stat:
-                    replaceFragment(new StatsFragment());
+                    replaceFragment(new LeaderboardFragment());
                     break;
                 case R.id.profile:
                     replaceFragment(new ProfileFragment());

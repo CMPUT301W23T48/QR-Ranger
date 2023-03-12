@@ -17,7 +17,7 @@
 
     <item
         android:id="@+id/stat"
-        android:title="Stat"
+        android:title="Leaderboard"
         android:icon="@drawable/ub_stats"/>
 
     <item

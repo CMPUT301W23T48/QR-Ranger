@@ -7,6 +7,9 @@ public class gemID {
     private String boarder;
     private String gemType;
     private int lusterLevel;
+
+
+
     private String gemName;
 
     public gemID() {
@@ -78,10 +81,13 @@ public class gemID {
         } else {
             name += "Diamond";
         }
-        return name;
+        setGemName(name);
+        return gemName;
     }
-
     //Getters for gem representation
+    public String getGemName() {
+        return gemName;
+    }
     public String getBgColor() {
         return bgColor;
     }
@@ -105,5 +111,8 @@ public class gemID {
     public void setGemType(String gemType) { this.gemType = gemType;}
     public void setLusterLevel(int lusterLevel) {
         this.lusterLevel = lusterLevel;
+    }
+    public void setGemName(String gemName) {
+        this.gemName = gemName;
     }
 }

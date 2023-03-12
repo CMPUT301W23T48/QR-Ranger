@@ -13,6 +13,16 @@ public class GemIDGenerationTest {
         System.out.println(ID.getLusterLevel());
 
     }
+    @Test
+    public void testGemGeneratingNameArray(){
+
+        gemID ID = new gemID();
+        String hash = "f3b355bbe2db35727ebcfa32732649dc";
+        ID.gemName(hash);
+        System.out.println(ID.getGemName());
+
+
+    }
 
 
 }

@@ -40,9 +40,9 @@ public class ProfileFragment extends Fragment {
         Context my_context = getContext();
         String deviceId = Settings.Secure.getString(my_context.getContentResolver(), Settings.Secure.ANDROID_ID);
 
-        playerName = view.findViewById(R.id.textView);
-        playerPhoneNumb = view.findViewById(R.id.textView2);
-        playerTotalScore = view.findViewById(R.id.textView3);
+        playerName = view.findViewById(R.id.ProfileUserName);
+        //playerPhoneNumb = view.findViewById(R.id.textView2);
+        playerTotalScore = view.findViewById(R.id.ProfileTS);
 
 
         myPlayerCollection.read(deviceId, data -> {

@@ -60,7 +60,9 @@ public class PlayerCollection extends Database_Controls{
         // returns
         Query query = collection.whereEqualTo("userID", PlayerId);
         query.get().addOnCompleteListener(task -> {
+            System.out.println("Data for user1:11 ");
             if (task.isSuccessful()) {
+                System.out.println("Data for user1:12 task success" );
                 for (QueryDocumentSnapshot document : task.getResult()) {
                     onSuccess.accept(document.getData());
                 }

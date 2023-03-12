@@ -35,8 +35,6 @@ public class ProfileFragment extends Fragment {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_profile, container, false);
-
-
         Context my_context = getContext();
         String deviceId = Settings.Secure.getString(my_context.getContentResolver(), Settings.Secure.ANDROID_ID);
 
@@ -45,12 +43,7 @@ public class ProfileFragment extends Fragment {
         //playerPhoneNumb = view.findViewById(R.id.textView2);
         playerTotalScore = view.findViewById(R.id.ProfileTS);
 
-        myPlayerCollection.read("sdafdsfsad", data -> {
-                    //value = data;
-                    System.out.println("Data for user1: " + data);},
-                error -> {
-                    System.out.println("Error getting player data: " + error);
-                });
+        myPlayerCollection.checkUserExists("");
 
     if(value != null) {
         myUser.setUserName((String) value.get("UserName"));

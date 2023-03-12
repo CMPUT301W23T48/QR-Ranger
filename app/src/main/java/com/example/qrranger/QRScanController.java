@@ -15,6 +15,8 @@ public class QRScanController {
     private ArrayList<String> supportedCodeFormats;
     private byte[] scanResult;
 
+    private QRCode code;
+
     public QRScanController() {
         // Set up Intent Integrator Settings.
         intentIntegrator.setBeepEnabled(false);

@@ -171,6 +171,25 @@ public class PlayerCollection extends Database_Controls {
         return future;
     }
 
+    public CompletableFuture<Boolean> checkUsernameUnique(String username) {
+        // returns true if a user exists, false otherwise
+        CompletableFuture<Boolean> future = new CompletableFuture<>();
+        Query query = collection.whereEqualTo("username", username);
+        query.get().addOnCompleteListener(task -> {
+            if (task.isSuccessful()) {
+                QuerySnapshot querySnapshot = task.getResult();
+                if (querySnapshot != null && !querySnapshot.isEmpty()) {
+                    future.complete(false);
+                } else {
+                    future.complete(true);
+                }
+            } else {
+                future.completeExceptionally(task.getException());
+            }
+        });
+        return future;
+    }
+
     public CompletableFuture<String> generateUniqueUsername() {
         // generates a unique username to use a default for a new user
         // asynchronous call as it counts the number of players in the database
@@ -198,7 +217,7 @@ public class PlayerCollection extends Database_Controls {
                 // There should be only one document with the given userID field
                 for (DocumentSnapshot document : task.getResult()) {
                     // Update the qr_code_ids field of the player document
-                    List<String> qrCodeIds = (List<String>) document.get("qr_code_ids");
+                    ArrayList<String> qrCodeIds = (ArrayList<String>) document.get("qr_code_ids");
                     qrCodeIds.add(QR_ID);
                     document.getReference().update("qr_code_ids", qrCodeIds);
                 }
@@ -223,7 +242,7 @@ public class PlayerCollection extends Database_Controls {
                 // There should be only one document with the given userID field
                 for (DocumentSnapshot document : task.getResult()) {
                     // Update the qr_code_ids field of the player document
-                    List<String> qrCodeIds = (List<String>) document.get("qr_code_ids");
+                    ArrayList<String> qrCodeIds = (ArrayList<String>) document.get("qr_code_ids");
                     qrCodeIds.remove(QR_ID);
                     document.getReference().update("qr_code_ids", qrCodeIds);
                 }
@@ -275,6 +294,7 @@ public class PlayerCollection extends Database_Controls {
                 onError.accept(task.getException());
             }
         });
-
     }
+
+
 }

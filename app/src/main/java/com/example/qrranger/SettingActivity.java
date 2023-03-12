@@ -12,6 +12,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import com.google.android.material.snackbar.Snackbar;
 
 import java.util.Map;
+import java.util.concurrent.CompletableFuture;
 
 public class SettingActivity extends AppCompatActivity {
     Button backButton;
@@ -75,27 +76,36 @@ public class SettingActivity extends AppCompatActivity {
         confirmButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                String userName = editUserName.getText().toString();
-                myUser.setUserName(userName);
-                settingsChanged = true;
-                // update database
+                String username = editUserName.getText().toString();
+                // check that username unique
+
                 PlayerCollection pc = new PlayerCollection(null);
                 UserState us = UserState.getInstance();
-                Map<String, Object> new_values = pc.createValues(us.getUserID(), myUser.getUserName(), myUser.getPhoneNumber(), myUser.getEmail(), myUser.getGeoLocationFlag(), Math.toIntExact(myUser.getTotalScore()), Math.toIntExact(myUser.getTotalQRCode()));
-                pc.update(us.getUserID(), new_values);
+                //check that username unique
+                CompletableFuture<Boolean> futureUnique = pc.checkUsernameUnique(username);
+                futureUnique.thenAccept(usernameUnique -> {
+                    if (usernameUnique) {
+                        System.out.println("Username Unique");
+                        // Username unique so update database
+                        myUser.setUserName(username);
+                        settingsChanged = true;
 
-                Snackbar snackbar = Snackbar.make(view, "Saved", Snackbar.LENGTH_LONG);
+                        Map<String, Object> new_values = pc.createValues(us.getUserID(), myUser.getUserName(), myUser.getPhoneNumber(), myUser.getEmail(), myUser.getGeoLocationFlag(), Math.toIntExact(myUser.getTotalScore()), Math.toIntExact(myUser.getTotalQRCode()));
+                        pc.update(us.getUserID(), new_values);
 
-                // Add an action to the Snackbar
-                snackbar.setAction("OK", new View.OnClickListener() {
-                    @Override
-                    public void onClick(View view) {
-                        // This is called when the "OK" button on the Snackbar is clicked
+                        Snackbar snackbar = Snackbar.make(view, "Saved", Snackbar.LENGTH_LONG);
+                        // Show the Snack bar
+                        snackbar.show();
+                    } else {
+                        // not unique so use a snackbar to inform the user
+                        System.out.println("Username Not Unique");
+                        Snackbar snackbar2 = Snackbar.make(view, "Username Already Taken.", Snackbar.LENGTH_LONG);
+                        snackbar2.show();
                     }
+                }).exceptionally(throwable -> {
+                    System.out.println("Error checking username unique: " + throwable.getMessage());
+                    return null;
                 });
-
-                // Show the Snackbar
-                snackbar.show();
             }
         });
 
@@ -138,6 +148,6 @@ public class SettingActivity extends AppCompatActivity {
                 finish();
             }
         });
-
     }
+
 }

@@ -97,8 +97,7 @@ public class ProfileFragment extends Fragment {
         // get data from userID
         myPlayerCollection.read(userID, data -> {
             // player found so handle code using data here
-            final Map values = data;
-            System.out.println("Data for user: " + values);
+            System.out.println("Data for user: " + data);
             myUser.setUserName(Objects.requireNonNull(data.get("username")).toString());
             myUser.setEmail(Objects.requireNonNull(data.get("email")).toString());
             myUser.setPhoneNumber(Objects.requireNonNull(data.get("phoneNumber")).toString());

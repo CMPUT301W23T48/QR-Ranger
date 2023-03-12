@@ -27,13 +27,13 @@ import java.util.Map;
 import java.util.concurrent.CompletableFuture;
 import java.util.function.Consumer;
 
-public class PlayerCollection extends Database_Controls{
+public class PlayerCollection extends Database_Controls {
 
     CollectionReference collection;
+
     // Instantiating Database class with variable db
     public PlayerCollection(Database db) {
-        if (db == null)
-        {
+        if (db == null) {
             db = Database.getInstance();
         }
         collection = db.getCollection("players");
@@ -45,11 +45,9 @@ public class PlayerCollection extends Database_Controls{
         collection.add(values).addOnCompleteListener(new OnCompleteListener<DocumentReference>() {
             @Override
             public void onComplete(@NonNull Task<DocumentReference> task) {
-                if (task.isSuccessful()){
+                if (task.isSuccessful()) {
                     Log.d(TAG, "onComplete: Finished");
-                }
-                else
-                {
+                } else {
                     Log.d(TAG, "UnSuccessful");
                 }
             }
@@ -139,11 +137,10 @@ public class PlayerCollection extends Database_Controls{
     }
 
     // returns a map to be used for adding and updating
-    public Map createValues(String userID, String username, String phoneNumber, String email, Boolean geolocation_setting, Integer totalScore, Integer totalQRCode)
-    {
+    public Map createValues(String userID, String username, String phoneNumber, String email, Boolean geolocation_setting, Integer totalScore, Integer totalQRCode) {
         // This represents the fields in the player collection
         // can add or remove fields here
-        Map <String, Object> values = new HashMap<>();
+        Map<String, Object> values = new HashMap<>();
         values.put("userID", userID);
         values.put("username", username);
         values.put("phoneNumber", phoneNumber);
@@ -192,7 +189,6 @@ public class PlayerCollection extends Database_Controls{
     }
 
 
-
     // Function to add a QR code ID to a player's document in the player collection
     public void add_QR_to_players(String userID, String QR_ID) {
         // Use a query to find the player document with the matching userID field
@@ -216,8 +212,6 @@ public class PlayerCollection extends Database_Controls{
 //    UserState us = UserState.getInstance();
 //    String ID = us.getUserID();
 //    pc.add_QR_from_players(ID, "test");
-
-
 
 
     // Function to delete a QR code ID from a player's document in the player collection
@@ -246,8 +240,7 @@ public class PlayerCollection extends Database_Controls{
         collection.document(userID).get().addOnSuccessListener(documentSnapshot -> {
             // Get the player's totalScore
             Long playerScore = documentSnapshot.getLong("totalScore");
-            if (playerScore == null)
-            {
+            if (playerScore == null) {
                 playerScore = (long) 0;
             }
             System.out.println("totalScore" + playerScore);
@@ -269,4 +262,19 @@ public class PlayerCollection extends Database_Controls{
         return futureRank;
     }
 
+    public void searchUser(String username, Consumer<Map<String, Object>> onSuccess, Consumer<Exception> onError) {
+        // returns the data for a user with the given userID
+        Query query = collection.whereEqualTo("username", username);
+
+        query.get().addOnCompleteListener(task -> {
+            if (task.isSuccessful()) {
+                for (QueryDocumentSnapshot document : task.getResult()) {
+                    onSuccess.accept(document.getData());
+                }
+            } else {
+                onError.accept(task.getException());
+            }
+        });
+
+    }
 }

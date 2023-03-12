@@ -113,7 +113,7 @@ public class SettingActivity extends AppCompatActivity {
 
                 Snackbar snackbar = Snackbar.make(view, "Saved", Snackbar.LENGTH_LONG);
 
-                // Add an action to the Snackbar
+                // Add an action to the Snack bar
                 snackbar.setAction("OK", new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {

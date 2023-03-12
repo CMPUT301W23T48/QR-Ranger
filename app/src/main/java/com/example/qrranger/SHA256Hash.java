@@ -13,14 +13,11 @@ public class SHA256Hash {
             for (byte b : hashInBytes) {
                 sb.append(String.format("%02x", b));
             }
+            //Returns the String representation of the hash 
+            //** Make sure to add "\n" to the end of the returned string to make give the desired hash**
             return sb.toString();
         } catch (NoSuchAlgorithmException e) {
             throw new RuntimeException(e);
         }
     }
-    public static void main(String[] args) {
-        String input = "BFG5DGW54";
-        System.out.println(hash(input + "\n"));
-    }
-
 }

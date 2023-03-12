@@ -10,8 +10,13 @@ import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.Query;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
+import com.google.firebase.firestore.QuerySnapshot;
+import com.google.protobuf.FieldMask;
+
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -55,9 +60,11 @@ public class PlayerCollection extends Database_Controls{
     }
 
     @Override
-    public void read(String PlayerId, Consumer<Map<String, Object>> onSuccess, Consumer<Exception> onError) {
-        // returns
-        Query query = collection.whereEqualTo("PlayerID", PlayerId);
+    public void read(String userID, Consumer<Map<String, Object>> onSuccess, Consumer<Exception> onError) {
+        // returns the data for a user with the given userID
+        // not 100%
+        Query query = collection.whereEqualTo("userID", userID);
+
         query.get().addOnCompleteListener(task -> {
             if (task.isSuccessful()) {
                 for (QueryDocumentSnapshot document : task.getResult()) {
@@ -78,16 +85,17 @@ public class PlayerCollection extends Database_Controls{
 
     @Override
     public CompletableFuture<Void> update(String userID, Map<String, Object> newData) {
+        // returns null on completion of update, exception otherwise
         CompletableFuture<Void> future = new CompletableFuture<>();
-        collection
-                .whereEqualTo("username", userID)
+        collection.whereEqualTo("userID", userID)
                 .get()
                 .addOnSuccessListener(queryDocumentSnapshots -> {
                     if (queryDocumentSnapshots.isEmpty()) {
                         future.completeExceptionally(new Exception("No player found with username: " + userID));
                     } else {
                         DocumentReference documentReference = queryDocumentSnapshots.getDocuments().get(0).getReference();
-                        newData.put("username", userID); // Add the username to the HashMap
+                        newData.put("userID", userID); // Add the username to the HashMap
+                        newData.remove("qr_code_ids");
                         documentReference.update(newData)
                                 .addOnSuccessListener(aVoid -> future.complete(null))
                                 .addOnFailureListener(e -> future.completeExceptionally(e));
@@ -110,14 +118,13 @@ public class PlayerCollection extends Database_Controls{
 
     @Override
     public void delete(String userID) {
-        CollectionReference playerCollection = collection;
-
-        Query query = playerCollection.whereEqualTo("username", userID);
+        // deletes the document in the player collection that has the given userID
+        Query query = collection.whereEqualTo("userID", userID);
 
         query.get().addOnCompleteListener(task -> {
             if (task.isSuccessful()) {
                 for (QueryDocumentSnapshot document : task.getResult()) {
-                    playerCollection.document(document.getId()).delete();
+                    collection.document(document.getId()).delete();
                 }
             } else {
                 System.out.println("Error deleting player: " + task.getException());
@@ -141,6 +148,7 @@ public class PlayerCollection extends Database_Controls{
         values.put("geolocation_setting", geolocation_setting);
         values.put("totalScore", totalScore);
         values.put("totalQRCode", totalQRCode);
+        values.put("qr_code_ids", new ArrayList<String>());
         return values;
     }
 
@@ -164,6 +172,8 @@ public class PlayerCollection extends Database_Controls{
     }
 
     public CompletableFuture<String> generateUniqueUsername() {
+        // generates a unique username to use a default for a new user
+        // asynchronous call as it counts the number of players in the database
         CompletableFuture<String> future = new CompletableFuture<>();
         collection.get().addOnCompleteListener(task -> {
             if (task.isSuccessful()) {
@@ -178,4 +188,51 @@ public class PlayerCollection extends Database_Controls{
         return future;
     }
 
+
+
+    // Function to add a QR code ID to a player's document in the player collection
+    public void add_QR_to_players(String userID, String QR_ID) {
+        // Use a query to find the player document with the matching userID field
+        Query query = collection.whereEqualTo("userID", userID);
+        query.get().addOnCompleteListener(task -> {
+            if (task.isSuccessful()) {
+                // There should be only one document with the given userID field
+                for (DocumentSnapshot document : task.getResult()) {
+                    // Update the qr_code_ids field of the player document
+                    List<String> qrCodeIds = (List<String>) document.get("qr_code_ids");
+                    qrCodeIds.add(QR_ID);
+                    document.getReference().update("qr_code_ids", qrCodeIds);
+                }
+            } else {
+                // Handle errors here
+            }
+        });
+    }
+    // run with:
+//    PlayerCollection pc = new PlayerCollection(null);
+//    UserState us = UserState.getInstance();
+//    String ID = us.getUserID();
+//    pc.add_QR_from_players(ID, "test");
+
+
+
+
+    // Function to delete a QR code ID from a player's document in the player collection
+    public void delete_QR_from_players(String userID, String QR_ID) {
+        // Use a query to find the player document with the matching userID field
+        Query query = collection.whereEqualTo("userID", userID);
+        query.get().addOnCompleteListener(task -> {
+            if (task.isSuccessful()) {
+                // There should be only one document with the given userID field
+                for (DocumentSnapshot document : task.getResult()) {
+                    // Update the qr_code_ids field of the player document
+                    List<String> qrCodeIds = (List<String>) document.get("qr_code_ids");
+                    qrCodeIds.remove(QR_ID);
+                    document.getReference().update("qr_code_ids", qrCodeIds);
+                }
+            } else {
+                // Handle errors here
+            }
+        });
+    }
 }

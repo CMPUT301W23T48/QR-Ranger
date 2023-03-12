@@ -18,6 +18,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 import com.example.qrranger.R;
+import com.google.firebase.firestore.auth.User;
 
 public class ProfileFragment extends Fragment {
     Player myUser = new Player();
@@ -60,7 +61,9 @@ public class ProfileFragment extends Fragment {
                     myUser.setPhoneNumber("Please change your phone number in setting");
                     myUser.setPlayerId(deviceId);
                     myUser.setGeoLocationSett(false);
-                    value = myPlayerCollection.createValues(myUser.getUserName(), myUser.getPhoneNumber(), myUser.getEmail(), myUser.isGeoLocationSett(), 0,0);
+                    UserState us = UserState.getInstance();
+                    String userID = us.getUserID();
+                    value = myPlayerCollection.createValues(userID, myUser.getUserName(), myUser.getPhoneNumber(), myUser.getEmail(), myUser.isGeoLocationSett(), 0,0);
                     myPlayerCollection.create(value);
                     playerName.setText(myUser.getUserName());
                     playerPhoneNumb.setText(myUser.getPhoneNumber());

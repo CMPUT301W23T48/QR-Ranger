@@ -207,6 +207,14 @@ public class PlayerCollection extends Database_Controls{
             }
         });
     }
+    // run with:
+//    PlayerCollection pc = new PlayerCollection(null);
+//    UserState us = UserState.getInstance();
+//    String ID = us.getUserID();
+//    pc.add_QR_from_players(ID, "test");
+
+
+
 
     // Function to delete a QR code ID from a player's document in the player collection
     public void delete_QR_from_players(String userID, String QR_ID) {

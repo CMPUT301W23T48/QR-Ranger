@@ -28,6 +28,7 @@ import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.firestore.auth.User;
 
 import java.util.Map;
 import java.util.concurrent.CompletableFuture;
@@ -64,8 +65,6 @@ public class MainActivity extends AppCompatActivity {
                     break;
                 case R.id.add:
                     replaceFragment(new AddFragment());
-                    PlayerCollection pc = new PlayerCollection(null);
-
                     break;
                 case R.id.stat:
                     replaceFragment(new LeaderboardFragment());
@@ -93,7 +92,10 @@ public class MainActivity extends AppCompatActivity {
                                 if (userExists) {
                                     System.out.println("User exists");
                                     // User exists so continue to launch profile screen
+                                    UserState us = UserState.getInstance();
+                                    us.setUserID(user.getUid());
                                 } else {
+                                    // FIRST TIME LOGIN
                                     System.out.println("User does not exist");
                                     // generate unique username and add default values to database
                                     CompletableFuture<String> usernameFuture = pc.generateUniqueUsername();
@@ -102,6 +104,8 @@ public class MainActivity extends AppCompatActivity {
                                         // Create the new player with a unique default username
                                         Map<String, Object> values = pc.createValues(user.getUid(), uniqueUsername, "", "", false, 0, 0);
                                         pc.create(values);
+                                        UserState us = UserState.getInstance();
+                                        us.setUserID(user.getUid());
                                     }).exceptionally(ex -> {
                                         // Handle the error
                                         System.out.println("Error Generating Unique Username.");
@@ -136,8 +140,5 @@ public class MainActivity extends AppCompatActivity {
         FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
         fragmentTransaction.replace(R.id.frame_layout, fragment);
         fragmentTransaction.commit();
-
     }
-    
-    
 }

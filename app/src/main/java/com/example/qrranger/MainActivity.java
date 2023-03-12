@@ -36,8 +36,14 @@ public class MainActivity extends AppCompatActivity {
                     qr = (byte[]) extras.get("qr_code");
                     pic = (Bitmap) extras.get("image");
 
-                    text.setText(qr.toString());
-                    image.setImageBitmap(pic);
+                    if(qr != null) {
+                        text.setText(qr.toString());
+                    }
+
+                    if(image != null) {
+                        image.setImageBitmap(pic);
+                    }
+
                 }
             }
         });

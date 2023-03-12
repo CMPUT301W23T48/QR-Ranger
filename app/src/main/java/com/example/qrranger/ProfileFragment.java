@@ -16,6 +16,7 @@ import androidx.fragment.app.Fragment;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.concurrent.CompletableFuture;
 
 import com.example.qrranger.R;
 
@@ -35,17 +36,22 @@ public class ProfileFragment extends Fragment {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_profile, container, false);
-        Context my_context = getContext();
-        String deviceId = Settings.Secure.getString(my_context.getContentResolver(), Settings.Secure.ANDROID_ID);
+
 
         playerEmail = view.findViewById(R.id.ProfileEmail);
         playerName = view.findViewById(R.id.ProfileUserName);
         //playerPhoneNumb = view.findViewById(R.id.textView2);
         playerTotalScore = view.findViewById(R.id.ProfileTS);
 
-        myPlayerCollection.checkUserExists("");
+        UserState us = UserState.getInstance();
+        String userID = us.getUserID();
 
-        if(value != null) {
+        CompletableFuture<Boolean> future = new CompletableFuture<>();
+        future.complete(true);
+
+        //test
+        if(myPlayerCollection.checkUserExists(userID) == future) {
+            System.out.println("Data for user1: future = true");
             myUser.setUserName((String) value.get("UserName"));
             myUser.setEmail((String) value.get("Email"));
             myUser.setPhoneNumber((String) value.get("PhoneNumber"));
@@ -54,16 +60,20 @@ public class ProfileFragment extends Fragment {
             playerName.setText(myUser.getUserName());
             //playerPhoneNumb.setText(myUser.getPhoneNumber());
         }else {
-            myUser.setUserName((deviceId));
+            System.out.println("system = false");
+            myUser.setUserName((userID));
             myUser.setEmail("Please change your email in setting");
             myUser.setPhoneNumber("Please change your phone number in setting");
-            myUser.setPlayerId(deviceId);
+            myUser.setPlayerId(userID);
             myUser.setGeoLocationSett(false);
-            value = myPlayerCollection.createValues(deviceId, myUser.getUserName(), myUser.getPhoneNumber(), myUser.getEmail(), myUser.isGeoLocationSett(), 0, 0);
+            value = myPlayerCollection.createValues(userID, myUser.getUserName(), myUser.getPhoneNumber(), myUser.getEmail(), myUser.isGeoLocationSett(), 0, 0);
             myPlayerCollection.create(value);
             playerName.setText(myUser.getUserName());
             //playerPhoneNumb.setText(myUser.getPhoneNumber());
         }
+        System.out.println(value.get("Email"));
+        //end test
+
         playerTotalScore.setText("0");
 
         myAvatar = view.findViewById(R.id.ProfileImage);

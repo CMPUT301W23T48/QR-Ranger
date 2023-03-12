@@ -12,12 +12,12 @@ public class gemID {
         //Creates gem ID
         Random generator = new Random();
         //Randomly assign background color to Gem
-        String[] bgColor = new String[]{"Red", "Blue", "Purple", "Pink", "White"};
+        String[] bgColor = new String[]{"bgred", "bgblue", "bgpurple", "bgpink", "bgwhite"};
         int randomIndex = generator.nextInt(bgColor.length);
         setBgColor(bgColor[randomIndex]);
 
         //Randomly assign boarder to Gem
-        String[] boarder = new String[]{"Gem", "Black", "Bronze", "Silver", "Gold", "Book"};
+        String[] boarder = new String[]{"gemborder", "blackborder", "bronzeborder", "silverborder", "goldborder", "bookborder"};
         randomIndex = generator.nextInt(boarder.length);
         setBoarder(boarder[randomIndex]);
 

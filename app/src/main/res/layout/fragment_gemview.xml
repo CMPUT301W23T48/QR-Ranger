@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#D1CBCB">
+    android:background="@color/purple_200">
 
     <TextView
         android:id="@+id/gemName"
@@ -43,7 +43,7 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_bias="0.126"
-        tools:srcCompat="@drawable/bgblue" />
+        app:srcCompat="@drawable/bgblue" />
 
     <ImageView
         android:id="@+id/borderType"
@@ -58,7 +58,7 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_bias="0.126"
-        tools:srcCompat="@drawable/blackborder" />
+        app:srcCompat="@drawable/blackborder" />
 
     <ImageView
         android:id="@+id/gem"
@@ -73,7 +73,7 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_bias="0.126"
-        tools:srcCompat="@drawable/bluegem2" />
+        app:srcCompat="@drawable/bluegem2" />
 
     <ImageView
         android:id="@+id/lusterLevel"
@@ -88,13 +88,14 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_bias="0.126"
+        app:srcCompat="@drawable/lusterlevel3"
         tools:srcCompat="@drawable/lusterlevel3" />
 
     <Button
-        android:id="@+id/gemgenerate"
+        android:id="@+id/delete"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Generate"
+        android:text="Delete"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.498"

@@ -9,6 +9,7 @@ import android.app.Activity;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.example.qrranger.databinding.ActivityMainBinding;
@@ -16,13 +17,12 @@ import com.example.qrranger.databinding.ActivityMainBinding;
 public class MainActivity extends AppCompatActivity {
 
     ActivityMainBinding binding;
-    private TextView gemName;
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         binding = ActivityMainBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
+
 
         replaceFragment(new MapFragment());
         binding.navigator.setBackground(null);
@@ -33,7 +33,7 @@ public class MainActivity extends AppCompatActivity {
                     replaceFragment(new MapFragment());
                     break;
                 case R.id.search:
-                    replaceFragment(new SearchFragment());
+                    replaceFragment(new GemFragment());
                     break;
                 case R.id.add:
                     replaceFragment(new AddFragment());
@@ -47,7 +47,7 @@ public class MainActivity extends AppCompatActivity {
             }
             return true;
         });
-        
+
 
 
 

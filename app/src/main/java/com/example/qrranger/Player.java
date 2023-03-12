@@ -35,9 +35,7 @@ public class Player implements Serializable {
         this.phoneNumber = phoneNumber;
         this.email = email;
     }
-    public void setPlayerId(String userID){
-        this.playerId = userID;
-    }
+
     //change username
     public void changeUsername(String userName){
         this.userName = userName;
@@ -54,23 +52,27 @@ public class Player implements Serializable {
             this.geoLocationSett = true;
         }
     }
-
+    // set user email
     public void setEmail(String email) {
         this.email = email;
     }
-
+    //set User ID
+    public void setPlayerId(String playerId){
+        this.playerId = playerId;
+    }
+    //set user name
     public void setUserName(String userName) {
         this.userName = userName;
     }
-
+    //set GeoLocation
     public void setGeoLocationSett(boolean geoLocationSett) {
         this.geoLocationSett = geoLocationSett;
     }
-
+    //set phone number
     public void setPhoneNumber(String phoneNumber) {
         this.phoneNumber = phoneNumber;
     }
-
+    //get player ID
     public String getPlayerId() {
         return playerId;
     }
@@ -95,6 +97,7 @@ public class Player implements Serializable {
     public void addQRCode(QRCode newQR){
         qrCodeCollection.add(newQR);
     }
+
     //remove QR Code
 //    public void removeQRCode(QRCode deleteQR){
 //        for(QRCode myQr : qrCodeCollection){
@@ -111,6 +114,8 @@ public class Player implements Serializable {
     public boolean isGeoLocationSett() {
         return geoLocationSett;
     }
+
+
     //give least score qr code
 //    public QRCode getLeastScoring() {
 //        return leastScoring;
@@ -123,6 +128,7 @@ public class Player implements Serializable {
 //    public int getScoreTotal() {
 //        return scoreTotal;
 //    }
+
     //give total qr code scanned by player
     public int getTotalQRCode() {
         return totalQRCode;

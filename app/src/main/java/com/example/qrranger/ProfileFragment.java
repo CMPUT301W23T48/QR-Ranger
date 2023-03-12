@@ -40,40 +40,37 @@ public class ProfileFragment extends Fragment {
         Context my_context = getContext();
         String deviceId = Settings.Secure.getString(my_context.getContentResolver(), Settings.Secure.ANDROID_ID);
 
-
         playerEmail = view.findViewById(R.id.ProfileEmail);
         playerName = view.findViewById(R.id.ProfileUserName);
         //playerPhoneNumb = view.findViewById(R.id.textView2);
         playerTotalScore = view.findViewById(R.id.ProfileTS);
+
+        myPlayerCollection.read("sdafdsfsad", data -> {
+                    //value = data;
+                    System.out.println("Data for user1: " + data);},
+                error -> {
+                    System.out.println("Error getting player data: " + error);
+                });
+
+    if(value != null) {
+        myUser.setUserName((String) value.get("UserName"));
+        myUser.setEmail((String) value.get("Email"));
+        myUser.setPhoneNumber((String) value.get("PhoneNumber"));
+        myUser.setPlayerId((String) value.get("PlayerID"));
+        //myUser.setGeoLocationSett(((Boolean) value.get("Geolocation Setting")));
+        playerName.setText(myUser.getUserName());
+        //playerPhoneNumb.setText(myUser.getPhoneNumber());
+    }else {
         myUser.setUserName((deviceId));
         myUser.setEmail("Please change your email in setting");
         myUser.setPhoneNumber("Please change your phone number in setting");
         myUser.setPlayerId(deviceId);
         myUser.setGeoLocationSett(false);
-        value = myPlayerCollection.createValues(myUser.getUserName(), myUser.getPhoneNumber(), myUser.getEmail(), myUser.isGeoLocationSett(), 0,0);
+        value = myPlayerCollection.createValues(deviceId, myUser.getUserName(), myUser.getPhoneNumber(), myUser.getEmail(), myUser.isGeoLocationSett(), 0, 0);
         myPlayerCollection.create(value);
-        myPlayerCollection.read(deviceId, data -> {
-                    myUser.setUserName((String)data.get("UserName"));
-                    myUser.setEmail((String)data.get("Email"));
-                    myUser.setPhoneNumber((String)data.get("PhoneNumber"));
-                    myUser.setPlayerId((String)data.get("PlayerID"));
-                    myUser.setGeoLocationSett(((Boolean)data.get("Geolocation Setting")));
-                    playerName.setText(myUser.getUserName());
-                    playerPhoneNumb.setText(myUser.getPhoneNumber());
-                    System.out.println("Data for user1: " + data);},
-                error -> {
-                    myUser.setUserName((deviceId));
-                    myUser.setEmail("Please change your email in setting");
-                    myUser.setPhoneNumber("Please change your phone number in setting");
-                    myUser.setPlayerId(deviceId);
-                    myUser.setGeoLocationSett(false);
-                    value = myPlayerCollection.createValues(myUser.getUserName(), myUser.getPhoneNumber(), myUser.getEmail(), myUser.isGeoLocationSett(), 0,0);
-                    myPlayerCollection.create(value);
-                    playerName.setText(myUser.getUserName());
-                    playerPhoneNumb.setText(myUser.getPhoneNumber());
-                    System.out.println("Error getting player data: " + error);
-                });
-
+        playerName.setText(myUser.getUserName());
+        //playerPhoneNumb.setText(myUser.getPhoneNumber());
+    }
         playerTotalScore.setText("0");
 
         myAvatar = view.findViewById(R.id.ProfileImage);

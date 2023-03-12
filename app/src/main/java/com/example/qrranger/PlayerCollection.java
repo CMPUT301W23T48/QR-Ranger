@@ -12,6 +12,7 @@ import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.Query;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
+import com.google.firebase.firestore.QuerySnapshot;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -57,7 +58,7 @@ public class PlayerCollection extends Database_Controls{
     @Override
     public void read(String PlayerId, Consumer<Map<String, Object>> onSuccess, Consumer<Exception> onError) {
         // returns
-        Query query = collection.whereEqualTo("PlayerID", PlayerId);
+        Query query = collection.whereEqualTo("userID", PlayerId);
         query.get().addOnCompleteListener(task -> {
             if (task.isSuccessful()) {
                 for (QueryDocumentSnapshot document : task.getResult()) {

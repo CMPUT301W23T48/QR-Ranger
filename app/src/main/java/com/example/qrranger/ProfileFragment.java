@@ -45,25 +45,25 @@ public class ProfileFragment extends Fragment {
 
         myPlayerCollection.checkUserExists("");
 
-    if(value != null) {
-        myUser.setUserName((String) value.get("UserName"));
-        myUser.setEmail((String) value.get("Email"));
-        myUser.setPhoneNumber((String) value.get("PhoneNumber"));
-        myUser.setPlayerId((String) value.get("PlayerID"));
-        //myUser.setGeoLocationSett(((Boolean) value.get("Geolocation Setting")));
-        playerName.setText(myUser.getUserName());
-        //playerPhoneNumb.setText(myUser.getPhoneNumber());
-    }else {
-        myUser.setUserName((deviceId));
-        myUser.setEmail("Please change your email in setting");
-        myUser.setPhoneNumber("Please change your phone number in setting");
-        myUser.setPlayerId(deviceId);
-        myUser.setGeoLocationSett(false);
-        value = myPlayerCollection.createValues(deviceId, myUser.getUserName(), myUser.getPhoneNumber(), myUser.getEmail(), myUser.isGeoLocationSett(), 0, 0);
-        myPlayerCollection.create(value);
-        playerName.setText(myUser.getUserName());
-        //playerPhoneNumb.setText(myUser.getPhoneNumber());
-    }
+        if(value != null) {
+            myUser.setUserName((String) value.get("UserName"));
+            myUser.setEmail((String) value.get("Email"));
+            myUser.setPhoneNumber((String) value.get("PhoneNumber"));
+            myUser.setPlayerId((String) value.get("PlayerID"));
+            //myUser.setGeoLocationSett(((Boolean) value.get("Geolocation Setting")));
+            playerName.setText(myUser.getUserName());
+            //playerPhoneNumb.setText(myUser.getPhoneNumber());
+        }else {
+            myUser.setUserName((deviceId));
+            myUser.setEmail("Please change your email in setting");
+            myUser.setPhoneNumber("Please change your phone number in setting");
+            myUser.setPlayerId(deviceId);
+            myUser.setGeoLocationSett(false);
+            value = myPlayerCollection.createValues(deviceId, myUser.getUserName(), myUser.getPhoneNumber(), myUser.getEmail(), myUser.isGeoLocationSett(), 0, 0);
+            myPlayerCollection.create(value);
+            playerName.setText(myUser.getUserName());
+            //playerPhoneNumb.setText(myUser.getPhoneNumber());
+        }
         playerTotalScore.setText("0");
 
         myAvatar = view.findViewById(R.id.ProfileImage);

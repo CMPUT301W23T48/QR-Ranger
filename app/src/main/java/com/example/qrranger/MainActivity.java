@@ -33,7 +33,7 @@ public class MainActivity extends AppCompatActivity {
                     replaceFragment(new MapFragment());
                     break;
                 case R.id.search:
-                    replaceFragment(new SearchFragment();
+                    replaceFragment(new SearchFragment());
                     break;
                 case R.id.add:
                     replaceFragment(new AddFragment());

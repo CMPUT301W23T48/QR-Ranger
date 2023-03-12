@@ -32,6 +32,8 @@ public class QRScannerActivity extends AppCompatActivity{
     private Bitmap locationImage;
     private byte[] scanResult;
 
+    private ActivityResultLauncher<Intent> pictureResultLauncher;
+
     @Override
     protected void onCreate(Bundle SavedInstanceBundle) {
         super.onCreate(SavedInstanceBundle);
@@ -42,6 +44,20 @@ public class QRScannerActivity extends AppCompatActivity{
         confirmButton = findViewById(R.id.button_confirm);
         qrTitle = findViewById(R.id.tv_title);
         qrScore = findViewById(R.id.tv_score);
+
+        // Set the ActivityResultLauncher so that the result of the activity is stored.
+        pictureResultLauncher = registerForActivityResult(
+                new ActivityResultContracts.StartActivityForResult(),
+                new ActivityResultCallback<ActivityResult>() {
+                    @Override
+                    public void onActivityResult(ActivityResult result) {
+                        if (result.getResultCode() == RESULT_OK) {
+                            if (result.getData() != null) {
+                                locationImage = (Bitmap) result.getData().getExtras().get("data");
+                            }
+                        }
+                    }
+                });
 
         scanQR();
 
@@ -72,20 +88,6 @@ public class QRScannerActivity extends AppCompatActivity{
     public void takePhoto() {
         // Launch the camera activity.
         Intent takePhotoIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-
-        // Set the ActivityResultLauncher so that the result of the activity is stored.
-        ActivityResultLauncher<Intent> pictureResultLauncher = registerForActivityResult(
-                new ActivityResultContracts.StartActivityForResult(),
-                new ActivityResultCallback<ActivityResult>() {
-                    @Override
-                    public void onActivityResult(ActivityResult result) {
-                        if (result.getResultCode() == RESULT_OK) {
-                            if (result.getData() != null) {
-                                locationImage = (Bitmap) result.getData().getExtras().get("data");
-                            }
-                        }
-                    }
-                });
 
         // Launch the photo activity with the launcher.
         pictureResultLauncher.launch(takePhotoIntent);

@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "663339235244",
+    "project_id": "qr-ranger",
+    "storage_bucket": "qr-ranger.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:663339235244:android:4a385ab9c602ca2b342c09",
+        "android_client_info": {
+          "package_name": "com.example.qrranger"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "663339235244-fscae8hlor2l35qatesdisbufbhidb5h.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyD1SDov1iJu-8Rpjj9vpO6qzcbP7Pv3Zuc"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "663339235244-fscae8hlor2l35qatesdisbufbhidb5h.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

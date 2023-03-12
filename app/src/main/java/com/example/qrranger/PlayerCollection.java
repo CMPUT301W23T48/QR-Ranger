@@ -10,10 +10,12 @@ import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.Query;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
+import com.google.protobuf.FieldMask;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -92,6 +94,7 @@ public class PlayerCollection extends Database_Controls{
                     } else {
                         DocumentReference documentReference = queryDocumentSnapshots.getDocuments().get(0).getReference();
                         newData.put("userID", userID); // Add the username to the HashMap
+                        newData.remove("qr_code_ids");
                         documentReference.update(newData)
                                 .addOnSuccessListener(aVoid -> future.complete(null))
                                 .addOnFailureListener(e -> future.completeExceptionally(e));
@@ -186,7 +189,41 @@ public class PlayerCollection extends Database_Controls{
 
 
 
-    // add qr code to player
+    // Function to add a QR code ID to a player's document in the player collection
+    public void add_QR_to_players(String userID, String QR_ID) {
+        // Use a query to find the player document with the matching userID field
+        Query query = collection.whereEqualTo("userID", userID);
+        query.get().addOnCompleteListener(task -> {
+            if (task.isSuccessful()) {
+                // There should be only one document with the given userID field
+                for (DocumentSnapshot document : task.getResult()) {
+                    // Update the qr_code_ids field of the player document
+                    List<String> qrCodeIds = (List<String>) document.get("qr_code_ids");
+                    qrCodeIds.add(QR_ID);
+                    document.getReference().update("qr_code_ids", qrCodeIds);
+                }
+            } else {
+                // Handle errors here
+            }
+        });
+    }
 
-    // delete qr code from player
+    // Function to delete a QR code ID from a player's document in the player collection
+    public void delete_QR_from_players(String userID, String QR_ID) {
+        // Use a query to find the player document with the matching userID field
+        Query query = collection.whereEqualTo("userID", userID);
+        query.get().addOnCompleteListener(task -> {
+            if (task.isSuccessful()) {
+                // There should be only one document with the given userID field
+                for (DocumentSnapshot document : task.getResult()) {
+                    // Update the qr_code_ids field of the player document
+                    List<String> qrCodeIds = (List<String>) document.get("qr_code_ids");
+                    qrCodeIds.remove(QR_ID);
+                    document.getReference().update("qr_code_ids", qrCodeIds);
+                }
+            } else {
+                // Handle errors here
+            }
+        });
+    }
 }

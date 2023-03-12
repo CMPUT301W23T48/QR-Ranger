@@ -64,6 +64,8 @@ public class MainActivity extends AppCompatActivity {
                     break;
                 case R.id.add:
                     replaceFragment(new AddFragment());
+                    PlayerCollection pc = new PlayerCollection(null);
+
                     break;
                 case R.id.stat:
                     replaceFragment(new LeaderboardFragment());

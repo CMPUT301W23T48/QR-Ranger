@@ -1,4 +1,5 @@
 package com.example.qrranger;
+import android.content.Intent;
 import android.os.Bundle;
 
 import static android.content.ContentValues.TAG;
@@ -63,7 +64,7 @@ public class MainActivity extends AppCompatActivity {
                     replaceFragment(new SearchFragment());
                     break;
                 case R.id.add:
-                    replaceFragment(new AddFragment());
+                    Intent addQRIntent = new Intent(getBaseContext(), QRScannerActivity.class);
                     break;
                 case R.id.stat:
                     replaceFragment(new LeaderboardFragment());

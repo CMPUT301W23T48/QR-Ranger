@@ -1,6 +1,5 @@
 package com.example.qrranger;
 
-import android.app.Activity;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.os.Bundle;
@@ -46,11 +45,11 @@ public class QRScannerActivity extends AppCompatActivity{
 
         scanQR();
 
-        // If user rejects the QR code, go back to profile.
+        // If user rejects the QR code, go back to MainActivity.
         rejectButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
+                Intent exitScannerIntent = new Intent(getBaseContext(), MainActivity.class);
             }
         });
 

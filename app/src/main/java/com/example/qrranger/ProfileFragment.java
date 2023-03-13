@@ -8,8 +8,11 @@ import android.provider.Settings;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.ImageButton;
 import android.widget.ImageView;
+import android.widget.ListView;
 import android.widget.TextView;
 
 import androidx.activity.result.ActivityResultLauncher;
@@ -24,6 +27,7 @@ import java.util.Objects;
 import java.util.concurrent.CompletableFuture;
 
 import com.example.qrranger.R;
+import com.google.firebase.firestore.DocumentSnapshot;
 
 public class ProfileFragment extends Fragment {
     Player myUser = new Player();
@@ -37,6 +41,7 @@ public class ProfileFragment extends Fragment {
     private ImageView myAvatar;
     private ImageButton mySettButton;
     private Intent data;
+    private ListView listView;
 
     private ActivityResultLauncher<Intent> startSettingsForResult =
             registerForActivityResult(new ActivityResultContracts.StartActivityForResult(),
@@ -68,6 +73,7 @@ public class ProfileFragment extends Fragment {
         playerTotalQRCodes = view.findViewById(R.id.ProfileQRNum);
         mySettButton = view.findViewById(R.id.ProfileSettingButton);
         profileRank = view.findViewById(R.id.ProfileRank);
+        listView = view.findViewById(R.id.ProfileQR_list_view);
 
         UserState us = UserState.getInstance();
         String userID = us.getUserID();
@@ -91,6 +97,14 @@ public class ProfileFragment extends Fragment {
             }
         });
 
+        listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+                String name = adapterView.getItemAtPosition(i).toString();
+            }
+        });
+
+
         return view;
     }
     public void setValues(String userID){
@@ -105,9 +119,11 @@ public class ProfileFragment extends Fragment {
             myUser.setTotalQRCode(((Long) data.get("totalQRCode")));
             myUser.setGeoLocationSett((Boolean) data.get("geolocation_setting"));
             myUser.setPlayerId(userID);
-            myUser.setQrCodeCollection((ArrayList<QRCode>) data.get("qr_code_ids"));
+            myUser.setQrCodeCollection((ArrayList<String>) data.get("qr_code_ids"));
             getAndSetRank(userID);
             System.out.println("Setting views");
+            getAndSetList(userID);
+            System.out.println("Setting List");
             setViews();
             }, error -> {
                 // Player not found, cannot set values
@@ -140,5 +156,35 @@ public class ProfileFragment extends Fragment {
             System.err.println("Failed to get player rank: " + e.getMessage());
             return null;
         });
+    }
+
+
+    public void getAndSetList(String userID){
+        getActivity().runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                // code that modifies the adapter
+                ArrayList<String> qrCodeCollection = myUser.getQrCodeCollection();
+                ArrayList<String> qrNames = new ArrayList<>();
+                QRCollection qrc = new QRCollection(null);
+                for (String qrCode : qrCodeCollection) {
+                    qrc.read(qrCode, data -> {
+                        // qr found
+                        qrNames.add(data.get("name").toString());
+                        if (qrNames.size() == qrCodeCollection.size()) {
+                            // All QR names retrieved, update list view
+                            ArrayAdapter<String> adapter = new ArrayAdapter<>(getContext(),
+                                    android.R.layout.simple_list_item_1, qrNames);
+                            listView.setAdapter(adapter);
+                        }
+                    }, error -> {
+                        // qr not found, cannot set values
+                        System.out.println("Error getting player data: " + error);
+                    });
+
+                }
+            }
+        });
+
     }
 }

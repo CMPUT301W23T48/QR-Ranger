@@ -255,31 +255,37 @@ public class PlayerCollection extends Database_Controls {
     public CompletableFuture<Integer> getPlayerRank(String userID) {
         CompletableFuture<Integer> futureRank = new CompletableFuture<>();
 
-        // Get the player document with the given playerId
-        collection.document(userID).get().addOnSuccessListener(documentSnapshot -> {
-            // Get the player's totalScore
-            Long playerScore = documentSnapshot.getLong("totalScore");
-            if (playerScore == null) {
-                playerScore = (long) 0;
+        // Query for the player document with the given userID field
+        Query query = collection.whereEqualTo("userID", userID);
+
+        // Get the player's totalScore from the document
+        query.get().addOnSuccessListener(queryDocumentSnapshots -> {
+            if (queryDocumentSnapshots.size() == 0) {
+                // Player not found
+                futureRank.completeExceptionally(new IllegalArgumentException("Player not found with userID " + userID));
+            } else {
+                DocumentSnapshot documentSnapshot = queryDocumentSnapshots.getDocuments().get(0);
+                Long playerScore = documentSnapshot.getLong("totalScore");
+                System.out.println("totalScore " + playerScore);
+
+                // Query for all players with a higher totalScore
+                Query scoreQuery = collection.whereGreaterThan("totalScore", playerScore);
+
+                // Count the number of players with a higher totalScore to determine the rank
+                scoreQuery.get().addOnSuccessListener(scoreQueryDocumentSnapshots -> {
+                    int rank = scoreQueryDocumentSnapshots.size() + 1;
+                    futureRank.complete(rank);
+                }).addOnFailureListener(e -> {
+                    futureRank.completeExceptionally(e);
+                });
             }
-            System.out.println("totalScore" + playerScore);
-
-            // Query for all players with a higher totalScore
-            Query query = collection.whereGreaterThan("totalScore", playerScore);
-
-            // Count the number of players with a higher totalScore to determine the rank
-            query.get().addOnSuccessListener(queryDocumentSnapshots -> {
-                int rank = queryDocumentSnapshots.size() + 1;
-                futureRank.complete(rank);
-            }).addOnFailureListener(e -> {
-                futureRank.completeExceptionally(e);
-            });
         }).addOnFailureListener(e -> {
             futureRank.completeExceptionally(e);
         });
 
         return futureRank;
     }
+
 
     public void searchUser(String username, Consumer<Map<String, Object>> onSuccess, Consumer<Exception> onError) {
         // returns the data for a user with the given userID

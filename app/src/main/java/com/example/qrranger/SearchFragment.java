@@ -18,6 +18,7 @@ import android.widget.ImageButton;
 import android.widget.ImageView;
 
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.Map;
 import java.util.Objects;
 import java.util.concurrent.CompletableFuture;
@@ -71,14 +72,14 @@ public class SearchFragment extends Fragment {
 
     private void startOtherUserProfile(Map<String,Object> data) {
         // send the info in data as intent for the new activity
-        Intent intent = new Intent(getActivity(), OtherUserProfileActivity.class);
+        Intent intent = new Intent(requireActivity(), OtherUserProfileActivity.class);
         intent.putExtra("username", data.get("username").toString());
         intent.putExtra("email", data.get("email").toString());
         intent.putExtra("phoneNumber", data.get("phoneNumber").toString());
         intent.putExtra("userID", data.get("userID").toString());
         intent.putExtra("totalQRCode", data.get("totalQRCode").toString());
         intent.putExtra("totalScore", data.get("totalScore").toString());
-//        intent.putExtra("qr_code_ids", data.get("qr_code_ids"));
+//        intent.putExtra("qr_code_ids", data.get("qr_code_ids").toString());
         startActivity(intent);
     }
 

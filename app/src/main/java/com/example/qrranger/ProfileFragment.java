@@ -5,6 +5,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.provider.Settings;
+import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -14,6 +15,7 @@ import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContracts;
@@ -21,10 +23,13 @@ import androidx.fragment.app.Fragment;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 import java.util.Objects;
 import java.util.concurrent.CompletableFuture;
+import java.util.concurrent.ExecutionException;
+import java.util.concurrent.atomic.AtomicInteger;
 
 import com.example.qrranger.R;
 import com.google.firebase.firestore.DocumentSnapshot;
@@ -42,6 +47,8 @@ public class ProfileFragment extends Fragment {
     private ImageButton mySettButton;
     private Intent data;
     private ListView listView;
+    private TextView highestQR;
+    private TextView lowestQR;
 
     private ActivityResultLauncher<Intent> startSettingsForResult =
             registerForActivityResult(new ActivityResultContracts.StartActivityForResult(),
@@ -53,6 +60,22 @@ public class ProfileFragment extends Fragment {
                                 if (dataChanged) {
                                     System.out.println("Data changed");
                                     myUser = (Player) data.getSerializableExtra("myUser");
+                                    setViews();
+                                }
+                            }
+                        }
+                    });
+
+    private ActivityResultLauncher<Intent> startGemForResult =
+            registerForActivityResult(new ActivityResultContracts.StartActivityForResult(),
+                    result -> {
+                        if (result.getResultCode() == Activity.RESULT_OK) {
+                            Intent data = result.getData();
+                            if (data != null) {
+                                boolean dataChanged = data.getBooleanExtra("dataChanged", false);
+                                if (dataChanged) {
+                                    System.out.println("Data changed");
+//                                    myUser = (Player) data.getSerializableExtra("myUser");
                                     setViews();
                                 }
                             }
@@ -74,6 +97,8 @@ public class ProfileFragment extends Fragment {
         mySettButton = view.findViewById(R.id.ProfileSettingButton);
         profileRank = view.findViewById(R.id.ProfileRank);
         listView = view.findViewById(R.id.ProfileQR_list_view);
+        highestQR = view.findViewById(R.id.ProfileHighest_QR);
+        lowestQR = view.findViewById(R.id.ProfileLowest_QR);
 
         UserState us = UserState.getInstance();
         String userID = us.getUserID();
@@ -100,7 +125,13 @@ public class ProfileFragment extends Fragment {
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
-                String name = adapterView.getItemAtPosition(i).toString();
+                getActivity().runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        String name = adapterView.getItemAtPosition(i).toString();
+                        startGemActivity(name);
+                    }
+                });
             }
         });
 
@@ -120,8 +151,12 @@ public class ProfileFragment extends Fragment {
             myUser.setGeoLocationSett((Boolean) data.get("geolocation_setting"));
             myUser.setPlayerId(userID);
             myUser.setQrCodeCollection((ArrayList<String>) data.get("qr_code_ids"));
+
             getAndSetRank(userID);
             System.out.println("Setting views");
+
+            setHighestLowest(userID, highestQR, lowestQR);
+
             getAndSetList(userID);
             System.out.println("Setting List");
             setViews();
@@ -145,6 +180,14 @@ public class ProfileFragment extends Fragment {
         Intent intent = new Intent(getActivity(), SettingActivity.class);
         intent.putExtra("myUser", myUser); // pass the user data to the settings activity
         startSettingsForResult.launch(intent);
+    }
+
+    private void startGemActivity(String name)
+    {
+        Intent intent = new Intent(getActivity(), GemActivity.class);
+        intent.putExtra("name", name);
+        startGemForResult.launch(intent);
+
     }
 
     public void getAndSetRank(String userID){
@@ -185,6 +228,63 @@ public class ProfileFragment extends Fragment {
                 }
             }
         });
-
     }
+    private void setHighestLowest(String userID, TextView highestPointsTextView, TextView lowestPointsTextView) {
+        PlayerCollection pc = new PlayerCollection(null);
+        QRCollection qrc = new QRCollection(null);
+
+        pc.read(userID, userData -> {
+            List<String> qrIds = (List<String>) userData.get("qr_code_ids");
+
+            if (qrIds != null && !qrIds.isEmpty()) {
+                int[] highestPoints = {0};
+                int[] lowestPoints = {Integer.MAX_VALUE};
+                String[] highestName = {""};
+                String[] lowestName = {""};
+
+                int count = qrIds.size();
+                AtomicInteger completed = new AtomicInteger(0);
+
+                for (String qrId : qrIds) {
+                    qrc.read(qrId, qrData -> {
+                        int points = ((Long) qrData.get("points")).intValue();
+                        String name = (String) qrData.get("name");
+
+                        if (points > highestPoints[0]) {
+                            highestPoints[0] = points;
+                            highestName[0] = name;
+                        }
+
+                        if (points < lowestPoints[0]) {
+                            lowestPoints[0] = points;
+                            lowestName[0] = name;
+                        }
+
+                        int currentCount = completed.incrementAndGet();
+                        if (currentCount == count) {
+                            highestPointsTextView.setText(highestName[0] + " (" + highestPoints[0] + ")");
+                            lowestPointsTextView.setText(lowestName[0] + " (" + lowestPoints[0] + ")");
+                        }
+                    }, e -> {
+                        // handle error
+                        int currentCount = completed.incrementAndGet();
+                        if (currentCount == count) {
+                            highestPointsTextView.setText("N/A");
+                            lowestPointsTextView.setText("N/A");
+                        }
+                    });
+                }
+            } else {
+                // handle case where user has no qr ids
+                highestPointsTextView.setText("N/A");
+                lowestPointsTextView.setText("N/A");
+            }
+        }, e -> {
+            // handle error
+            highestPointsTextView.setText("N/A");
+            lowestPointsTextView.setText("N/A");
+        });
+    }
+
+
 }

@@ -174,7 +174,7 @@
                 android:textStyle="bold">
             </TextView>
             <ListView
-                android:id="@+id/OUQR_image_view"
+                android:id="@+id/OUQR_list_view"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent">
             </ListView>

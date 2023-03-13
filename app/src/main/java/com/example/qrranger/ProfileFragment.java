@@ -5,12 +5,17 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.provider.Settings;
+import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.ImageButton;
 import android.widget.ImageView;
+import android.widget.ListView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContracts;
@@ -18,12 +23,16 @@ import androidx.fragment.app.Fragment;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 import java.util.Objects;
 import java.util.concurrent.CompletableFuture;
+import java.util.concurrent.ExecutionException;
+import java.util.concurrent.atomic.AtomicInteger;
 
 import com.example.qrranger.R;
+import com.google.firebase.firestore.DocumentSnapshot;
 
 public class ProfileFragment extends Fragment {
     Player myUser = new Player();
@@ -37,6 +46,11 @@ public class ProfileFragment extends Fragment {
     private ImageView myAvatar;
     private ImageButton mySettButton;
     private Intent data;
+    private ArrayAdapter<String> adapter;
+    private ListView listView;
+    private TextView highestQR;
+    private TextView lowestQR;
+    PlayerCollection myPlayerCollection = new PlayerCollection(Database.getInstance());
 
     private ActivityResultLauncher<Intent> startSettingsForResult =
             registerForActivityResult(new ActivityResultContracts.StartActivityForResult(),
@@ -54,7 +68,25 @@ public class ProfileFragment extends Fragment {
                         }
                     });
 
-    PlayerCollection myPlayerCollection = new PlayerCollection(Database.getInstance());
+    private ActivityResultLauncher<Intent> startGemForResult =
+            registerForActivityResult(new ActivityResultContracts.StartActivityForResult(),
+                    result -> {
+                        if (result.getResultCode() == Activity.RESULT_OK) {
+                            Intent data = result.getData();
+                            if (data != null) {
+                                boolean dataChanged = data.getBooleanExtra("dataDeleted", false);
+                                if (dataChanged) {
+                                    System.out.println("Data deleted");
+                                    String qr_id = data.getStringExtra("qr_id");
+                                    myPlayerCollection.delete_QR_from_players(myUser.getPlayerId(), qr_id);
+                                    getAndSetList(myUser.getPlayerId());
+                                    MainActivity mainActivity = (MainActivity) getActivity();
+                                    mainActivity.replaceFragment(new ProfileFragment());
+                                }
+                            }
+                        }
+                    });
+
 
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -68,6 +100,9 @@ public class ProfileFragment extends Fragment {
         playerTotalQRCodes = view.findViewById(R.id.ProfileQRNum);
         mySettButton = view.findViewById(R.id.ProfileSettingButton);
         profileRank = view.findViewById(R.id.ProfileRank);
+        listView = view.findViewById(R.id.ProfileQR_list_view);
+        highestQR = view.findViewById(R.id.ProfileHighest_QR);
+        lowestQR = view.findViewById(R.id.ProfileLowest_QR);
 
         UserState us = UserState.getInstance();
         String userID = us.getUserID();
@@ -91,6 +126,20 @@ public class ProfileFragment extends Fragment {
             }
         });
 
+        listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+                getActivity().runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        String name = adapterView.getItemAtPosition(i).toString();
+                        startGemActivity(name, i);
+                    }
+                });
+            }
+        });
+
+
         return view;
     }
     public void setValues(String userID){
@@ -105,9 +154,15 @@ public class ProfileFragment extends Fragment {
             myUser.setTotalQRCode(((Long) data.get("totalQRCode")));
             myUser.setGeoLocationSett((Boolean) data.get("geolocation_setting"));
             myUser.setPlayerId(userID);
-            myUser.setQrCodeCollection((ArrayList<QRCode>) data.get("qr_code_ids"));
+            myUser.setQrCodeCollection((ArrayList<String>) data.get("qr_code_ids"));
+
             getAndSetRank(userID);
             System.out.println("Setting views");
+
+            setHighestLowest(userID, highestQR, lowestQR);
+
+            getAndSetList(userID);
+            System.out.println("Setting List");
             setViews();
             }, error -> {
                 // Player not found, cannot set values
@@ -131,6 +186,15 @@ public class ProfileFragment extends Fragment {
         startSettingsForResult.launch(intent);
     }
 
+    private void startGemActivity(String name, Integer index)
+    {
+        Intent intent = new Intent(getActivity(), GemActivity.class);
+        String qr_id = myUser.getQrCodeCollection().get(index);
+        intent.putExtra("qr_id", qr_id);
+        intent.putExtra("name", name);
+        startGemForResult.launch(intent);
+    }
+
     public void getAndSetRank(String userID){
         CompletableFuture<Integer> rankFuture = myPlayerCollection.getPlayerRank(userID);
         rankFuture.thenAccept(rank -> {
@@ -141,4 +205,92 @@ public class ProfileFragment extends Fragment {
             return null;
         });
     }
+
+
+    public void getAndSetList(String userID){
+        getActivity().runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                // code that modifies the adapter
+                ArrayList<String> qrCodeCollection = myUser.getQrCodeCollection();
+                ArrayList<String> qrNames = new ArrayList<>();
+                QRCollection qrc = new QRCollection(null);
+                for (String qrCode : qrCodeCollection) {
+                    qrc.read(qrCode, data -> {
+                        // qr found
+                        qrNames.add(data.get("name").toString());
+                        if (qrNames.size() == qrCodeCollection.size()) {
+                            // All QR names retrieved, update list view
+                            if (qrNames != null){
+                            ArrayAdapter<String> adapter = new ArrayAdapter<>(getContext(),
+                                    android.R.layout.simple_list_item_1, qrNames);
+                            listView.setAdapter(adapter);}
+                        }
+                    }, error -> {
+                        // qr not found, cannot set values
+                        System.out.println("Error getting player data: " + error);
+                    });
+
+                }
+            }
+        });
+    }
+    private void setHighestLowest(String userID, TextView highestPointsTextView, TextView lowestPointsTextView) {
+        PlayerCollection pc = new PlayerCollection(null);
+        QRCollection qrc = new QRCollection(null);
+
+        pc.read(userID, userData -> {
+            List<String> qrIds = (List<String>) userData.get("qr_code_ids");
+
+            if (qrIds != null && !qrIds.isEmpty()) {
+                int[] highestPoints = {0};
+                int[] lowestPoints = {Integer.MAX_VALUE};
+                String[] highestName = {""};
+                String[] lowestName = {""};
+
+                int count = qrIds.size();
+                AtomicInteger completed = new AtomicInteger(0);
+
+                for (String qrId : qrIds) {
+                    qrc.read(qrId, qrData -> {
+                        int points = ((Long) qrData.get("points")).intValue();
+                        String name = (String) qrData.get("name");
+
+                        if (points > highestPoints[0]) {
+                            highestPoints[0] = points;
+                            highestName[0] = name;
+                        }
+
+                        if (points < lowestPoints[0]) {
+                            lowestPoints[0] = points;
+                            lowestName[0] = name;
+                        }
+
+                        int currentCount = completed.incrementAndGet();
+                        if (currentCount == count) {
+                            highestPointsTextView.setText(highestName[0] + " (" + highestPoints[0] + ")");
+                            lowestPointsTextView.setText(lowestName[0] + " (" + lowestPoints[0] + ")");
+                        }
+                    }, e -> {
+                        // handle error
+                        int currentCount = completed.incrementAndGet();
+                        if (currentCount == count) {
+                            highestPointsTextView.setText("N/A");
+                            lowestPointsTextView.setText("N/A");
+                        }
+                    });
+                }
+            } else {
+                // handle case where user has no qr ids
+                highestPointsTextView.setText("N/A");
+                lowestPointsTextView.setText("N/A");
+            }
+        }, e -> {
+            // handle error
+            highestPointsTextView.setText("N/A");
+            lowestPointsTextView.setText("N/A");
+        });
+    }
+
+
 }

@@ -26,8 +26,9 @@ public class Player implements Serializable {
 
     /**
      * Allows each player to have their own qrCollection
+     * holds a list of qr ids
      */
-    private ArrayList<QRCode> qrCodeCollection;
+    private ArrayList<String> qrCodeCollection;
 
     //player stats
 //    private QRCode leastScoring = qrCodeCollection.getLeast();
@@ -88,7 +89,7 @@ public class Player implements Serializable {
     // set totalQRCode (the number of QR codes the player owns)
     public void setTotalQRCode(Long totalQRCode){ this.totalQRCode = totalQRCode; }
     // set the QR code collection
-    public void setQrCodeCollection(ArrayList<QRCode> QRList) { this.qrCodeCollection = QRList; }
+    public void setQrCodeCollection(ArrayList<String> QRList) { this.qrCodeCollection = QRList; }
 
 
     /**
@@ -114,13 +115,14 @@ public class Player implements Serializable {
         return totalQRCode;
     }
     public Boolean getGeoLocationFlag() { return geoLocationSett; }
+    public ArrayList<String> getQrCodeCollection() { return qrCodeCollection; }
 
 
     /**
      * Adds QR code to a player's collection
      */
     public void addQRCode(QRCode newQR){
-        qrCodeCollection.add(newQR);
+        qrCodeCollection.add(newQR.getId());
     }
 
     //remove QR Code

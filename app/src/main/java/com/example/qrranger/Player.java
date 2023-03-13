@@ -6,7 +6,9 @@ import java.io.Serializable;
 import java.util.ArrayList;
 
 public class Player implements Serializable {
-
+    /**
+     * Sets Player class with attributes
+     */
     //player profile
     private String playerId;
     private String email;
@@ -16,10 +18,15 @@ public class Player implements Serializable {
     private Long totalQRCode;
 
 
-    //player settings
+
+    /**
+     * Provides attribute for allowing geolocation
+     */
     private boolean geoLocationSett;
 
-    //Collection of QrCode
+    /**
+     * Allows each player to have their own qrCollection
+     */
     private ArrayList<QRCode> qrCodeCollection;
 
     //player stats
@@ -27,7 +34,9 @@ public class Player implements Serializable {
 //    private QRCode highestScoring = qrCodeCollection.getHighest();
 //    private int scoreTotal = qrCodeCollection.getTotal();
 
-    //location of player
+    /**
+     * Allows location to be stored where the player scans a QR code
+     */
     private Location location;
     public Player(){
     }
@@ -37,16 +46,15 @@ public class Player implements Serializable {
         this.phoneNumber = phoneNumber;
         this.email = email;
     }
-
-    //change username
+    /**
+     * Allows for the changing of Username, Phonenumber and GeoSetting
+     */
     public void changeUsername(String userName){
         this.userName = userName;
     }
-    //change phone number
     public void changePhoneNumb(String phoneNumb){
         this.phoneNumber = phoneNumb;
     }
-    //change geo setting
     public void changeGeoSett(){
         if (this.geoLocationSett == true){
             this.geoLocationSett = false;
@@ -54,23 +62,24 @@ public class Player implements Serializable {
             this.geoLocationSett = true;
         }
     }
-    // set user email
+    /**
+     * Setters for userEmail, PlayerId, UserName, and Geolocation Setting
+     */
     public void setEmail(String email) {
         this.email = email;
     }
-    //set User ID
     public void setPlayerId(String playerId){
         this.playerId = playerId;
     }
-    //set user name
     public void setUserName(String userName) {
         this.userName = userName;
     }
-    //set GeoLocation
     public void setGeoLocationSett(boolean geoLocationSett) {
         this.geoLocationSett = geoLocationSett;
     }
-    //set phone number
+    /**
+     * Setters for phoneNumber, totalScore, totalQRCodes and QRCodeCollection
+     */
     public void setPhoneNumber(String phoneNumber) {
         this.phoneNumber = phoneNumber;
     }
@@ -82,37 +91,34 @@ public class Player implements Serializable {
     public void setQrCodeCollection(ArrayList<QRCode> QRList) { this.qrCodeCollection = QRList; }
 
 
-    //get player ID
+    /**
+     * Getters for playerId, email, userName, phoneNumber, comment, totalScore, totalQRCodes, and geoLocationSett
+     */
     public String getPlayerId() {
         return playerId;
     }
-    //get email
     public String getEmail() {
         return email;
     }
-    //get username
     public String getUserName() {
         return userName;
     }
-    //get phone number
     public String getPhoneNumber() {
         return phoneNumber;
     }
-    //comment
     public String comment(String comment){
         return comment;
     }
-    // get totalScore
     public Long getTotalScore() { return totalScore; }
-    // get total qr code scanned by player
     public Long getTotalQRCode() {
         return totalQRCode;
     }
-    // get the geolocation settings boolean
     public Boolean getGeoLocationFlag() { return geoLocationSett; }
 
 
-    //add QR Code
+    /**
+     * Adds QR code to a player's collection
+     */
     public void addQRCode(QRCode newQR){
         qrCodeCollection.add(newQR);
     }
@@ -125,7 +131,9 @@ public class Player implements Serializable {
 //            }
 //        }
 //    }
-    //give player current Location
+    /**
+     * When prompted, provides user location
+     */
     public Location getLocation(){
         return this.location;
     }

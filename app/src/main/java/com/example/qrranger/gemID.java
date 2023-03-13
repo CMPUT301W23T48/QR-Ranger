@@ -3,9 +3,9 @@ package com.example.qrranger;
 import java.util.Random;
 
 public class gemID {
-    private String bgColor;
-    private String boarder;
-    private String gemType;
+    private int bgColor;
+    private int boarder;
+    private int gemType;
     private int lusterLevel;
     private String gemName;
 
@@ -13,23 +13,24 @@ public class gemID {
         //Creates gem ID
         Random generator = new Random();
         //Randomly assign background color to Gem
-        String[] bgColor = new String[]{"bgred", "bgblue", "bgpurple", "bgpink", "bgwhite"};
+        int[] bgColor = new int[]{R.drawable.bgred, R.drawable.bgblue, R.drawable.bgpurple, R.drawable.bgpink, R.drawable.bgwhite};
         int randomIndex = generator.nextInt(bgColor.length);
         setBgColor(bgColor[randomIndex]);
 
         //Randomly assign boarder to Gem
-        String[] boarder = new String[]{"gemborder", "blackborder", "bronzeborder", "silverborder", "goldborder", "bookborder"};
+        int[] boarder = new int[]{R.drawable.gemborder, R.drawable.blackborder, R.drawable.bronzeborder, R.drawable.silverborder, R.drawable.goldborder, R.drawable.bookborder};
         randomIndex = generator.nextInt(boarder.length);
         setBoarder(boarder[randomIndex]);
 
         //Randomly assign gem type to Gem
-        String[] gemType = new String[]{"bluegem1", "bluegem2", "bluegem3", "greengem1", "greengem2", "greengem3", "purplegem1", "purplegem2", "purplegem3", "yellowgem1", "yellowgem2", "yellowgem3"};
+        int[] gemType = new int[]{R.drawable.bluegem1, R.drawable.bluegem2, R.drawable.bluegem3, R.drawable.greengem1, R.drawable.greengem2, R.drawable.greengem3, R.drawable.purplegem1, R.drawable.purplegem2, R.drawable.purplegem3, R.drawable.yellowgem1, R.drawable.yellowgem2, R.drawable.yellowgem3};
         randomIndex = generator.nextInt(gemType.length);
         setGemType(gemType[randomIndex]);
 
         //Randomly assign luster level to Gem
-        randomIndex = generator.nextInt(4)+1;
-        setLusterLevel(randomIndex);
+        int[] gemLustre = new int[]{R.drawable.lusterlevel0, R.drawable.lusterlevel1, R.drawable.lusterlevel2, R.drawable.lusterlevel3, R.drawable.lusterlevel4};
+        randomIndex = generator.nextInt(4);
+        setLusterLevel(gemLustre[randomIndex]);
     }
     public String gemName(String hash) {
         //Takes hash and turns it into a binary array
@@ -82,13 +83,13 @@ public class gemID {
     }
 
     //Getters for gem representation
-    public String getBgColor() {
+    public int getBgColor() {
         return bgColor;
     }
-    public String getBoarder() {
+    public int getBoarder() {
         return boarder;
     }
-    public String getGemType() {
+    public int getGemType() {
         return gemType;
     }
     public int getLusterLevel() {
@@ -96,13 +97,13 @@ public class gemID {
     }
 
     //Setters for gem representation
-    public void setBgColor(String bgColor) {
+    public void setBgColor(int bgColor) {
         this.bgColor = bgColor;
     }
-    public void setBoarder(String boarder) {
+    public void setBoarder(int boarder) {
         this.boarder = boarder;
     }
-    public void setGemType(String gemType) { this.gemType = gemType;}
+    public void setGemType(int gemType) { this.gemType = gemType;}
     public void setLusterLevel(int lusterLevel) {
         this.lusterLevel = lusterLevel;
     }

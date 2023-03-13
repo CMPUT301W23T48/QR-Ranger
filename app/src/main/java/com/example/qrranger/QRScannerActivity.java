@@ -11,6 +11,7 @@ import android.provider.MediaStore;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -36,11 +37,16 @@ public class QRScannerActivity extends AppCompatActivity{
     private Button confirmButton;
     private TextView qrTitle;
     private TextView qrScore;
+    private ImageView gemShape;
+    private ImageView backgroundColor;
+    private ImageView gemBorder;
+    private ImageView gemLustre;
     private Bitmap locationImage;
-    private byte[] scanResult;
-    private int CAMERA_PERMISSIONS_REQUEST_CODE = 100;
-
+    private QRGenerator generator;
+    private QRCode qrCode;
+    private String scanResult;
     private ActivityResultLauncher<Intent> pictureResultLauncher;
+    private int CAMERA_PERMISSIONS_REQUEST_CODE = 100;
 
     @Override
     protected void onCreate(Bundle SavedInstanceBundle) {
@@ -50,10 +56,18 @@ public class QRScannerActivity extends AppCompatActivity{
         // Populate view properties.
         rejectButton = findViewById(R.id.button_reject);
         confirmButton = findViewById(R.id.button_confirm);
-        qrTitle = findViewById(R.id.tv_title);
-        qrScore = findViewById(R.id.tv_score);
+        qrTitle = findViewById(R.id.gemName);
+        qrScore = findViewById(R.id.gemValue);
+        gemShape = findViewById(R.id.gem);
+        backgroundColor = findViewById(R.id.backgroundColor);
+        gemBorder = findViewById(R.id.borderType);
+        gemLustre = findViewById(R.id.lusterLevel);
 
         scanQR();
+
+        qrCode = generator.generateQR(scanResult);
+
+        updateUi();
 
         /*
          * Similar to onActivityResult() seen below, but the
@@ -76,9 +90,6 @@ public class QRScannerActivity extends AppCompatActivity{
 
                                 // Return to the main activity with the image data.
                                 Intent returnIntent = new Intent(getBaseContext(), MainActivity.class);
-                                returnIntent.putExtra("qr_code", scanResult);
-                                returnIntent.putExtra("image", locationImage);
-
                                 startActivity(returnIntent);
                             }
                         }
@@ -98,9 +109,25 @@ public class QRScannerActivity extends AppCompatActivity{
         confirmButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                takePhoto();
+                try {
+                    generator.addQRToAccount(qrCode.getId());
+                    takePhoto();
+                }
+                catch (IllegalArgumentException e) {
+                    // QR is already in account.
+                    Toast.makeText(getBaseContext(), "QR is already in account!", Toast.LENGTH_SHORT);
+                }
             }
         });
+    }
+
+    private void updateUi() {
+        gemShape.setImageResource(qrCode.getGemID().getGemType());
+        gemLustre.setImageResource(qrCode.getGemID().getLusterLevel());
+        gemBorder.setImageResource(qrCode.getGemID().getBoarder());
+        backgroundColor.setImageResource(qrCode.getGemID().getBgColor());
+        qrTitle.setText(qrCode.getName());
+        qrScore.setText(qrCode.getPoints());
     }
 
     /**
@@ -161,7 +188,7 @@ public class QRScannerActivity extends AppCompatActivity{
             // Get the result.
             IntentResult intentResult = IntentIntegrator.parseActivityResult(requestCode, resultCode, data);
             if (intentResult != null && intentResult.getContents() != null) {
-                scanResult = intentResult.getRawBytes();
+                scanResult = intentResult.getRawBytes().toString();
             } else {
                 // An error occurs and the scan returns no results.
                 Log.e(TAG, "Error during QR scan.");

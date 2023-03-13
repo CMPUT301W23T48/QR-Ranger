@@ -18,15 +18,13 @@ import java.util.concurrent.CompletableFuture;
 public class QRGenerator {
     private QRCollection qrCollection;
     private PlayerCollection playerCollection;
-    private gemID gemRepresentation;
 
     private QRCode qr;
 
     public QRGenerator() {
         qrCollection = new QRCollection(null);
         playerCollection = new PlayerCollection(null);
-        gemRepresentation = new gemID();
-        qr = new QRCode("None", "None", "None");
+        qr = new QRCode("None", "None");
     }
 
     /**
@@ -54,9 +52,9 @@ public class QRGenerator {
                     String name = Objects.requireNonNull(data.get("name").toString());
                     String url = Objects.requireNonNull(data.get("url").toString());
                     Integer points = (Integer) data.get("points");
+                    gemID gem = (gemID) data.get("gem_id");
 
-                    qr = new QRCode(qrId, name, url);
-                    qr.setPoints(points);
+                    qr = new QRCode(qrId, url, gem);
                 }, error -> {
                     // Send error message.
                     Log.e(TAG, "Error loading QR database entry.");
@@ -65,16 +63,12 @@ public class QRGenerator {
             else {
                 // QR doesn't exist, so generate a new one!
                 String hash = SHA256Hash(qrData);
-                Integer points = calculateScore(hash);
-                gemRepresentation = new gemID();
-                String name = "Placeholder!";
 
                 // Create the QRCode object.
-                qr = new QRCode(hash, name, qrData);
-                qr.setPoints(points);
+                qr = new QRCode(hash, qrData);
 
                 // Add the new QR to the database:
-                Map values = qrCollection.createValues(hash, name, qrData, points);
+                Map values = qrCollection.createValues(hash, qr.getName(), qrData, qr.getPoints(), qr.getGemID());
                 qrCollection.create(values);
             }
         });

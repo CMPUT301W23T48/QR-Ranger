@@ -95,7 +95,7 @@ public class QRCollection extends Database_Controls{
         });
     }
 
-    public Map createValues(String QR_ID, String name, String url, Integer points)
+    public Map createValues(String QR_ID, String name, String url, Integer points, gemID gem)
     {
         // This represents the fields in the player collection
         // can add or remove fields here
@@ -104,6 +104,7 @@ public class QRCollection extends Database_Controls{
         values.put("name", name);
         values.put("url", url);
         values.put("points", points);
+        values.put("gem_id", gem);
         return values;
     }
 

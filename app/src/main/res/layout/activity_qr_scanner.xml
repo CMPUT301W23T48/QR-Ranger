@@ -10,8 +10,9 @@
         style="@style/Widget.Material3.Button"
         android:layout_width="135dp"
         android:layout_height="67dp"
-        android:layout_marginBottom="316dp"
+        android:layout_marginBottom="148dp"
         android:text="Confirm"
+        android:textSize="16sp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toEndOf="@id/button_reject" />
@@ -21,42 +22,96 @@
         style="@style/Widget.Material3.Button"
         android:layout_width="135dp"
         android:layout_height="67dp"
-        android:layout_marginBottom="316dp"
+        android:layout_marginBottom="148dp"
         android:text="Cancel"
+        android:textSize="16sp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toStartOf="@+id/button_confirm"
         app:layout_constraintStart_toStartOf="parent" />
 
     <TextView
-        android:id="@+id/tv_title"
+        android:id="@+id/gemName"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="QR Title"
-        android:textSize="24sp"
-        app:layout_constraintBottom_toTopOf="@+id/button_reject"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.497"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.151" />
-
-    <ImageView
-        android:id="@+id/imageView"
-        android:layout_width="273dp"
-        android:layout_height="251dp"
+        android:text="@string/app_name"
+        android:textColor="@color/black"
+        app:layout_constraintBottom_toTopOf="@+id/backgroundColor"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/tv_title"
-        app:srcCompat="@drawable/ic_launcher_foreground" />
+        app:layout_constraintTop_toTopOf="parent" />
 
     <TextView
-        android:id="@+id/tv_score"
+        android:id="@+id/gemValue"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="QR Score"
-        app:layout_constraintBottom_toTopOf="@+id/button_confirm"
+        android:text="@string/app_name"
+        android:textColor="@color/black"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.498"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/imageView" />
+        app:layout_constraintTop_toBottomOf="@+id/backgroundColor"
+        app:layout_constraintVertical_bias="0.057" />
+
+    <ImageView
+        android:id="@+id/backgroundColor"
+        android:layout_width="300dp"
+        android:layout_height="300dp"
+        android:background="#007C7777"
+        android:contentDescription="@string/app_name"
+        android:cropToPadding="true"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.498"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.126"
+        app:srcCompat="@drawable/bgblue" />
+
+    <ImageView
+        android:id="@+id/borderType"
+        android:layout_width="300dp"
+        android:layout_height="300dp"
+        android:background="#007C7777"
+        android:contentDescription="@string/app_name"
+        android:cropToPadding="false"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.498"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.126"
+        app:srcCompat="@drawable/blackborder" />
+
+    <ImageView
+        android:id="@+id/gem"
+        android:layout_width="300dp"
+        android:layout_height="300dp"
+        android:background="#007C7777"
+        android:contentDescription="@string/app_name"
+        android:cropToPadding="false"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.498"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.126"
+        app:srcCompat="@drawable/bluegem2" />
+
+    <ImageView
+        android:id="@+id/lusterLevel"
+        android:layout_width="300dp"
+        android:layout_height="300dp"
+        android:background="#007C7777"
+        android:contentDescription="@string/app_name"
+        android:cropToPadding="false"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.498"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.126"
+        app:srcCompat="@drawable/lusterlevel3"
+        tools:srcCompat="@drawable/lusterlevel3" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

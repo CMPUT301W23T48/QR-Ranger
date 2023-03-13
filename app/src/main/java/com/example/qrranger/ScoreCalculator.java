@@ -1,6 +1,6 @@
 package com.example.qrranger;
 
-import static com.example.qrranger.SHA256Hash.hash;
+
 
 public class ScoreCalculator {
 

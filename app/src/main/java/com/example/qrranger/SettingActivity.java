@@ -15,11 +15,11 @@ import java.util.Map;
 import java.util.concurrent.CompletableFuture;
 
 public class SettingActivity extends AppCompatActivity {
-    Button backButton;
-    Button confirmButton, confirmButton2, confirmButton3;
-    EditText editUserName ;
-    EditText editPhoneNumber;
-    EditText editEmail;
+    private Button backButton;
+    private Button confirmButton, confirmButton2, confirmButton3;
+    private EditText editUserName ;
+    private EditText editPhoneNumber;
+    private EditText editEmail;
     private Boolean settingsChanged = false;
 
     @Override

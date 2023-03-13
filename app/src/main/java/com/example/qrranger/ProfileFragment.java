@@ -80,6 +80,8 @@ public class ProfileFragment extends Fragment {
                                     String qr_id = data.getStringExtra("qr_id");
                                     myPlayerCollection.delete_QR_from_players(myUser.getPlayerId(), qr_id);
                                     getAndSetList(myUser.getPlayerId());
+                                    MainActivity mainActivity = (MainActivity) getActivity();
+                                    mainActivity.replaceFragment(new ProfileFragment());
                                 }
                             }
                         }
@@ -191,7 +193,6 @@ public class ProfileFragment extends Fragment {
         intent.putExtra("qr_id", qr_id);
         intent.putExtra("name", name);
         startGemForResult.launch(intent);
-
     }
 
     public void getAndSetRank(String userID){
@@ -220,9 +221,10 @@ public class ProfileFragment extends Fragment {
                         qrNames.add(data.get("name").toString());
                         if (qrNames.size() == qrCodeCollection.size()) {
                             // All QR names retrieved, update list view
+                            if (qrNames != null){
                             ArrayAdapter<String> adapter = new ArrayAdapter<>(getContext(),
                                     android.R.layout.simple_list_item_1, qrNames);
-                            listView.setAdapter(adapter);
+                            listView.setAdapter(adapter);}
                         }
                     }, error -> {
                         // qr not found, cannot set values

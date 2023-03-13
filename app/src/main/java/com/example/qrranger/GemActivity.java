@@ -65,11 +65,11 @@ public class GemActivity extends AppCompatActivity {
         deleteButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                deleted = true;
-                Intent returnIntent = new Intent();
-                returnIntent.putExtra("dataDeleted", deleted);
-                returnIntent.putExtra("qr_id", qr_id); // Pass the modified object back to the first activity
-                setResult(RESULT_OK, returnIntent);
+//                deleted = true;
+//                Intent returnIntent = new Intent();
+//                returnIntent.putExtra("dataDeleted", deleted);
+//                returnIntent.putExtra("qr_id", qr_id); // Pass the modified object back to the first activity
+//                setResult(RESULT_OK, returnIntent);
                 finish();
             }
         });

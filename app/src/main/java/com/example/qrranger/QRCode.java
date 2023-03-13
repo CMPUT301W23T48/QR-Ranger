@@ -1,14 +1,15 @@
 package com.example.qrranger;
 
 public class QRCode {
+    private String id;
     private String name;
     private String url;
     private Integer points;
-
     private String geoLocation;
 
     //Initialization of the QRCode Class
-    public QRCode(String name, String url) {
+    public QRCode(String id, String name, String url) {
+        this.id = id;
         this.name = name;
         this.url = url;
         this.points = 0;
@@ -16,6 +17,10 @@ public class QRCode {
     }
 
     //Getters for the QR code Class
+    public String getId() {
+        return id;
+    }
+
     public String getName() {
         return name;
     }

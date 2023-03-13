@@ -7,6 +7,7 @@ public class gemID {
     private String boarder;
     private String gemType;
     private int lusterLevel;
+    private String gemName;
 
     public gemID() {
         //Creates gem ID
@@ -30,6 +31,56 @@ public class gemID {
         randomIndex = generator.nextInt(4)+1;
         setLusterLevel(randomIndex);
     }
+    public String gemName(String hash) {
+        //Takes hash and turns it into a binary array
+        StringBuilder result = new StringBuilder();
+        char[] hashChars = hash.toCharArray();
+        for (char aChar: hashChars){
+            result.append(
+                    String.format("%8s", Integer.toBinaryString(aChar))
+                            .replaceAll(" ", "0")
+            );
+        }
+        result.toString();
+        String name = "";
+        if (hashChars[0] == '0') {
+            name += "Clear ";
+        } else {
+            name += "Smokey ";
+        }
+        if (hashChars[1] == '0') {
+            name += "Shiny ";
+        } else {
+            name += "Dull ";
+        }
+        if (hashChars[2] == '0') {
+            name += "Rare ";
+        } else {
+            name += "Common ";
+        }
+        if (hashChars[3] == '0') {
+            name += "Flawless ";
+        } else {
+            name += "Spotless ";
+        }
+        if (hashChars[4] == '0') {
+            name += "BO";
+        } else {
+            name += "Lo";
+        }
+        if (hashChars[5] == '0') {
+            name += "Sho ";
+        } else {
+            name += "Kou ";
+        }
+        if (hashChars[6] == '0') {
+            name += "Quartz";
+        } else {
+            name += "Diamond";
+        }
+        return name;
+    }
+
     //Getters for gem representation
     public String getBgColor() {
         return bgColor;

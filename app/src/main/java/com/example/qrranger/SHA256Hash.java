@@ -2,7 +2,10 @@ package com.example.qrranger;
 
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
-
+/**
+ * Provided a String, this class will return the hash
+ * equivalent of that String
+ */
 public class SHA256Hash {
     public static String hash(String input) {
         try {

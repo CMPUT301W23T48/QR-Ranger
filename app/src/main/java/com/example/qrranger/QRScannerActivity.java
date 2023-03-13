@@ -65,10 +65,9 @@ public class QRScannerActivity extends AppCompatActivity{
 
         scanQR();
 
-
         qrCode = generator.generateQR(scanResult);
 
-
+        updateUi();
 
         /*
          * Similar to onActivityResult() seen below, but the
@@ -123,8 +122,12 @@ public class QRScannerActivity extends AppCompatActivity{
     }
 
     private void updateUi() {
-        //gemShape.setImageBitmap("res/drawable-mdpi/" + gemType);
-        gemLustre.setImageBitmap
+        gemShape.setImageResource(qrCode.getGemID().getGemType());
+        gemLustre.setImageResource(qrCode.getGemID().getLusterLevel());
+        gemBorder.setImageResource(qrCode.getGemID().getBoarder());
+        backgroundColor.setImageResource(qrCode.getGemID().getBgColor());
+        qrTitle.setText(qrCode.getName());
+        qrScore.setText(qrCode.getPoints());
     }
 
     /**

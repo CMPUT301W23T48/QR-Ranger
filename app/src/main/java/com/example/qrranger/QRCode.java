@@ -8,16 +8,25 @@ public class QRCode {
     private Integer points;
     private String geoLocation;
 
-    private gemID gemID;
+    private gemID gemId;
 
     //Initialization of the QRCode Class
-    public QRCode(String id, String name, String url, gemID gemID) {
+    public QRCode(String id, String url) {
         this.id = id;
-        this.name = name;
+        this.gemId = new gemID();
+        this.name = gemId.gemName(id);
         this.url = url;
-        this.points = 0;
+        this.points = calculateScore(id);
         this.geoLocation = "Unknown";
-        this.gemID = gemID;
+
+    }
+
+    public QRCode(String id, String url, gemID gemId) {
+        this.id = id;
+        this.gemId = gemId;
+        this.name = gemId.gemName(id);
+        this.url = url;
+        this.geoLocation = "Unknown";
     }
 
     //Getters for the QR code Class
@@ -39,6 +48,10 @@ public class QRCode {
 
     public String getGeoLocation(){
         return geoLocation;
+    }
+
+    public gemID getGemID() {
+        return this.gemId;
     }
 
     //Setters for the QR code class

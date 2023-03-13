@@ -3,13 +3,12 @@ package com.example.qrranger;
 import junit.framework.TestCase;
 
 import org.junit.Test;
-
-public class QRCodeTest extends TestCase {
+/**
+ * Testing Setters and Getters of QRCode by first initializing the class
+ * getting the inital attributes, and setting them to new ones
+ */
+public class QRCodeTest {
     @Test
-    /**
-     * Testing Setters and Getters of QRCode by first initializing the class
-     * getting the inital attributes, and setting them to new ones
-     */
     public void testGettersAndSettersOfQRCode(){
         QRCode test = new QRCode("9a86a0b4c6d85bf937e174b39055a156","https://www.youtube.com/");
         System.out.println(test.getId());
@@ -34,7 +33,7 @@ public class QRCodeTest extends TestCase {
      *
      * Since both scores are the same, this shows that our calculateScore
      * method works properly
-     */
+     **/
     public void testScoreCalculator(){
         QRCode test = new QRCode("696ce4dbd7bb57cbfe58b64f530f428b74999cb37e2ee60980490cd9552de3a6","https://www.youtube.com/");
         test.setPoints(QRCode.calculateScore(test.getId()));

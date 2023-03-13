@@ -3,13 +3,13 @@ package com.example.qrranger;
 import junit.framework.TestCase;
 
 import org.junit.Test;
-
+/**
+ * Testing getters and setters of the player class, along with
+ * the changeUserName, changeGeoSett, and changePhoneNumber
+ */
 public class PlayerTest extends TestCase {
     @Test
-    /**
-     * Testing getters and setters of the player class, along with
-     * the changeUserName, changeGeoSett, and changePhoneNumber
-     */
+
     public void testPlayerChangeMethods(){
         Player player = new Player();
         boolean False = false;

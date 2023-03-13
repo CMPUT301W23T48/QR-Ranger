@@ -3,14 +3,14 @@ package com.example.qrranger;
 import static com.example.qrranger.SHA256Hash.hash;
 
 import org.junit.Test;
-
+/**
+ * Gives the hash method a string to hash, and
+ * views the output to see if it successfully hashes the same
+ * hash provided the same string
+ */
 public class QRGeneratorTest {
     @Test
-    /**
-     * Gives the hash method a string to hash, and
-     * views the output to see if it successfully hashes the same
-     * hash provided the same string
-     */
+
     public void SHA256HashTest() {
         String string = "";
         string = hash("apples\n");

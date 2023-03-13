@@ -113,7 +113,7 @@ public class QRScannerActivity extends AppCompatActivity{
                 }
                 catch (IllegalArgumentException e) {
                     // QR is already in account.
-                    Toast.makeText(getBaseContext(), "QR is already in account!", Toast.LENGTH_SHORT);
+                    Toast.makeText(getBaseContext(), "QR is already in account!", Toast.LENGTH_SHORT).show();
                 }
             }
         });
@@ -133,7 +133,7 @@ public class QRScannerActivity extends AppCompatActivity{
      * @See MediaStore.ACTION_IMAGE_CAPTURE
      */
     public void takePhoto() {
-        Toast.makeText(getApplicationContext(), "Take a photo near the QR!", Toast.LENGTH_SHORT);
+        Toast.makeText(getApplicationContext(), "Take a photo near the QR!", Toast.LENGTH_SHORT).show();
         // Make the intent.
         Intent takePhotoIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
 
@@ -207,7 +207,7 @@ public class QRScannerActivity extends AppCompatActivity{
             // Activates on back-button press out of the scanner.
 
             // Small popup notifying the user that the scan was cancelled, if so.
-            Toast.makeText(getBaseContext(), "Scan Cancelled", Toast.LENGTH_SHORT);
+            Toast.makeText(getBaseContext(), "Scan Cancelled", Toast.LENGTH_SHORT).show();
 
             // Return to the main activity rather than the scan page.
             Intent returnToMain = new Intent(getBaseContext(), MainActivity.class);

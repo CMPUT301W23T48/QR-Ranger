@@ -83,6 +83,7 @@ public class QRCode {
     public void setID(String ID) { this.id = ID; }
     public void setGemId(gemID gem) { this.gemId = gem; }
 
+
     /**
      * Takes the String hash of a QRCode and
      * calculates a score using it

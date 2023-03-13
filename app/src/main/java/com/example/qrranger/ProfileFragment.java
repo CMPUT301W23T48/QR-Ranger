@@ -46,9 +46,11 @@ public class ProfileFragment extends Fragment {
     private ImageView myAvatar;
     private ImageButton mySettButton;
     private Intent data;
+    private ArrayAdapter<String> adapter;
     private ListView listView;
     private TextView highestQR;
     private TextView lowestQR;
+    PlayerCollection myPlayerCollection = new PlayerCollection(Database.getInstance());
 
     private ActivityResultLauncher<Intent> startSettingsForResult =
             registerForActivityResult(new ActivityResultContracts.StartActivityForResult(),
@@ -72,17 +74,17 @@ public class ProfileFragment extends Fragment {
                         if (result.getResultCode() == Activity.RESULT_OK) {
                             Intent data = result.getData();
                             if (data != null) {
-                                boolean dataChanged = data.getBooleanExtra("dataChanged", false);
+                                boolean dataChanged = data.getBooleanExtra("dataDeleted", false);
                                 if (dataChanged) {
-                                    System.out.println("Data changed");
-//                                    myUser = (Player) data.getSerializableExtra("myUser");
-                                    setViews();
+                                    System.out.println("Data deleted");
+                                    String qr_id = data.getStringExtra("qr_id");
+                                    myPlayerCollection.delete_QR_from_players(myUser.getPlayerId(), qr_id);
+                                    getAndSetList(myUser.getPlayerId());
                                 }
                             }
                         }
                     });
 
-    PlayerCollection myPlayerCollection = new PlayerCollection(Database.getInstance());
 
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -129,7 +131,7 @@ public class ProfileFragment extends Fragment {
                     @Override
                     public void run() {
                         String name = adapterView.getItemAtPosition(i).toString();
-                        startGemActivity(name);
+                        startGemActivity(name, i);
                     }
                 });
             }
@@ -182,9 +184,11 @@ public class ProfileFragment extends Fragment {
         startSettingsForResult.launch(intent);
     }
 
-    private void startGemActivity(String name)
+    private void startGemActivity(String name, Integer index)
     {
         Intent intent = new Intent(getActivity(), GemActivity.class);
+        String qr_id = myUser.getQrCodeCollection().get(index);
+        intent.putExtra("qr_id", qr_id);
         intent.putExtra("name", name);
         startGemForResult.launch(intent);
 

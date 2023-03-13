@@ -1,16 +1,25 @@
 package com.example.qrranger;
 
-
+/**
+ * The structure for the QR class
+ * Also responsible for calculating the score of a QR code
+ */
 public class QRCode {
+    /**
+     * Attributes of id, name, url, points,
+     * geoLocation and gemID for QRCode cLass
+     */
     private String id;
     private String name;
     private String url;
     private Integer points;
     private String geoLocation;
-
     private gemID gemId;
 
-    //Initialization of the QRCode Class
+    /**
+     * Initializer for generating a QRCode from scratch
+     * responsible for generating a new gem ID
+     */
     public QRCode(String id, String url) {
         this.id = id;
         this.gemId = new gemID();
@@ -18,9 +27,13 @@ public class QRCode {
         this.url = url;
         this.points = calculateScore(id);
         this.geoLocation = "Unknown";
-
     }
 
+    /**
+     * Initializer for getting a QRCode from the database
+     * and repopulating it, no need to generate a new gemID as
+     * it already exists
+     */
     public QRCode(String id, String url, gemID gemId) {
         this.id = id;
         this.gemId = gemId;
@@ -29,52 +42,51 @@ public class QRCode {
         this.geoLocation = "Unknown";
     }
 
-    //Getters for the QR code Class
+    /**
+     * Getters for the QRCode id, name, url, points, geoLocation and gemID
+     */
     public String getId() {
         return id;
     }
-
     public String getName() {
         return name;
     }
-
     public String getUrl() {
         return url;
     }
-
     public Integer getPoints() {
         return points;
     }
-
     public String getGeoLocation(){
         return geoLocation;
     }
-
     public gemID getGemID() {
         return this.gemId;
     }
 
-    //Setters for the QR code class
+    /**
+     * Setters for the name, url, points and geoLocation
+     */
     public void setName(String name) {
         this.name = name;
     }
-
     public void setUrl(String url) {
         this.url = url;
     }
-
     public void setPoints(Integer points) {
         this.points = points;
     }
-
     public void setGeoLocation(String GeoLocation){
         this.geoLocation = GeoLocation;
     }
-
     public void setGemId(gemID id) {
         this.gemId = id;
     }
-
+    
+    /**
+     * Takes the String hash of a QRCode and
+     * calculates a score using it
+     */
     public static Integer calculateScore(String hash) {
         // Calculate score
         /* From: geeksforgeeks.org

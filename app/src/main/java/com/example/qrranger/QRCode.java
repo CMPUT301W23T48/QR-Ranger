@@ -79,11 +79,10 @@ public class QRCode {
     public void setGeoLocation(String GeoLocation){
         this.geoLocation = GeoLocation;
     }
-
     public void setGemId(gemID id) {
         this.gemId = id;
     }
-
+    
     /**
      * Takes the String hash of a QRCode and
      * calculates a score using it

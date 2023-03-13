@@ -71,6 +71,10 @@ public class QRCode {
         this.geoLocation = GeoLocation;
     }
 
+    public void setGemId(gemID id) {
+        this.gemId = id;
+    }
+
     public static Integer calculateScore(String hash) {
         // Calculate score
         /* From: geeksforgeeks.org

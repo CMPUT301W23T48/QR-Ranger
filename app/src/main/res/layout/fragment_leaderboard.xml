@@ -71,7 +71,6 @@
                 android:layout_width="155dp"
                 android:layout_height="match_parent"
                 android:id="@+id/Rank1Username"
-                android:text="Username"
                 android:textStyle="bold"
                 android:gravity="center"
                 android:textSize="18dp"
@@ -82,7 +81,6 @@
                 android:layout_height="match_parent"
                 android:id="@+id/Rank1Score"
                 android:gravity="center"
-                android:text="10"
                 android:textSize="18dp"
                 android:textStyle="bold"
                 >

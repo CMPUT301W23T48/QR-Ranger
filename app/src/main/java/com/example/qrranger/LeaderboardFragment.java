@@ -11,6 +11,9 @@ import android.widget.TextView;
 
 import com.example.qrranger.R;
 
+import java.util.List;
+import java.util.Map;
+
 public class LeaderboardFragment extends Fragment {
 
     TextView rank1Username;
@@ -39,6 +42,7 @@ public class LeaderboardFragment extends Fragment {
                     // handle successful retrieval of top 3 players
                     // top3Players is a List<Map<String, Object>> containing the data of the top 3 players
                     System.out.println("Top 3 Players: " + top3Players);
+                    setViews(top3Players);
                 },
                 error -> {
                     // handle error
@@ -46,16 +50,16 @@ public class LeaderboardFragment extends Fragment {
                     System.out.println("Error getting top 3 players.");
                 }
         );
-
-
-        // get rank 1 user
-        // get rank 2 user
-        // get rank 3 user
-
-
-        // set views
-
-
         return view;
+    }
+    public void setViews(List<Map<String, Object>> top3Players)
+    {
+        rank1Username.setText(top3Players.get(0).get("username").toString());
+        rank2Username.setText(top3Players.get(1).get("username").toString());
+        rank3Username.setText(top3Players.get(2).get("username").toString());
+
+        rank1Score.setText(top3Players.get(0).get("totalScore").toString());
+        rank2Score.setText(top3Players.get(1).get("totalScore").toString());
+        rank3Score.setText(top3Players.get(2).get("totalScore").toString());
     }
 }

@@ -63,11 +63,9 @@ public class QRScannerActivity extends AppCompatActivity{
         gemBorder = findViewById(R.id.borderType);
         gemLustre = findViewById(R.id.lusterLevel);
 
+        generator = new QRGenerator();
+
         scanQR();
-
-        qrCode = generator.generateQR(scanResult);
-
-        updateUi();
 
         /*
          * Similar to onActivityResult() seen below, but the
@@ -127,7 +125,7 @@ public class QRScannerActivity extends AppCompatActivity{
         gemBorder.setImageResource(qrCode.getGemID().getBoarder());
         backgroundColor.setImageResource(qrCode.getGemID().getBgColor());
         qrTitle.setText(qrCode.getName());
-        qrScore.setText(qrCode.getPoints());
+        qrScore.setText(qrCode.getPoints().toString());
     }
 
     /**
@@ -187,8 +185,15 @@ public class QRScannerActivity extends AppCompatActivity{
         if (requestCode == IntentIntegrator.REQUEST_CODE && resultCode == RESULT_OK) {
             // Get the result.
             IntentResult intentResult = IntentIntegrator.parseActivityResult(requestCode, resultCode, data);
-            if (intentResult != null && intentResult.getContents() != null) {
+            if (intentResult != null && intentResult.getRawBytes() != null) {
                 scanResult = intentResult.getRawBytes().toString();
+                qrCode = generator.generateQR(scanResult);
+                updateUi();
+            }
+            else if (intentResult != null && intentResult.getContents() != null) {
+                scanResult = intentResult.getContents();
+                qrCode = generator.generateQR(scanResult);
+                updateUi();
             } else {
                 // An error occurs and the scan returns no results.
                 Log.e(TAG, "Error during QR scan.");

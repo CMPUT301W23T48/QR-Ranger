@@ -29,7 +29,7 @@ public class gemID {
 
         //Randomly assign luster level to Gem
         int[] gemLustre = new int[]{R.drawable.lusterlevel0, R.drawable.lusterlevel1, R.drawable.lusterlevel2, R.drawable.lusterlevel3, R.drawable.lusterlevel4};
-        randomIndex = generator.nextInt(4);
+        randomIndex = generator.nextInt(5);
         setLusterLevel(gemLustre[randomIndex]);
     }
     public String gemName(String hash) {
@@ -43,6 +43,7 @@ public class gemID {
             );
         }
         result.toString();
+        System.out.println(hashChars);
         String name = "";
         if (hashChars[0] == '0') {
             name += "Clear ";

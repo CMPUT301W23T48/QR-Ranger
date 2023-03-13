@@ -16,11 +16,12 @@
     <string name="Comment">Comments:</string>
     <string name="numComment">2</string>
     <string name="ChangeUsername">ChangeUsername:</string>
-    <string name="NewContract">New Contract:</string>
+    <string name="NewPhoneNumber">New Phone Number:</string>
     <string name="GeolocationSetting">Enable Geo Location Recording</string>
     <string name="Back">Back</string>
     <string name="Delete">Delete</string>
     <string name="ShowQR">All QR:</string>
     <string name="Yes">Yes</string>
     <string name="No">No</string>
+    <string name="new_email">New Email:</string>
 </resources>

@@ -12,23 +12,47 @@ import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import androidx.activity.result.ActivityResultLauncher;
+import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.fragment.app.Fragment;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Locale;
 import java.util.Map;
+import java.util.Objects;
 import java.util.concurrent.CompletableFuture;
 
 import com.example.qrranger.R;
 
 public class ProfileFragment extends Fragment {
     Player myUser = new Player();
-    TextView playerName;
-    TextView playerEmail;
-    Map<String, Object> value = new HashMap<>();
-    TextView playerPhoneNumb;
-    TextView playerTotalScore;
-    ImageView myAvatar;
-    ImageButton mySettButton;
+    private TextView playerName;
+    private TextView playerEmail;
+    private Map<String, Object> value = new HashMap<>();
+    private TextView playerPhoneNumb;
+    private TextView playerTotalScore;
+    private TextView playerTotalQRCodes;
+    private TextView profileRank;
+    private ImageView myAvatar;
+    private ImageButton mySettButton;
+    private Intent data;
+
+    private ActivityResultLauncher<Intent> startSettingsForResult =
+            registerForActivityResult(new ActivityResultContracts.StartActivityForResult(),
+                    result -> {
+                        if (result.getResultCode() == Activity.RESULT_OK) {
+                            Intent data = result.getData();
+                            if (data != null) {
+                                boolean dataChanged = data.getBooleanExtra("dataChanged", false);
+                                if (dataChanged) {
+                                    System.out.println("Data changed");
+                                    myUser = (Player) data.getSerializableExtra("myUser");
+                                    setViews();
+                                }
+                            }
+                        }
+                    });
 
     PlayerCollection myPlayerCollection = new PlayerCollection(Database.getInstance());
 
@@ -37,74 +61,84 @@ public class ProfileFragment extends Fragment {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_profile, container, false);
 
-
-        playerEmail = view.findViewById(R.id.ProfileEmail);
+        playerEmail = view.findViewById(R.id.ProfileUserEmail);
         playerName = view.findViewById(R.id.ProfileUserName);
-        //playerPhoneNumb = view.findViewById(R.id.textView2);
+        playerPhoneNumb = view.findViewById(R.id.ProfileUserPhoneNumber);
         playerTotalScore = view.findViewById(R.id.ProfileTS);
+        playerTotalQRCodes = view.findViewById(R.id.ProfileQRNum);
+        mySettButton = view.findViewById(R.id.ProfileSettingButton);
+        profileRank = view.findViewById(R.id.ProfileRank);
 
         UserState us = UserState.getInstance();
         String userID = us.getUserID();
 
-        CompletableFuture<Boolean> future = new CompletableFuture<>();
-        future.complete(true);
+        CompletableFuture<Boolean> future = myPlayerCollection.checkUserExists(userID);
+        future.thenAccept(userExists -> {
+                    if (userExists) {
+                        // User exists
+                        System.out.println("User exists");
+                        setValues(userID);
+                    } else {
+                        // User does not exist, handle errors
+                    }
 
-        //test
-        if(myPlayerCollection.checkUserExists(userID) == future) {
-            System.out.println("Data for user1: future = true");
-            myUser.setUserName((String) value.get("UserName"));
-            myUser.setEmail((String) value.get("Email"));
-            myUser.setPhoneNumber((String) value.get("PhoneNumber"));
-            myUser.setPlayerId((String) value.get("PlayerID"));
-            //myUser.setGeoLocationSett(((Boolean) value.get("Geolocation Setting")));
-            playerName.setText(myUser.getUserName());
-            //playerPhoneNumb.setText(myUser.getPhoneNumber());
-        }else {
-            System.out.println("system = false");
-            myUser.setUserName((userID));
-            myUser.setEmail("Please change your email in setting");
-            myUser.setPhoneNumber("Please change your phone number in setting");
-            myUser.setPlayerId(userID);
-            myUser.setGeoLocationSett(false);
-            value = myPlayerCollection.createValues(userID, myUser.getUserName(), myUser.getPhoneNumber(), myUser.getEmail(), myUser.isGeoLocationSett(), 0, 0);
-            myPlayerCollection.create(value);
-            playerName.setText(myUser.getUserName());
-            //playerPhoneNumb.setText(myUser.getPhoneNumber());
-        }
-        System.out.println(value.get("Email"));
-        //end test
+                });
 
-        playerTotalScore.setText("0");
-
-        myAvatar = view.findViewById(R.id.ProfileImage);
-        mySettButton = view.findViewById(R.id.ProfileSettingButton);
         mySettButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent intent = new Intent(getActivity(), SettingActivity.class);
-                intent.putExtra("myUser", myUser);
-                startActivityForResult(intent, 2);
+                startSettingsActivity();
             }
         });
 
-        myAvatar.setImageDrawable(getResources().getDrawable(R.drawable.ub_profile));
-        mySettButton.setImageDrawable(getResources().getDrawable(R.drawable.setting));
-
         return view;
     }
+    public void setValues(String userID){
+        // get data from userID
+        myPlayerCollection.read(userID, data -> {
+            // player found so handle code using data here
+            System.out.println("Data for user: " + data);
+            myUser.setUserName(Objects.requireNonNull(data.get("username")).toString());
+            myUser.setEmail(Objects.requireNonNull(data.get("email")).toString());
+            myUser.setPhoneNumber(Objects.requireNonNull(data.get("phoneNumber")).toString());
+            myUser.setTotalScore(((Long) data.get("totalScore")));
+            myUser.setTotalQRCode(((Long) data.get("totalQRCode")));
+            myUser.setGeoLocationSett((Boolean) data.get("geolocation_setting"));
+            myUser.setPlayerId(userID);
+            myUser.setQrCodeCollection((ArrayList<QRCode>) data.get("qr_code_ids"));
+            getAndSetRank(userID);
+            System.out.println("Setting views");
+            setViews();
+            }, error -> {
+                // Player not found, cannot set values
+                // perhaps change to default values for less chance of error during demo
+                System.out.println("Error getting player data: " + error);
+        });
 
-    @Override
-    public void onActivityResult(int requestCode, int resultCode, Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
-        if (requestCode == 2 && resultCode == Activity.RESULT_OK) {
-            // Retrieve the updated Player object from the returned intent
-            Player updatedUser = (Player) data.getSerializableExtra("myUser");
+    }
 
-            playerName.setText(updatedUser.getUserName());
-            //playerPhoneNumb.setText(updatedUser.getPhoneNumber());
+    public void setViews(){
+        playerName.setText(myUser.getUserName());
+        playerEmail.setText(myUser.getEmail());
+        playerPhoneNumb.setText(myUser.getPhoneNumber());
+        playerTotalScore.setText(myUser.getTotalScore().toString());
+        playerTotalQRCodes.setText(myUser.getTotalQRCode().toString());
+    }
 
-            myUser.setUserName(updatedUser.getUserName());
-            myUser.setPhoneNumber(updatedUser.getPhoneNumber());
-        }
+    private void startSettingsActivity() {
+        Intent intent = new Intent(getActivity(), SettingActivity.class);
+        intent.putExtra("myUser", myUser); // pass the user data to the settings activity
+        startSettingsForResult.launch(intent);
+    }
+
+    public void getAndSetRank(String userID){
+        CompletableFuture<Integer> rankFuture = myPlayerCollection.getPlayerRank(userID);
+        rankFuture.thenAccept(rank -> {
+            System.out.println("Player rank: " + rank);
+            profileRank.setText(rank.toString());
+        }).exceptionally(e -> {
+            System.err.println("Failed to get player rank: " + e.getMessage());
+            return null;
+        });
     }
 }

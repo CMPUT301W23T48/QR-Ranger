@@ -39,6 +39,7 @@
                 android:text="Submit"/>
         </LinearLayout>
     </LinearLayout>
+
     <LinearLayout
         android:id="@+id/SettingLL4"
         android:layout_width="match_parent"
@@ -48,7 +49,7 @@
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="@string/NewContract"
+            android:text="@string/NewPhoneNumber"
             android:textSize="20dp"
             android:textColor="@color/black"/>
 
@@ -60,7 +61,7 @@
             android:layout_margin="10dp">
 
             <EditText
-                android:id="@+id/SettingContactInput"
+                android:id="@+id/SettingPhoneNumInput"
                 android:layout_width="299dp"
                 android:layout_height="45dp"
                 android:layout_marginTop="5dp"
@@ -69,12 +70,50 @@
                 android:queryHint="Enter username" />
 
             <Button
-                android:id="@+id/SettingContactSubmitButton"
+                android:id="@+id/SettingPhoneNumSubmitButton"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="Submit"/>
         </LinearLayout>
     </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/SettingLL6"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:layout_marginTop="10dp">
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/new_email"
+            android:textSize="20dp"
+            android:textColor="@color/black"/>
+
+        <LinearLayout
+            android:id="@+id/SettingLL7"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:layout_margin="10dp">
+
+            <EditText
+                android:id="@+id/SettingEmailInput"
+                android:layout_width="299dp"
+                android:layout_height="45dp"
+                android:layout_marginTop="5dp"
+                android:background="@drawable/input_box_outline"
+                android:iconifiedByDefault="false"
+                android:queryHint="Enter username" />
+
+            <Button
+                android:id="@+id/SettingEmailSubmitButton"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Submit"/>
+        </LinearLayout>
+    </LinearLayout>
+
 
     <Switch
         android:id="@+id/SettingSwitch"

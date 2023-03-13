@@ -106,7 +106,7 @@ public class MainActivity extends AppCompatActivity {
                                     usernameFuture.thenAccept(uniqueUsername -> {
                                         System.out.println("Unique Username Generated.");
                                         // Create the new player with a unique default username
-                                        Map<String, Object> values = pc.createValues(user.getUid(), uniqueUsername, "", "", false, 0, 0);
+                                        Map<String, Object> values = pc.createValues(user.getUid(), uniqueUsername, "Not Set", "Not Set", false, 0, 0);
                                         pc.create(values);
                                         UserState us = UserState.getInstance();
                                         us.setUserID(user.getUid());

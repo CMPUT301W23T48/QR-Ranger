@@ -296,5 +296,21 @@ public class PlayerCollection extends Database_Controls {
         });
     }
 
+    public void getTop3Players(Consumer<List<Map<String, Object>>> onSuccess, Consumer<Exception> onError) {
+        // retrieve the top 3 players sorted by their total score in descending order
+        Query query = collection.orderBy("totalScore", Query.Direction.DESCENDING).limit(3);
+
+        query.get().addOnCompleteListener(task -> {
+            if (task.isSuccessful()) {
+                List<Map<String, Object>> top3Players = new ArrayList<>();
+                for (QueryDocumentSnapshot document : task.getResult()) {
+                    top3Players.add(document.getData());
+                }
+                onSuccess.accept(top3Players);
+            } else {
+                onError.accept(task.getException());
+            }
+        });
+    }
 
 }

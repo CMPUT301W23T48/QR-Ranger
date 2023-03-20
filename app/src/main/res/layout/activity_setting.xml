@@ -30,7 +30,8 @@
                 android:layout_marginTop="5dp"
                 android:background="@drawable/input_box_outline"
                 android:iconifiedByDefault="false"
-                android:queryHint="Enter username" />
+                android:hint="Enter username"
+                android:paddingLeft="10dp"/>
 
             <Button
                 android:id="@+id/SettingUsernameSubmitButton"
@@ -67,7 +68,8 @@
                 android:layout_marginTop="5dp"
                 android:background="@drawable/input_box_outline"
                 android:iconifiedByDefault="false"
-                android:queryHint="Enter username" />
+                android:hint="Enter Phone Number"
+                android:paddingLeft="10dp"/>
 
             <Button
                 android:id="@+id/SettingPhoneNumSubmitButton"
@@ -104,13 +106,15 @@
                 android:layout_marginTop="5dp"
                 android:background="@drawable/input_box_outline"
                 android:iconifiedByDefault="false"
-                android:queryHint="Enter username" />
+                android:hint="Enter Email"
+                android:paddingLeft="10dp"/>
 
             <Button
                 android:id="@+id/SettingEmailSubmitButton"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="Submit"/>
+                android:text="Submit"
+                />
         </LinearLayout>
     </LinearLayout>
 

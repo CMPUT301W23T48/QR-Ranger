@@ -42,6 +42,7 @@ public class QRGenerator {
     public QRCode generateQR(String qrData) {
         qrCollection = new QRCollection(null);
 
+
         // Generate a new QR if it doesn't already exist or pull the existing one from the db.
         CompletableFuture<Boolean> future = qrCollection.checkQRExists(qrData);
         future.thenAccept(qrExists -> {
@@ -54,7 +55,12 @@ public class QRGenerator {
                     Integer points = (Integer) data.get("points");
                     gemID gem = (gemID) data.get("gem_id");
 
-                    qr = new QRCode(qrId, url, gem);
+//                    qr = new QRCode(qrId, url, gem);
+                    qr.setID(qrId);
+                    qr.setName(name);
+                    qr.setUrl(url);
+                    qr.setPoints(points);
+                    qr.setGemId(gem);
                 }, error -> {
                     // Send error message.
                     Log.e(TAG, "Error loading QR database entry.");
@@ -64,8 +70,15 @@ public class QRGenerator {
                 // QR doesn't exist, so generate a new one!
                 String hash = SHA256Hash(qrData);
 
+                gemID gem = new gemID();
+
                 // Create the QRCode object.
-                qr = new QRCode(hash, qrData);
+                // qr = new QRCode(hash, qrData);
+                qr.setID(hash);
+                qr.setName(gem.gemName(qrData));
+                qr.setUrl(qrData);
+                qr.setPoints(QRCode.calculateScore(qrData));
+                qr.setGemId(qr.getGemID());
 
                 // Add the new QR to the database:
                 Map values = qrCollection.createValues(hash, qr.getName(), qrData, qr.getPoints(), qr.getGemID());

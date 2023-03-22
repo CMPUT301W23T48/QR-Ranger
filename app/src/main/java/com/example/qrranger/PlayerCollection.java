@@ -13,6 +13,7 @@ import com.google.android.gms.tasks.Task;
 import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.firestore.FieldValue;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.Query;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
@@ -24,6 +25,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 import java.util.concurrent.CompletableFuture;
 import java.util.function.Consumer;
 
@@ -220,6 +222,8 @@ public class PlayerCollection extends Database_Controls {
                     ArrayList<String> qrCodeIds = (ArrayList<String>) document.get("qr_code_ids");
                     qrCodeIds.add(QR_ID);
                     document.getReference().update("qr_code_ids", qrCodeIds);
+                    // increase total number of QR
+                    increaseTotals(QR_ID, document);
                 }
             } else {
                 // Handle errors here
@@ -245,6 +249,7 @@ public class PlayerCollection extends Database_Controls {
                     ArrayList<String> qrCodeIds = (ArrayList<String>) document.get("qr_code_ids");
                     qrCodeIds.remove(QR_ID);
                     document.getReference().update("qr_code_ids", qrCodeIds);
+                    decreaseTotals(QR_ID, document);
                 }
             } else {
                 // Handle errors here
@@ -316,6 +321,40 @@ public class PlayerCollection extends Database_Controls {
             } else {
                 onError.accept(task.getException());
             }
+        });
+    }
+
+    public void increaseTotals(String QR_ID, DocumentSnapshot document)
+    {
+        document.getReference().update("totalQRCode", FieldValue.increment(1));
+        // increase total score
+        QRCollection qrc = new QRCollection(null);
+        qrc.read(QR_ID, data -> {
+            // qr found so handle code using data here
+            Long points = (Long) data.get("points");
+            System.out.println("QR POINTS SCANNED: "+ points);
+            document.getReference().update("totalScore", FieldValue.increment(points));
+            System.out.println(document.get("totalScore"));
+        }, error -> {
+            // qr not found, cannot set values
+            System.out.println("Error getting player data: " + error);
+        });
+    }
+
+    public void decreaseTotals(String QR_ID, DocumentSnapshot document)
+    {
+        document.getReference().update("totalQRCode", FieldValue.increment(-1));
+        // decrease total score
+        QRCollection qrc = new QRCollection(null);
+        qrc.read(QR_ID, data -> {
+            // qr found so handle code using data here
+            Long points = (Long) data.get("points");
+            System.out.println("QR POINTS SCANNED: "+ points);
+            document.getReference().update("totalScore", FieldValue.increment(-(points)));
+            System.out.println(document.get("totalScore"));
+        }, error -> {
+            // qr not found, cannot set values
+            System.out.println("Error getting player data: " + error);
         });
     }
 

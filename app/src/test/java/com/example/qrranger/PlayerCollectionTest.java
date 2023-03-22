@@ -62,7 +62,7 @@ public class PlayerCollectionTest {
             myTestUser.setTotalQRCode(((Long) data.get("totalQRCode")));
             myTestUser.setGeoLocationSett((Boolean) data.get("geolocation_setting"));
             myTestUser.setPlayerId(testStringID);
-            myTestUser.setQrCodeCollection((ArrayList<QRCode>) data.get("qr_code_ids"));
+            myTestUser.setQrCodeCollection((ArrayList<String>) data.get("qr_code_ids"));
         }, error -> {
 
             System.out.println("Error getting player data: " + error);

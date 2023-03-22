@@ -34,6 +34,7 @@ import java.util.concurrent.atomic.AtomicInteger;
 import com.example.qrranger.R;
 import com.google.firebase.firestore.DocumentSnapshot;
 
+// Fragment of player profile
 public class ProfileFragment extends Fragment {
     Player myUser = new Player();
     private TextView playerName;

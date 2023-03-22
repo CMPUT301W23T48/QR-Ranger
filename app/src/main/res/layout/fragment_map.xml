@@ -20,12 +20,12 @@
             android:layout_marginBottom="16dp"
             android:background="@drawable/map_search"/>
 
-        <ImageView
-            android:id="@+id/MapView"
-            android:layout_width="356dp"
-            android:layout_height="535dp"
-            android:layout_gravity="center"
-            android:src="@drawable/map" />
+        <Button
+            android:id="@+id/viewMap"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="View Map" />
+
     </LinearLayout>
 
 </FrameLayout>

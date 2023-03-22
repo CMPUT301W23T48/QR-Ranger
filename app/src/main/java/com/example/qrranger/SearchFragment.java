@@ -1,35 +1,35 @@
 package com.example.qrranger;
 
-import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 
-import androidx.activity.result.ActivityResultLauncher;
-import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.fragment.app.Fragment;
 
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
-import android.widget.ImageView;
-
-import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.Map;
-import java.util.Objects;
-import java.util.concurrent.CompletableFuture;
 
+/**
+ * SearchFragment class represents the search functionality for the app,
+ * allowing users to search for other users and navigate to their profiles.
+ */
 public class SearchFragment extends Fragment {
     EditText searchInput;
     ImageButton confirmButton;
     PlayerCollection pc = new PlayerCollection(null);
 
-
-
+    /**
+     * Called to create the view hierarchy associated with the fragment.
+     *
+     * @param inflater The LayoutInflater object that can be used to inflate views in the fragment.
+     * @param container The parent view that the fragment's UI should be attached to.
+     * @param savedInstanceState If non-null, this fragment is being re-constructed from a previous saved state as given here.
+     * @return The View for the fragment's UI.
+     */
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -70,6 +70,11 @@ public class SearchFragment extends Fragment {
         return view;
     }
 
+    /**
+     * Starts the OtherUserProfileActivity to display the searched user's profile.
+     *
+     * @param data A map containing the data of the searched user.
+     */
     private void startOtherUserProfile(Map<String,Object> data) {
         // send the info in data as intent for the new activity
         Intent intent = new Intent(requireActivity(), OtherUserProfileActivity.class);
@@ -82,6 +87,4 @@ public class SearchFragment extends Fragment {
 //        intent.putExtra("qr_code_ids", data.get("qr_code_ids").toString());
         startActivity(intent);
     }
-
-
 }

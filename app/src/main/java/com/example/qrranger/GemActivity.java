@@ -15,7 +15,10 @@ import androidx.constraintlayout.widget.ConstraintLayout;
 import java.util.HashMap;
 import java.util.Map;
 
-
+/**
+ * An Activity class that displays the details of a specific gem, retrieved
+ * from a QR code.
+ */
 public class GemActivity extends AppCompatActivity {
 
     private TextView nameView;
@@ -31,6 +34,11 @@ public class GemActivity extends AppCompatActivity {
     private Map gem_data;
     private Boolean deleted = false;
 
+    /**
+     * Initializes the activity and sets up the views for displaying the gem details.
+     *
+     * @param savedInstanceState A Bundle containing the saved state of the activity.
+     */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -77,7 +85,9 @@ public class GemActivity extends AppCompatActivity {
 
     }
 
-
+    /**
+     * Sets up the views with the appropriate gem details.
+     */
     public void setViews(){
         nameView.setText(name);
         qrScore.setText(points);

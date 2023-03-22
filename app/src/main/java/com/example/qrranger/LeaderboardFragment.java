@@ -29,6 +29,14 @@ public class LeaderboardFragment extends Fragment {
     LinearLayout rank3LL;
     List<Map<String, Object>> top3;
 
+    /**
+     * Initializes the fragment and sets up the views for displaying the leaderboard.
+     *
+     * @param inflater           A LayoutInflater to inflate the layout for this fragment.
+     * @param container          A ViewGroup in which the fragment's layout will be added.
+     * @param savedInstanceState A Bundle containing the saved state of the fragment.
+     * @return The View for the fragment's UI, or null.
+     */
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -97,6 +105,12 @@ public class LeaderboardFragment extends Fragment {
 
         return view;
     }
+
+    /**
+     * Sets up the views with the appropriate data of the top 3 players.
+     *
+     * @param top3Players A List of Maps containing the data of the top 3 players.
+     */
     public void setViews(List<Map<String, Object>> top3Players)
     {
         rank1Username.setText(top3Players.get(0).get("username").toString());
@@ -109,6 +123,11 @@ public class LeaderboardFragment extends Fragment {
     }
 
 
+    /**
+     * Starts a new activity displaying the details of another user's profile.
+     *
+     * @param data A Map containing the data of the user's profile to display.
+     */
     private void startOtherUserProfile(Map<String,Object> data) {
         // send the info in data as intent for the new activity
         Intent intent = new Intent(getActivity(), OtherUserProfileActivity.class);

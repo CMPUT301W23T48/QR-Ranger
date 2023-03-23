@@ -101,11 +101,11 @@ public class CommentCollection extends Database_Controls{
     /**
      * Deletes the specified document from the Firestore collection.
      *
-     * @param comment_ID The ID of the document to delete.
+     * @param authorID The ID of the document to delete.
      */
     @Override
-    void delete(String comment_ID) {
-        Query query = collection.whereEqualTo("comment_id", comment_ID);
+    void delete(String authorID) {
+        Query query = collection.whereEqualTo("author_id", authorID);
 
         query.get().addOnCompleteListener(task -> {
             if (task.isSuccessful()) {
@@ -119,12 +119,21 @@ public class CommentCollection extends Database_Controls{
     }
 
 
-    public Map createValues(String comment_ID, String QR_ID, String author, String comment)
+    /**
+     * Creates a HashMap representing the fields in the comments collection.
+     *
+     * @param QR_ID The unique identifier for the QR code that owns the comment.
+     * @param author The name of the author who wrote the comment.
+     * @param authorID The id of the author who wrote the comment.
+     * @param comment The actual data of the comment.
+     * @return A HashMap containing the key-value pairs for the QR code fields.
+     */
+    public Map createValues(String QR_ID, String author, String authorID, String comment)
     {
         // This represents the fields in the player collection
         // can add or remove fields here
         Map <String, Object> values = new HashMap<>();
-        values.put("comment_id", comment_ID);
+        values.put("author_id", authorID);
         values.put("comment", comment);
         values.put("author", author);
         values.put("QR_ID", QR_ID);

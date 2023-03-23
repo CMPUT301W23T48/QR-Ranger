@@ -28,6 +28,7 @@ public class GemActivity extends AppCompatActivity {
     private ImageView gemBorder;
     private ImageView gemLustre;
     private Button deleteButton;
+    private Button commentsButton;
     private String name;
     private String qr_id;
     private String points;
@@ -48,6 +49,7 @@ public class GemActivity extends AppCompatActivity {
         nameView = cl.findViewById(R.id.gemName);
         qrScore = cl.findViewById(R.id.gemValue);
         deleteButton = cl.findViewById(R.id.delete);
+        commentsButton = cl.findViewById(R.id.comments);
         gemShape = cl.findViewById(R.id.gem);
         backgroundColor = cl.findViewById(R.id.backgroundColor);
         gemBorder = cl.findViewById(R.id.borderType);
@@ -73,6 +75,8 @@ public class GemActivity extends AppCompatActivity {
         deleteButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                // need to add array adapter to handle delete
+                // error on return from activity
 //                deleted = true;
 //                Intent returnIntent = new Intent();
 //                returnIntent.putExtra("dataDeleted", deleted);
@@ -82,6 +86,14 @@ public class GemActivity extends AppCompatActivity {
             }
         });
 
+        commentsButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(GemActivity.this, CommentActivity.class);
+                intent.putExtra("qr_id", qr_id);
+                startActivity(intent);
+            }
+        });
 
     }
 

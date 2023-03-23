@@ -77,7 +77,6 @@ public class PlayerCollection extends Database_Controls {
     @Override
     public void read(String userID, Consumer<Map<String, Object>> onSuccess, Consumer<Exception> onError) {
         // returns the data for a user with the given userID
-        // not 100%
         Query query = collection.whereEqualTo("userID", userID);
 
         query.get().addOnCompleteListener(task -> {

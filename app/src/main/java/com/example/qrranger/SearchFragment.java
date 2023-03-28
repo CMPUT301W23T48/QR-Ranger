@@ -2,34 +2,24 @@ package com.example.qrranger;
 
 import android.content.Intent;
 import android.os.Bundle;
-
 import androidx.fragment.app.Fragment;
-
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-
 import android.widget.EditText;
 import android.widget.ImageButton;
+
+import com.example.qrranger.PlayerCollection;
+
+import java.io.Serializable;
+import java.util.List;
 import java.util.Map;
 
-/**
- * SearchFragment class represents the search functionality for the app,
- * allowing users to search for other users and navigate to their profiles.
- */
 public class SearchFragment extends Fragment {
     EditText searchInput;
     ImageButton confirmButton;
     PlayerCollection pc = new PlayerCollection(null);
 
-    /**
-     * Called to create the view hierarchy associated with the fragment.
-     *
-     * @param inflater The LayoutInflater object that can be used to inflate views in the fragment.
-     * @param container The parent view that the fragment's UI should be attached to.
-     * @param savedInstanceState If non-null, this fragment is being re-constructed from a previous saved state as given here.
-     * @return The View for the fragment's UI.
-     */
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -44,26 +34,21 @@ public class SearchFragment extends Fragment {
                 System.out.println("button clicked");
 
                 String user_search = searchInput.getText().toString();
-                // launch next activity to display that user's profile if they exist
-                pc.searchUser(user_search, data -> {
-                    // player found so handle code using data here
-                    if (data != null){
-                        System.out.println("Search User ID: " + data.get("userID"));
-                        // use data to send as intent to next activity
-                        startOtherUserProfile(data);
-                    }
-                    else
-                    {
-                        // handle error
-                        System.out.println("Error User Does Not Exist");
-                    }
 
+                // Search for similar usernames
+                pc.searchSimilarUsernames(user_search, data -> {
+                    if (data != null && !data.isEmpty()) {
+                        System.out.println("Similar usernames found");
+                        // Launch SimilarUsernamesActivity with the list of similar usernames
+                        startSearchResultsActivity(data);
+                    } else {
+                        System.out.println("No similar usernames found");
+                        // Handle no similar usernames found (e.g., show a message or a Toast)
+                    }
                 }, error -> {
-                    // Player not found, cannot display user
-                    // put a toast here saying user doesn't exist
-                    System.out.println("Error getting player data: " + error);
+                    // Error occurred while searching for similar usernames
+                    System.out.println("Error searching for similar usernames: " + error);
                 });
-
             }
         });
 
@@ -71,20 +56,13 @@ public class SearchFragment extends Fragment {
     }
 
     /**
-     * Starts the OtherUserProfileActivity to display the searched user's profile.
+     * Starts the SimilarUsernamesActivity to display the list of similar usernames.
      *
-     * @param data A map containing the data of the searched user.
+     * @param data A list of maps containing the data of the similar users.
      */
-    private void startOtherUserProfile(Map<String,Object> data) {
-        // send the info in data as intent for the new activity
-        Intent intent = new Intent(requireActivity(), OtherUserProfileActivity.class);
-        intent.putExtra("username", data.get("username").toString());
-        intent.putExtra("email", data.get("email").toString());
-        intent.putExtra("phoneNumber", data.get("phoneNumber").toString());
-        intent.putExtra("userID", data.get("userID").toString());
-        intent.putExtra("totalQRCode", data.get("totalQRCode").toString());
-        intent.putExtra("totalScore", data.get("totalScore").toString());
-//        intent.putExtra("qr_code_ids", data.get("qr_code_ids").toString());
+    private void startSearchResultsActivity(List<Map<String, Object>> data) {
+        Intent intent = new Intent(requireActivity(), SearchResultsActivity.class);
+        intent.putExtra("similarUsernames", (Serializable) data);
         startActivity(intent);
     }
 }

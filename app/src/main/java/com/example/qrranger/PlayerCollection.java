@@ -372,6 +372,26 @@ public class PlayerCollection extends Database_Controls {
     }
 
     /**
+     * Searches for similar usernames in the Firestore collection and returns the results as a list of maps.
+     * Each map contains the data of a matching user document.
+     *
+     * @param searchInput   The input string to search for similar usernames.
+     * @param onSuccess     Callback to handle the success case. Takes a list of maps with the user data.
+     * @param onFailure     Callback to handle the failure case. Takes a Throwable representing the error.
+     */
+    public void searchSimilarUsernames(String searchInput, OnSuccessListener<List<Map<String, Object>>> onSuccess, OnFailureListener onFailure) {
+        Query query = collection.orderBy("username").startAt(searchInput).endAt(searchInput + "\uf8ff");
+        query.get().addOnSuccessListener(queryDocumentSnapshots -> {
+            List<Map<String, Object>> users = new ArrayList<>();
+            for (QueryDocumentSnapshot documentSnapshot : queryDocumentSnapshots) {
+                users.add(documentSnapshot.getData());
+            }
+            onSuccess.onSuccess(users);
+        }).addOnFailureListener(onFailure);
+    }
+
+
+    /**
      * Retrieves the top 3 players sorted by their total score in descending order.
      *
      * @param onSuccess A Consumer that will be called with the top 3 players' data when the query is successful.
@@ -394,7 +414,14 @@ public class PlayerCollection extends Database_Controls {
         });
     }
 
-
+    /**
+     * Counts the total number of QR codes for a user with the given userID in the Firestore collection.
+     * Returns the count as a CompletableFuture.
+     *
+     * @param userID        The unique identifier of the user for which to count the QR codes.
+     * @return CompletableFuture<Integer> A CompletableFuture that resolves to the total count of QR codes for the user.
+     * @throws IllegalArgumentException if the player is not found with the given userID.
+     */
     public CompletableFuture<Integer> countTotalQRCodes(String userID) {
         CompletableFuture<Integer> futureTotal = new CompletableFuture<>();
 

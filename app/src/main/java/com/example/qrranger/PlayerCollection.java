@@ -410,6 +410,7 @@ public class PlayerCollection extends Database_Controls {
                 DocumentSnapshot documentSnapshot = queryDocumentSnapshots.getDocuments().get(0);
                 List<String> qrCodeIds = (List<String>) documentSnapshot.get("qr_code_ids");
                 int numberOfQRCodes = qrCodeIds != null ? qrCodeIds.size() : 0;
+                documentSnapshot.getReference().update("totalQRCode", numberOfQRCodes);
                 System.out.println("Number of QR Codes: " + numberOfQRCodes);
                 futureTotal.complete(numberOfQRCodes);
             }

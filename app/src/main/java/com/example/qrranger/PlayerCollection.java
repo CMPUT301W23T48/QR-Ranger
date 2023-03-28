@@ -272,8 +272,6 @@ public class PlayerCollection extends Database_Controls {
                     ArrayList<String> qrCodeIds = (ArrayList<String>) document.get("qr_code_ids");
                     qrCodeIds.add(QR_ID);
                     document.getReference().update("qr_code_ids", qrCodeIds);
-                    // increase total number of QR
-                    increaseTotals(QR_ID, document);
                 }
             } else {
                 // Handle errors here
@@ -304,7 +302,6 @@ public class PlayerCollection extends Database_Controls {
                     ArrayList<String> qrCodeIds = (ArrayList<String>) document.get("qr_code_ids");
                     qrCodeIds.remove(QR_ID);
                     document.getReference().update("qr_code_ids", qrCodeIds);
-                    decreaseTotals(QR_ID, document);
                 }
             } else {
                 // Handle errors here
@@ -397,50 +394,31 @@ public class PlayerCollection extends Database_Controls {
         });
     }
 
-    /**
-     * Increases the total number of QR codes scanned and total score for a player after successfully scanning a new QR code.
-     *
-     * @param QR_ID The ID of the scanned QR code.
-     * @param document The DocumentSnapshot containing the player's data.
-     */
-    public void increaseTotals(String QR_ID, DocumentSnapshot document)
-    {
-        document.getReference().update("totalQRCode", FieldValue.increment(1));
-        // increase total score
-        QRCollection qrc = new QRCollection(null);
-        qrc.read(QR_ID, data -> {
-            // qr found so handle code using data here
-            Long points = (Long) data.get("points");
-            System.out.println("QR POINTS SCANNED: "+ points);
-            document.getReference().update("totalScore", FieldValue.increment(points));
-            System.out.println(document.get("totalScore"));
-        }, error -> {
-            // qr not found, cannot set values
-            System.out.println("Error getting player data: " + error);
+
+    public CompletableFuture<Integer> countTotalQRCodes(String userID) {
+        CompletableFuture<Integer> futureTotal = new CompletableFuture<>();
+
+        // Query for the player document with the given userID field
+        Query query = collection.whereEqualTo("userID", userID);
+
+        // Get the player's qr_code_ids from the document
+        query.get().addOnSuccessListener(queryDocumentSnapshots -> {
+            if (queryDocumentSnapshots.size() == 0) {
+                // Player not found
+                futureTotal.completeExceptionally(new IllegalArgumentException("Player not found with userID " + userID));
+            } else {
+                DocumentSnapshot documentSnapshot = queryDocumentSnapshots.getDocuments().get(0);
+                List<String> qrCodeIds = (List<String>) documentSnapshot.get("qr_code_ids");
+                int numberOfQRCodes = qrCodeIds != null ? qrCodeIds.size() : 0;
+                System.out.println("Number of QR Codes: " + numberOfQRCodes);
+                futureTotal.complete(numberOfQRCodes);
+            }
+        }).addOnFailureListener(e -> {
+            futureTotal.completeExceptionally(e);
         });
+
+        return futureTotal;
     }
 
-    /**
-     * Decreases the total number of QR codes scanned and total score for a player after removing a previously scanned QR code.
-     *
-     * @param QR_ID The ID of the QR code to be removed.
-     * @param document The DocumentSnapshot containing the player's data.
-     */
-    public void decreaseTotals(String QR_ID, DocumentSnapshot document)
-    {
-        document.getReference().update("totalQRCode", FieldValue.increment(-1));
-        // decrease total score
-        QRCollection qrc = new QRCollection(null);
-        qrc.read(QR_ID, data -> {
-            // qr found so handle code using data here
-            Long points = (Long) data.get("points");
-            System.out.println("QR POINTS SCANNED: "+ points);
-            document.getReference().update("totalScore", FieldValue.increment(-(points)));
-            System.out.println(document.get("totalScore"));
-        }, error -> {
-            // qr not found, cannot set values
-            System.out.println("Error getting player data: " + error);
-        });
-    }
 
 }

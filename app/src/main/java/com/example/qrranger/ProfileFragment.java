@@ -34,7 +34,12 @@ import java.util.concurrent.atomic.AtomicInteger;
 import com.example.qrranger.R;
 import com.google.firebase.firestore.DocumentSnapshot;
 
-// Fragment of player profile
+/**
+ * A fragment representing the user's profile screen in the QR Ranger application.
+ * Displays the user's information, such as name, email, phone number, total score,
+ * total QR codes collected, profile rank, and lists the collected QR codes.
+ * Allows the user to navigate to the Settings and Gem activities.
+ */
 public class ProfileFragment extends Fragment {
     Player myUser = new Player();
     private TextView playerName;
@@ -89,6 +94,15 @@ public class ProfileFragment extends Fragment {
                     });
 
 
+    /**
+     * Called to create the view hierarchy associated with the fragment.
+     * Inflates the layout for the fragment, initializes views, and sets up listeners.
+     *
+     * @param inflater           The LayoutInflater object that can be used to inflate any views in the fragment.
+     * @param container          If non-null, this is the parent view that the fragment's UI should be attached to.
+     * @param savedInstanceState If non-null, this fragment is being re-constructed from a previous saved state.
+     * @return The View for the fragment's UI, or null.
+     */
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
@@ -173,6 +187,9 @@ public class ProfileFragment extends Fragment {
 
     }
 
+    /**
+     * Sets the user's information to the views.
+     */
     public void setViews(){
         playerName.setText(myUser.getUserName());
         playerEmail.setText(myUser.getEmail());
@@ -181,12 +198,21 @@ public class ProfileFragment extends Fragment {
         playerTotalQRCodes.setText(myUser.getTotalQRCode().toString());
     }
 
+    /**
+     * Starts the SettingsActivity and passes the user data to it.
+     */
     private void startSettingsActivity() {
         Intent intent = new Intent(getActivity(), SettingActivity.class);
         intent.putExtra("myUser", myUser); // pass the user data to the settings activity
         startSettingsForResult.launch(intent);
     }
 
+    /**
+     * Starts the GemActivity and passes the QR code name and index to it.
+     *
+     * @param name  The name of the selected QR code.
+     * @param index The index of the selected QR code in the list.
+     */
     private void startGemActivity(String name, Integer index)
     {
         Intent intent = new Intent(getActivity(), GemActivity.class);
@@ -196,6 +222,11 @@ public class ProfileFragment extends Fragment {
         startGemForResult.launch(intent);
     }
 
+    /**
+     * Gets and sets the user's rank based on their ID.
+     *
+     * @param userID The ID of the user.
+     */
     public void getAndSetRank(String userID){
         CompletableFuture<Integer> rankFuture = myPlayerCollection.getPlayerRank(userID);
         rankFuture.thenAccept(rank -> {
@@ -207,7 +238,11 @@ public class ProfileFragment extends Fragment {
         });
     }
 
-
+    /**
+     * Gets and sets the list of collected QR codes for the user.
+     *
+     * @param userID The ID of the user.
+     */
     public void getAndSetList(String userID){
         getActivity().runOnUiThread(new Runnable() {
             @Override
@@ -236,6 +271,14 @@ public class ProfileFragment extends Fragment {
             }
         });
     }
+
+    /**
+     * Sets the highest and lowest scoring QR codes for the user.
+     *
+     * @param userID               The ID of the user.
+     * @param highestPointsTextView The TextView displaying the highest scoring QR code.
+     * @param lowestPointsTextView  The TextView displaying the lowest scoring QR code.
+     */
     private void setHighestLowest(String userID, TextView highestPointsTextView, TextView lowestPointsTextView) {
         PlayerCollection pc = new PlayerCollection(null);
         QRCollection qrc = new QRCollection(null);

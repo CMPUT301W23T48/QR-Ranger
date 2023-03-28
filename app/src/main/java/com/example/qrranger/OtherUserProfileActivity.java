@@ -14,6 +14,10 @@ import androidx.appcompat.app.AppCompatActivity;
 import java.util.ArrayList;
 import java.util.concurrent.CompletableFuture;
 
+/**
+ * This Activity allows you to view another user's profile, showing their username,
+ * email, phone number, rank, total score, and the number of QR codes they've collected.
+ */
 public class OtherUserProfileActivity extends AppCompatActivity {
 
     Button backButton;
@@ -27,6 +31,12 @@ public class OtherUserProfileActivity extends AppCompatActivity {
     Player myUser = new Player();
 
 
+    /**
+     * When the activity is created, we set up the views and populate them
+     * with the user's profile data from the Intent.
+     *
+     * @param savedInstanceState A Bundle containing the saved state of the activity.
+     */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -54,6 +64,11 @@ public class OtherUserProfileActivity extends AppCompatActivity {
 
     }
 
+    /**
+     * Sets up the views with the appropriate data from the Intent.
+     *
+     * @param intent An Intent containing the user's profile data.
+     */
     public void setViews(Intent intent) {
         usernameView.setText(intent.getStringExtra("username"));
         myUser.setUserName(intent.getStringExtra("username"));
@@ -76,6 +91,11 @@ public class OtherUserProfileActivity extends AppCompatActivity {
         getAndSetRank(intent.getStringExtra("userID"));
     }
 
+    /**
+     * Retrieves and sets the rank for the user with the specified user ID.
+     *
+     * @param userID The user ID of the user whose rank we want to fetch and display.
+     */
     public void getAndSetRank(String userID) {
         PlayerCollection pc = new PlayerCollection(null);
         CompletableFuture<Integer> rankFuture = pc.getPlayerRank(userID);

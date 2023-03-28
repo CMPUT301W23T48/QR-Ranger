@@ -397,9 +397,9 @@ public class PlayerCollection extends Database_Controls {
      * @param onSuccess A Consumer that will be called with the top 3 players' data when the query is successful.
      * @param onError A Consumer that will be called with an exception when the query fails.
      */
-    public void getTop3Players(Consumer<List<Map<String, Object>>> onSuccess, Consumer<Exception> onError) {
+    public void getTop6Players(Consumer<List<Map<String, Object>>> onSuccess, Consumer<Exception> onError) {
         // retrieve the top 3 players sorted by their total score in descending order
-        Query query = collection.orderBy("totalScore", Query.Direction.DESCENDING).limit(3);
+        Query query = collection.orderBy("totalScore", Query.Direction.DESCENDING).limit(6);
 
         query.get().addOnCompleteListener(task -> {
             if (task.isSuccessful()) {

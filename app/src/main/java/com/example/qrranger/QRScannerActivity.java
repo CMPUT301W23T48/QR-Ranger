@@ -64,6 +64,7 @@ public class QRScannerActivity extends AppCompatActivity{
         gemLustre = findViewById(R.id.lusterLevel);
 
         generator = new QRGenerator();
+        qrCode = new QRCode("Placeholder", "Placeholder");
 
         scanQR();
 
@@ -107,13 +108,15 @@ public class QRScannerActivity extends AppCompatActivity{
         confirmButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                try {
-                    generator.addQRToAccount(qrCode.getId());
+                if(generator.addQRToAccount(qrCode.getId())) {
+                    // QR is successfully added to account.
                     takePhoto();
                 }
-                catch (IllegalArgumentException e) {
+                else {
                     // QR is already in account.
-                    Toast.makeText(getBaseContext(), "QR is already in account!", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(getBaseContext(), "QR is already in account!", Toast.LENGTH_LONG).show();
+                    Intent qrAlreadyIn = new Intent(getBaseContext(), MainActivity.class);
+                    startActivity(qrAlreadyIn);
                 }
             }
         });
@@ -125,7 +128,7 @@ public class QRScannerActivity extends AppCompatActivity{
         gemBorder.setImageResource(qrCode.getGemID().getBoarder());
         backgroundColor.setImageResource(qrCode.getGemID().getBgColor());
         qrTitle.setText(qrCode.getName());
-        qrScore.setText(qrCode.getPoints().toString());
+        qrScore.setText(((Integer)qrCode.getPoints()).toString());
     }
 
     /**
@@ -185,14 +188,12 @@ public class QRScannerActivity extends AppCompatActivity{
         if (requestCode == IntentIntegrator.REQUEST_CODE && resultCode == RESULT_OK) {
             // Get the result.
             IntentResult intentResult = IntentIntegrator.parseActivityResult(requestCode, resultCode, data);
-            if (intentResult != null && intentResult.getRawBytes() != null) {
-                scanResult = intentResult.getRawBytes().toString();
-                qrCode = generator.generateQR(scanResult);
-                updateUi();
-            }
-            else if (intentResult != null && intentResult.getContents() != null) {
+            if (intentResult != null && intentResult.getContents() != null) {
                 scanResult = intentResult.getContents();
-                qrCode = generator.generateQR(scanResult);
+                generator.generateQR(scanResult);
+                while(generator.getQr().getId() == "123456789") {
+                    qrCode = generator.getQr();
+                }
                 updateUi();
             } else {
                 // An error occurs and the scan returns no results.

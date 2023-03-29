@@ -4,7 +4,7 @@ package com.example.qrranger;
 
 public class ScoreCalculator {
 
-    public static Integer calculateScore(String hash) {
+    public static int calculateScore(String hash) {
          // Calculate score
         /* From: geeksforgeeks.org
          * At: https://www.geeksforgeeks.org/java-program-for-hexadecimal-to-decimal-conversion/

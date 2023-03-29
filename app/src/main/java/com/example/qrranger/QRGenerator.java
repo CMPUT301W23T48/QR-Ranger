@@ -18,13 +18,18 @@ import java.util.concurrent.CompletableFuture;
 public class QRGenerator {
     private QRCollection qrCollection;
     private PlayerCollection playerCollection;
-
     private QRCode qr;
+    private boolean qrAdded;
 
     public QRGenerator() {
         qrCollection = new QRCollection(null);
         playerCollection = new PlayerCollection(null);
         qr = new QRCode("12345689", "None");
+        qrAdded = false;
+    }
+
+    public QRCode getQr() {
+        return this.qr;
     }
 
     /**
@@ -39,23 +44,24 @@ public class QRGenerator {
      *      The generated or retrieved QRCode instance.
      *
      */
-    public QRCode generateQR(String qrData) {
+    public void generateQR(String qrData) {
         qrCollection = new QRCollection(null);
 
+        // Hash the data to get the QR ID.
+        String hash = SHA256Hash(qrData);
 
         // Generate a new QR if it doesn't already exist or pull the existing one from the db.
-        CompletableFuture<Boolean> future = qrCollection.checkQRExists(qrData);
+        CompletableFuture<Boolean> future = qrCollection.checkQRExists(hash);
         future.thenAccept(qrExists -> {
             if (qrExists) {
                 // Pull existing QR from the DB.
-                qrCollection.read(qrData, data -> {
+                qrCollection.read(hash, data -> {
                     String qrId = Objects.requireNonNull(data.get("qr_id").toString());
                     String name = Objects.requireNonNull(data.get("name").toString());
                     String url = Objects.requireNonNull(data.get("url").toString());
-                    Integer points = (Integer) data.get("points");
+                    int points = (int) (long) data.get("points");
                     gemID gem = (gemID) data.get("gem_id");
 
-//                    qr = new QRCode(qrId, url, gem);
                     qr.setID(qrId);
                     qr.setName(name);
                     qr.setUrl(url);
@@ -68,25 +74,20 @@ public class QRGenerator {
             }
             else {
                 // QR doesn't exist, so generate a new one!
-                String hash = SHA256Hash(qrData);
 
                 gemID gem = new gemID();
 
-                // Create the QRCode object.
-                // qr = new QRCode(hash, qrData);
                 qr.setID(hash);
-                qr.setName(gem.gemName(qrData));
+                qr.setName(gem.gemName(hash));
                 qr.setUrl(qrData);
-                qr.setPoints(QRCode.calculateScore(qrData));
-                qr.setGemId(qr.getGemID());
+                qr.setPoints(QRCode.calculateScore(hash));
+                qr.setGemId(gem);
 
                 // Add the new QR to the database:
                 Map values = qrCollection.createValues(hash, qr.getName(), qrData, qr.getPoints(), qr.getGemID());
                 qrCollection.create(values);
             }
         });
-
-        return qr;
     }
 
     /**
@@ -97,7 +98,7 @@ public class QRGenerator {
      * @throws IllegalArgumentException
      *      Thrown when QR being added is already linked to the account.
      */
-    public void addQRToAccount(String qrId) throws IllegalArgumentException {
+    public boolean addQRToAccount(String qrId) {
 
         playerCollection = new PlayerCollection(null);
         UserState state = UserState.getInstance();
@@ -107,15 +108,18 @@ public class QRGenerator {
             //Check if the qr is already added to the player's profile.
             ArrayList<String> codeList = Objects.requireNonNull((ArrayList<String>) data.get("qr_code_ids"));
             if(codeList.contains(qrId)) {
-                throw new IllegalArgumentException("QR Code is already in account!");
+                qrAdded = false;
             }
             else {
                 // Add the QR to the player database.
                 playerCollection.add_QR_to_players(userId, qrId);
+                qrAdded = true;
             }
         }, error -> {
             Log.e(TAG, "Error when reading Player from database.");
         });
+
+        return qrAdded;
     }
 
     /**

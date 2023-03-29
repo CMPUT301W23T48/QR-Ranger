@@ -12,7 +12,7 @@ public class QRCode {
     private String id;
     private String name;
     private String url;
-    private Integer points;
+    private int points;
     private String geoLocation;
     private gemID gemId;
 
@@ -55,7 +55,7 @@ public class QRCode {
     public String getUrl() {
         return url;
     }
-    public Integer getPoints() {
+    public int getPoints() {
         return points;
     }
     public String getGeoLocation(){
@@ -74,7 +74,7 @@ public class QRCode {
     public void setUrl(String url) {
         this.url = url;
     }
-    public void setPoints(Integer points) {
+    public void setPoints(int points) {
         this.points = points;
     }
     public void setGeoLocation(String GeoLocation){
@@ -88,7 +88,7 @@ public class QRCode {
      * Takes the String hash of a QRCode and
      * calculates a score using it
      */
-    public static Integer calculateScore(String hash) {
+    public static int calculateScore(String hash) {
         // Calculate score
         /* From: geeksforgeeks.org
          * At: https://www.geeksforgeeks.org/java-program-for-hexadecimal-to-decimal-conversion/

@@ -22,6 +22,7 @@ import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.fragment.app.Fragment;
 
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
@@ -219,7 +220,10 @@ public class ProfileFragment extends Fragment {
     private void startGemActivity(String name, Integer index)
     {
         Intent intent = new Intent(getActivity(), GemActivity.class);
+        ArrayList<String> qrCodeCollection = myUser.getQrCodeCollection();
+        
         String qr_id = myUser.getQrCodeCollection().get(index);
+
         intent.putExtra("qr_id", qr_id);
         intent.putExtra("name", name);
         startGemForResult.launch(intent);
@@ -253,17 +257,26 @@ public class ProfileFragment extends Fragment {
                 // code that modifies the adapter
                 ArrayList<String> qrCodeCollection = myUser.getQrCodeCollection();
                 ArrayList<String> qrNames = new ArrayList<>();
+                Map<String, Integer> qrSort = new HashMap<>();
                 QRCollection qrc = new QRCollection(null);
                 for (String qrCode : qrCodeCollection) {
                     qrc.read(qrCode, data -> {
                         // qr found
-                        qrNames.add(data.get("name").toString());
-                        if (qrNames.size() == qrCodeCollection.size()) {
+                        qrSort.put(data.get("name").toString(), Integer.parseInt(data.get("points").toString()));
+
+                        if (qrSort.size() == qrCodeCollection.size()) {
                             // All QR names retrieved, update list view
-                            if (qrNames != null){
+                            List<Map.Entry<String, Integer>> list = new ArrayList<>(qrSort.entrySet());
+                            list.sort(Comparator.comparing(Map.Entry::getValue));
+                            if (qrSort != null){
+                                for(int i = list.size()-1; i>= 0; --i) {
+                                    qrNames.add(list.get(i).getKey());
+                                }
                             ArrayAdapter<String> adapter = new ArrayAdapter<>(getContext(),
                                     android.R.layout.simple_list_item_1, qrNames);
-                            listView.setAdapter(adapter);}
+                            listView.setAdapter(adapter);
+                                adapter.notifyDataSetChanged();}
+
                         }
                     }, error -> {
                         // qr not found, cannot set values

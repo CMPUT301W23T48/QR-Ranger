@@ -174,6 +174,9 @@ public class ProfileFragment extends Fragment {
             getAndSetRank(userID);
             System.out.println("Setting views");
 
+            getAndSetTotalQRCodes(userID);
+            System.out.println("Setting Total QR Count.");
+
             setHighestLowest(userID, highestQR, lowestQR);
 
             getAndSetList(userID);
@@ -336,5 +339,17 @@ public class ProfileFragment extends Fragment {
         });
     }
 
+
+    private void getAndSetTotalQRCodes(String userID)
+    {
+        CompletableFuture<Integer> futureCount = myPlayerCollection.countTotalQRCodes(userID);
+        futureCount.thenAccept(count -> {
+            System.out.println("Player rank: " + count);
+            playerTotalQRCodes.setText(count.toString());
+        }).exceptionally(e -> {
+            System.err.println("Failed to get player rank: " + e.getMessage());
+            return null;
+        });
+    }
 
 }

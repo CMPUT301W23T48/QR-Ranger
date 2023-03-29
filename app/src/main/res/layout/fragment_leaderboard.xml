@@ -157,6 +157,112 @@
                 >
             </TextView>
         </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="60dp"
+            android:id="@+id/LeaderboardRank4LL"
+            android:orientation="horizontal"
+            >
+            <TextView
+                android:layout_width="128dp"
+                android:layout_height="match_parent"
+                android:text="4."
+                android:textSize="18dp"
+                android:textStyle="bold"
+                android:gravity="center"
+                >
+            </TextView>
+            <TextView
+                android:layout_width="155dp"
+                android:layout_height="match_parent"
+                android:id="@+id/Rank4Username"
+                android:textStyle="bold"
+                android:gravity="center"
+                android:textSize="18dp"
+                >
+            </TextView>
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:id="@+id/Rank4Score"
+                android:gravity="center"
+                android:textSize="18dp"
+                android:textStyle="bold"
+                >
+            </TextView>
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="60dp"
+            android:id="@+id/LeaderboardRank5LL"
+            android:orientation="horizontal"
+            >
+            <TextView
+                android:layout_width="128dp"
+                android:layout_height="match_parent"
+                android:text="5."
+                android:textSize="18dp"
+                android:textStyle="bold"
+                android:gravity="center"
+                >
+            </TextView>
+            <TextView
+                android:layout_width="155dp"
+                android:layout_height="match_parent"
+                android:id="@+id/Rank5Username"
+                android:textStyle="bold"
+                android:gravity="center"
+                android:textSize="18dp"
+                >
+            </TextView>
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:id="@+id/Rank5Score"
+                android:gravity="center"
+                android:textSize="18dp"
+                android:textStyle="bold"
+                >
+            </TextView>
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="60dp"
+            android:id="@+id/LeaderboardRank6LL"
+            android:orientation="horizontal"
+            >
+            <TextView
+                android:layout_width="128dp"
+                android:layout_height="match_parent"
+                android:text="6."
+                android:textSize="18dp"
+                android:textStyle="bold"
+                android:gravity="center"
+                >
+            </TextView>
+            <TextView
+                android:layout_width="155dp"
+                android:layout_height="match_parent"
+                android:id="@+id/Rank6Username"
+                android:textStyle="bold"
+                android:gravity="center"
+                android:textSize="18dp"
+                >
+            </TextView>
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:id="@+id/Rank6Score"
+                android:gravity="center"
+                android:textSize="18dp"
+                android:textStyle="bold"
+                >
+            </TextView>
+        </LinearLayout>
+
     </LinearLayout>
 
 

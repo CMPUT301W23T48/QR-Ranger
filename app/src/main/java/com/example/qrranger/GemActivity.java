@@ -15,7 +15,10 @@ import androidx.constraintlayout.widget.ConstraintLayout;
 import java.util.HashMap;
 import java.util.Map;
 
-
+/**
+ * An Activity class that displays the details of a specific gem, retrieved
+ * from a QR code.
+ */
 public class GemActivity extends AppCompatActivity {
 
     private TextView nameView;
@@ -25,12 +28,18 @@ public class GemActivity extends AppCompatActivity {
     private ImageView gemBorder;
     private ImageView gemLustre;
     private Button deleteButton;
+    private Button commentsButton;
     private String name;
     private String qr_id;
     private String points;
     private Map gem_data;
     private Boolean deleted = false;
 
+    /**
+     * Initializes the activity and sets up the views for displaying the gem details.
+     *
+     * @param savedInstanceState A Bundle containing the saved state of the activity.
+     */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -40,6 +49,7 @@ public class GemActivity extends AppCompatActivity {
         nameView = cl.findViewById(R.id.gemName);
         qrScore = cl.findViewById(R.id.gemValue);
         deleteButton = cl.findViewById(R.id.delete);
+        commentsButton = cl.findViewById(R.id.comments);
         gemShape = cl.findViewById(R.id.gem);
         backgroundColor = cl.findViewById(R.id.backgroundColor);
         gemBorder = cl.findViewById(R.id.borderType);
@@ -65,6 +75,8 @@ public class GemActivity extends AppCompatActivity {
         deleteButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                // need to add array adapter to handle delete
+                // error on return from activity
 //                deleted = true;
 //                Intent returnIntent = new Intent();
 //                returnIntent.putExtra("dataDeleted", deleted);
@@ -74,10 +86,20 @@ public class GemActivity extends AppCompatActivity {
             }
         });
 
+        commentsButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(GemActivity.this, CommentActivity.class);
+                intent.putExtra("qr_id", qr_id);
+                startActivity(intent);
+            }
+        });
 
     }
 
-
+    /**
+     * Sets up the views with the appropriate gem details.
+     */
     public void setViews(){
         nameView.setText(name);
         qrScore.setText(points);

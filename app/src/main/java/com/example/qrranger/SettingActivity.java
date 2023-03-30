@@ -16,7 +16,7 @@ import java.util.concurrent.CompletableFuture;
 
 public class SettingActivity extends AppCompatActivity {
     private Button backButton;
-    private Button confirmButton, confirmButton2, confirmButton3;
+    private Button confirmButton;
     private EditText editUserName ;
     private EditText editPhoneNumber;
     private EditText editEmail;
@@ -27,12 +27,8 @@ public class SettingActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_setting);
 
-        LinearLayout linearLayout = findViewById(R.id.SettingLL3);
-        confirmButton = linearLayout.findViewById(R.id.SettingUsernameSubmitButton);
-        LinearLayout linearLayout1 = findViewById(R.id.SettingLL5);
-        confirmButton2 = linearLayout1.findViewById(R.id.SettingPhoneNumSubmitButton);
-        LinearLayout linearLayout2 = findViewById(R.id.SettingLL7);
-        confirmButton3 = linearLayout2.findViewById(R.id.SettingEmailSubmitButton);
+        confirmButton =findViewById(R.id.SettingSubmitButton);
+        backButton = findViewById(R.id.SettingBackButton);
 
         editPhoneNumber = findViewById(R.id.SettingPhoneNumInput);
         editUserName = findViewById(R.id.SettingUsernameInput);
@@ -45,34 +41,6 @@ public class SettingActivity extends AppCompatActivity {
         editPhoneNumber.setText(myUser.getPhoneNumber());
         editEmail.setText(myUser.getEmail());
 
-
-        confirmButton2.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                String phoneNumb = editPhoneNumber.getText().toString();
-                myUser.setPhoneNumber(phoneNumb);
-                settingsChanged = true;
-
-                // update database
-                PlayerCollection pc = new PlayerCollection(null);
-                UserState us = UserState.getInstance();
-                Map<String, Object> new_values = pc.createValues(us.getUserID(), myUser.getUserName(), myUser.getPhoneNumber(), myUser.getEmail(), myUser.getGeoLocationFlag(), Math.toIntExact(myUser.getTotalScore()), Math.toIntExact(myUser.getTotalQRCode()));
-                pc.update(us.getUserID(), new_values);
-
-                Snackbar snackbar = Snackbar.make(view, "Saved", Snackbar.LENGTH_LONG);
-                // Add an action to the Snackbar
-                snackbar.setAction("OK", new View.OnClickListener() {
-                    @Override
-                    public void onClick(View view) {
-                        // This is called when the "OK" button on the Snackbar is clicked
-                    }
-                });
-
-                // Show the Snackbar
-                snackbar.show();
-            }
-        });
-
         confirmButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -83,6 +51,14 @@ public class SettingActivity extends AppCompatActivity {
                 UserState us = UserState.getInstance();
                 //check that username unique
                 CompletableFuture<Boolean> futureUnique = pc.checkUsernameUnique(username);
+
+                String phoneNumb = editPhoneNumber.getText().toString();
+                myUser.setPhoneNumber(phoneNumb);
+
+
+                String email = editEmail.getText().toString();
+                myUser.setEmail(email);
+
                 futureUnique.thenAccept(usernameUnique -> {
                     if (usernameUnique) {
                         System.out.println("Username Unique");
@@ -99,6 +75,10 @@ public class SettingActivity extends AppCompatActivity {
                     } else {
                         // not unique so use a snackbar to inform the user
                         System.out.println("Username Not Unique");
+
+                        Map<String, Object> new_values = pc.createValues(us.getUserID(), myUser.getUserName(), myUser.getPhoneNumber(), myUser.getEmail(), myUser.getGeoLocationFlag(), Math.toIntExact(myUser.getTotalScore()), Math.toIntExact(myUser.getTotalQRCode()));
+                        pc.update(us.getUserID(), new_values);
+
                         Snackbar snackbar2 = Snackbar.make(view, "Username Already Taken.", Snackbar.LENGTH_LONG);
                         snackbar2.show();
                     }
@@ -109,35 +89,7 @@ public class SettingActivity extends AppCompatActivity {
             }
         });
 
-        confirmButton3.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                String email = editEmail.getText().toString();
-                myUser.setEmail(email);
-                settingsChanged = true;
-                // update database
-                PlayerCollection pc = new PlayerCollection(null);
-                UserState us = UserState.getInstance();
-                Map<String, Object> new_values = pc.createValues(us.getUserID(), myUser.getUserName(), myUser.getPhoneNumber(), myUser.getEmail(), myUser.getGeoLocationFlag(), Math.toIntExact(myUser.getTotalScore()), Math.toIntExact(myUser.getTotalQRCode()));
-                pc.update(us.getUserID(), new_values);
 
-                Snackbar snackbar = Snackbar.make(view, "Saved", Snackbar.LENGTH_LONG);
-
-                // Add an action to the Snack bar
-                snackbar.setAction("OK", new View.OnClickListener() {
-                    @Override
-                    public void onClick(View view) {
-                        // This is called when the "OK" button on the Snackbar is clicked
-                    }
-                });
-
-                // Show the Snackbar
-                snackbar.show();
-            }
-        });
-
-
-        backButton = findViewById(R.id.SettingBackButton);
         backButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {

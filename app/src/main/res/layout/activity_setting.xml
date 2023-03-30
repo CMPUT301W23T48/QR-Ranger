@@ -25,7 +25,7 @@
 
             <EditText
                 android:id="@+id/SettingUsernameInput"
-                android:layout_width="299dp"
+                android:layout_width="match_parent"
                 android:layout_height="45dp"
                 android:layout_marginTop="5dp"
                 android:background="@drawable/input_box_outline"
@@ -33,11 +33,6 @@
                 android:hint="Enter username"
                 android:paddingLeft="10dp"/>
 
-            <Button
-                android:id="@+id/SettingUsernameSubmitButton"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="Submit"/>
         </LinearLayout>
     </LinearLayout>
 
@@ -63,7 +58,7 @@
 
             <EditText
                 android:id="@+id/SettingPhoneNumInput"
-                android:layout_width="299dp"
+                android:layout_width="match_parent"
                 android:layout_height="45dp"
                 android:layout_marginTop="5dp"
                 android:background="@drawable/input_box_outline"
@@ -71,11 +66,6 @@
                 android:hint="Enter Phone Number"
                 android:paddingLeft="10dp"/>
 
-            <Button
-                android:id="@+id/SettingPhoneNumSubmitButton"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="Submit"/>
         </LinearLayout>
     </LinearLayout>
 
@@ -101,7 +91,7 @@
 
             <EditText
                 android:id="@+id/SettingEmailInput"
-                android:layout_width="299dp"
+                android:layout_width="match_parent"
                 android:layout_height="45dp"
                 android:layout_marginTop="5dp"
                 android:background="@drawable/input_box_outline"
@@ -109,12 +99,7 @@
                 android:hint="Enter Email"
                 android:paddingLeft="10dp"/>
 
-            <Button
-                android:id="@+id/SettingEmailSubmitButton"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="Submit"
-                />
+
         </LinearLayout>
     </LinearLayout>
 
@@ -126,12 +111,19 @@
         android:layout_marginTop="10dp"
         android:text="Enable Geo Location"
         android:textSize="20dp" />
+
+    <Button
+        android:id="@+id/SettingSubmitButton"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Submit" />
+
     <Button
         android:id="@+id/SettingBackButton"
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_gravity="end"
         android:layout_marginTop="10dp"
-        android:text="@string/Back"
-        android:layout_gravity="end"/>
+        android:text="@string/Back" />
 
 </LinearLayout>

@@ -16,9 +16,19 @@ import java.util.Map;
 import java.util.concurrent.CompletableFuture;
 import java.util.function.Consumer;
 
+/**
+ * QRCollection is a class that extends the Database_Controls abstract class.
+ * It provides methods to interact with the 'qr_codes' collection in the Firestore database.
+ * The class allows you to create, read, update, and delete QR codes, as well as check if a QR code exists.
+ */
 public class QRCollection extends Database_Controls{
     CollectionReference collection;
-    // Instantiating Database class with variable db
+
+    /**
+     * Constructor for QRCollection class, initializes the Firestore collection reference.
+     *
+     * @param db The instance of the Database class.
+     */
     public QRCollection(Database db) {
         if (db == null)
         {
@@ -28,6 +38,11 @@ public class QRCollection extends Database_Controls{
     }
 
 
+    /**
+     * Adds a new QR code to the database with the given values.
+     *
+     * @param values A map containing field names as keys and their corresponding values.
+     */
     @Override
     void create(Map values) {
         // adds the values in the Map to the database, key = field
@@ -40,7 +55,13 @@ public class QRCollection extends Database_Controls{
                 });
     }
 
-
+    /**
+     * Reads the data for a QR code with the given QR_ID.
+     *
+     * @param QR_ID The QR code ID to be read.
+     * @param onSuccess A consumer to handle the data on a successful read operation.
+     * @param onError A consumer to handle exceptions on a failed read operation.
+     */
     @Override
     void read(String QR_ID, Consumer<Map<String, Object>> onSuccess, Consumer<Exception> onError) {
         // returns the data for a QR code with the given QR_ID
@@ -57,6 +78,13 @@ public class QRCollection extends Database_Controls{
         });
     }
 
+    /**
+     * Updates the data for a QR code with the given QR_ID.
+     *
+     * @param QR_ID The QR code ID to be updated.
+     * @param values A map containing field names as keys and their corresponding new values.
+     * @return A CompletableFuture that completes when the update operation finishes.
+     */
     @Override
     CompletableFuture<Void> update(String QR_ID, Map<String, Object> values) {
         // updates the data for the QR code with the given QR_ID
@@ -79,6 +107,11 @@ public class QRCollection extends Database_Controls{
         return future;
     }
 
+    /**
+     * Deletes the QR code with the given QR_ID from the database.
+     *
+     * @param QR_ID The QR code ID to be deleted.
+     */
     @Override
     void delete(String QR_ID) {
         // deletes the QR code, with QR_ID, from the database.
@@ -95,6 +128,16 @@ public class QRCollection extends Database_Controls{
         });
     }
 
+    /**
+     * Creates a HashMap representing the fields in the QR code collection.
+     *
+     * @param QR_ID The unique identifier for the QR code.
+     * @param name The name of the QR code.
+     * @param url The URL associated with the QR code.
+     * @param points The points earned when scanning the QR code.
+     * @param gem The gem ID associated with the QR code.
+     * @return A HashMap containing the key-value pairs for the QR code fields.
+     */
     public Map createValues(String QR_ID, String name, String url, Integer points, gemID gem)
     {
         // This represents the fields in the player collection
@@ -108,6 +151,12 @@ public class QRCollection extends Database_Controls{
         return values;
     }
 
+    /**
+     * Checks if a QR code with the specified QR_ID exists in the database.
+     *
+     * @param QR_ID The unique identifier for the QR code.
+     * @return A CompletableFuture that completes with true if the QR code exists, false otherwise.
+     */
     public CompletableFuture<Boolean> checkQRExists(String QR_ID) {
         // returns true if a QR code exists in the database, false otherwise
         CompletableFuture<Boolean> future = new CompletableFuture<>();

@@ -25,6 +25,7 @@ import com.google.firebase.firestore.QuerySnapshot;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 
 /**
  * CommentActivity allows users to view, add, and delete comments related to a specific QR code.
@@ -81,12 +82,7 @@ public class CommentActivity extends AppCompatActivity {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 Comment clickedComment = commentsList.get(position);
-                UserState us = UserState.getInstance();
-                String userID = us.getUserID();
-
-                if (clickedComment.getAuthorID().equals(userID)) {
-                    showDeleteCommentDialog(clickedComment);
-                }
+                showDeleteCommentDialog(clickedComment);
             }
         });
     }
@@ -102,12 +98,17 @@ public class CommentActivity extends AppCompatActivity {
             public void onComplete(@NonNull Task<QuerySnapshot> task) {
                 if (task.isSuccessful()) {
                     for (QueryDocumentSnapshot document : task.getResult()) {
-                        Comment comment = document.toObject(Comment.class);
+                        Comment comment = new Comment();
+                        comment.setQr_id(document.get("QR_ID").toString());
+                        comment.setAuthor(document.get("author").toString());
+                        comment.setAuthorID(document.get("author_id").toString());
+                        comment.setComment(document.get("comment").toString());
+
                         commentsList.add(comment);
                     }
                     commentListAdapter.notifyDataSetChanged();
                 } else {
-                    // Handle the error
+                    System.out.println("ERROR: cannot find comment.");
                 }
             }
         });
@@ -130,7 +131,6 @@ public class CommentActivity extends AppCompatActivity {
                         String commentText = commentInput.getText().toString().trim();
                         if (!commentText.isEmpty()) {
                             // Save the comment to the database
-                            // have QR_ID
                             saveComment(commentText);
                         }
                     }
@@ -205,11 +205,31 @@ public class CommentActivity extends AppCompatActivity {
      * @param comment The Comment object to be deleted.
      */
     private void deleteComment(Comment comment) {
-        CommentCollection cc = new CommentCollection(null);
-        cc.delete(comment.getAuthorID());
-        commentsList.remove(comment);
-        commentListAdapter.notifyDataSetChanged();
+        UserState us = UserState.getInstance();
+        String userID = us.getUserID();
+        String authorID = comment.getAuthorID();
+        Database db = Database.getInstance();
+        CommentCollection cc = new CommentCollection(db);
+        if (Objects.equals(authorID, userID)){
+            System.out.println(comment.getQR_id() + comment.getAuthor() + comment.getComment());
+            Query query = db.getCollection("comments")
+                    .whereEqualTo("QR_ID", comment.getQR_id())
+                    .whereEqualTo("author_id", comment.getAuthorID())
+                    .whereEqualTo("comment", comment.getComment());
+
+            query.get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                @Override
+                public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                    if (task.isSuccessful()) {
+                        for (QueryDocumentSnapshot document : task.getResult()) {
+                            cc.delete(document.getId());
+                            commentsList.remove(comment);
+                            commentListAdapter.notifyDataSetChanged();}
+                    } else {
+                        System.out.println("Error finding comment: " + task.getException());
+                    }
+                }
+            });
+        }
     }
-
-
 }

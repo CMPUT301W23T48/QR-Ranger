@@ -10,7 +10,6 @@
         android:label="@string/app_name"
         android:supportsRtl="true"
         android:theme="@style/Theme.QRRanger"
-
         tools:targetApi="31">
 
         <activity

@@ -2,7 +2,6 @@ package com.example.qrranger;
 
 import static android.content.ContentValues.TAG;
 
-import android.Manifest;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
@@ -85,7 +84,7 @@ public class QRScannerActivity extends AppCompatActivity{
                         if (result.getResultCode() == RESULT_OK) {
                             if (result.getData() != null) {
                                 locationImage = (Bitmap) result.getData().getExtras().get("data");
-
+                                compressImage.compressImage(locationImage);
                                 // Return to the main activity with the image data.
                                 Intent returnIntent = new Intent(getBaseContext(), MainActivity.class);
                                 startActivity(returnIntent);

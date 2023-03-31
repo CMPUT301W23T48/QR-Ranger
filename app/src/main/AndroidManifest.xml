@@ -37,6 +37,10 @@
             android:exported="true">
         </activity>
 
+        <activity
+            android:name=".UsersThatScannedActivity"
+            android:exported="true">
+        </activity>
 
         <activity
             android:name=".MainActivity"

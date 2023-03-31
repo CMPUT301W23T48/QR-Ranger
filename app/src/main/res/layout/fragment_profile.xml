@@ -111,7 +111,7 @@
                 <TextView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="Rank:"
+                    android:text="Rank of Highest Scoring Gem:"
                     android:textSize="15dp"
                     android:textStyle="bold" />
 

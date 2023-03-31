@@ -101,22 +101,15 @@ public class CommentCollection extends Database_Controls{
     /**
      * Deletes the specified document from the Firestore collection.
      *
-     * @param authorID The ID of the document to delete.
+     * @param docID The ID of the document to delete.
      */
     @Override
-    void delete(String authorID) {
-        Query query = collection.whereEqualTo("author_id", authorID);
-
-        query.get().addOnCompleteListener(task -> {
-            if (task.isSuccessful()) {
-                for (QueryDocumentSnapshot document : task.getResult()) {
-                    collection.document(document.getId()).delete();
-                }
-            } else {
-                System.out.println("Error deleting player: " + task.getException());
-            }
-        });
+    void delete(String docID) {
+        collection.document(docID).delete()
+                .addOnSuccessListener(aVoid -> System.out.println("Document successfully deleted!"))
+                .addOnFailureListener(e -> System.out.println("Error deleting document: " + e));
     }
+
 
 
     /**

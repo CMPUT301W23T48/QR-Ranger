@@ -481,5 +481,34 @@ public class PlayerCollection extends Database_Controls {
         return futureTotal;
     }
 
+    /**
+     * Get a list of users that have the specified QR code ID in their 'qr_code_ids' field.
+     *
+     * @param qr_id The QR code ID to search for.
+     * @return A CompletableFuture that resolves to a list of user data maps containing user fields on successful query,
+     *         or completes exceptionally with an exception on error.
+     */
+    public CompletableFuture<List<String>> getUsersWithQrId(String qr_id) {
+        CompletableFuture<List<String>> future = new CompletableFuture<>();
+        Query query = collection.whereArrayContains("qr_code_ids", qr_id);
+
+        query.get().addOnCompleteListener(task -> {
+            if (task.isSuccessful()) {
+                List<String> usernames = new ArrayList<>();
+                for (QueryDocumentSnapshot document : task.getResult()) {
+                    String username = document.getString("username");
+                    usernames.add(username);
+                }
+                future.complete(usernames);
+            } else {
+                future.completeExceptionally(task.getException());
+            }
+        });
+
+        return future;
+    }
+
+
+
 
 }

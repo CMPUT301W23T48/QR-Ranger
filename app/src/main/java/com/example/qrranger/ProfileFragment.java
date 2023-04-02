@@ -88,6 +88,7 @@ public class ProfileFragment extends Fragment {
                                     getAndSetList(myUser.getPlayerId());
                                     MainActivity mainActivity = (MainActivity) getActivity();
                                     mainActivity.replaceFragment(new ProfileFragment());
+                                    adapter.notifyDataSetChanged();
                                 }
                             }
                         }
@@ -263,7 +264,7 @@ public class ProfileFragment extends Fragment {
                         //if (qrNames.size() == qrCodeCollection.size()) {
                             // All QR names retrieved, update list view
                             //if (qrNames != null){
-                            ArrayAdapter<String> adapter = new QRLIstArrayAdapter(getContext(), qrCodeCollection);
+                            adapter = new QRLIstArrayAdapter(getContext(), qrCodeCollection);
                             listView.setAdapter(adapter);}
                         //}
                     //}, error -> {
@@ -356,16 +357,24 @@ public class ProfileFragment extends Fragment {
     }
 
 
-    private void getAndSetTotalScore(String userID)
-    {
+    private void getAndSetTotalScore(String userID) {
         myPlayerCollection.calcScore(userID, score -> {
             System.out.println("Total score for user " + userID + ": " + score);
-            playerTotalScore.setText(score.toString());
-            myUser.setTotalScore(score.longValue());
-            Map<String, Object> values = myPlayerCollection.createValues(userID, myUser.getUserName(), myUser.getPhoneNumber(), myUser.getEmail(), myUser.getGeoLocationFlag(),(int)(long) myUser.getTotalScore(), (int)(long)myUser.getTotalQRCode());
+
+            // Set the score in the UI
+            playerTotalScore.setText(String.valueOf(score));
+
+            // Update the user object
+            myUser.setTotalScore((long) score);
+
+            // Create the updated values map for the user
+            Map<String, Object> values = myPlayerCollection.createValues(userID, myUser.getUserName(), myUser.getPhoneNumber(), myUser.getEmail(), myUser.getGeoLocationFlag(), (int) (long) myUser.getTotalScore(), (int) (long) myUser.getTotalQRCode());
+
+            // Update the user's document in the database with the new total score
             myPlayerCollection.update(userID, values);
         }, error -> {
             System.out.println("Error calculating score: " + error);
         });
     }
+
 }

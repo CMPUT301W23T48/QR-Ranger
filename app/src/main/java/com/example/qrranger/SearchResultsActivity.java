@@ -67,7 +67,7 @@ public class SearchResultsActivity extends AppCompatActivity {
         intent.putExtra("userID", data.get("userID").toString());
         intent.putExtra("totalQRCode", data.get("totalQRCode").toString());
         intent.putExtra("totalScore", data.get("totalScore").toString());
-//        intent.putExtra("qr_code_ids", data.get("qr_code_ids").toString());
+        intent.putExtra("qr_code_ids", (ArrayList<String>)data.get("qr_code_ids"));
         startActivity(intent);
     }
 }

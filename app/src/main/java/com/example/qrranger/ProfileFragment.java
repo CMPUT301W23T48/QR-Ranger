@@ -261,8 +261,7 @@ public class ProfileFragment extends Fragment {
                         if (qrNames.size() == qrCodeCollection.size()) {
                             // All QR names retrieved, update list view
                             if (qrNames != null){
-                            ArrayAdapter<String> adapter = new ArrayAdapter<>(getContext(),
-                                    android.R.layout.simple_list_item_1, qrNames);
+                            ArrayAdapter<String> adapter = new QRLIstArrayAdapter(getContext(), qrNames);
                             listView.setAdapter(adapter);}
                         }
                     }, error -> {

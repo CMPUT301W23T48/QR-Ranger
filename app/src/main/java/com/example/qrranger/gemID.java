@@ -125,5 +125,4 @@ public class gemID {
         this.lusterLevel = lusterLevel;
     }
 
-
 }

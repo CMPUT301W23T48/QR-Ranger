@@ -13,6 +13,7 @@ import android.widget.TextView;
 
 import com.example.qrranger.R;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
@@ -194,7 +195,8 @@ public class LeaderboardFragment extends Fragment {
         intent.putExtra("userID", data.get("userID").toString());
         intent.putExtra("totalQRCode", data.get("totalQRCode").toString());
         intent.putExtra("totalScore", data.get("totalScore").toString());
-//        intent.putExtra("qr_code_ids", data.get("qr_code_ids"));
+        intent.putExtra("qr_code_ids", (ArrayList<String>)data.get("qr_code_ids"));
+
         startActivity(intent);
     }
 }

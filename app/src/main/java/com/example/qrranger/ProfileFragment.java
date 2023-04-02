@@ -177,6 +177,8 @@ public class ProfileFragment extends Fragment {
             getAndSetTotalQRCodes(userID);
             System.out.println("Setting Total QR Count.");
 
+            getAndSetTotalScore(userID);
+
             setHighestLowest(userID, highestQR, lowestQR);
 
             getAndSetList(userID);
@@ -346,10 +348,25 @@ public class ProfileFragment extends Fragment {
         futureCount.thenAccept(count -> {
             System.out.println("Player rank: " + count);
             playerTotalQRCodes.setText(count.toString());
+            myUser.setTotalQRCode(count.longValue());
+
         }).exceptionally(e -> {
             System.err.println("Failed to get player rank: " + e.getMessage());
             return null;
         });
     }
 
+
+    private void getAndSetTotalScore(String userID)
+    {
+        myPlayerCollection.calcScore(userID, score -> {
+            System.out.println("Total score for user " + userID + ": " + score);
+            playerTotalScore.setText(score.toString());
+            myUser.setTotalScore(score.longValue());
+            Map<String, Object> values = myPlayerCollection.createValues(userID, myUser.getUserName(), myUser.getPhoneNumber(), myUser.getEmail(), myUser.getGeoLocationFlag(),(int)(long) myUser.getTotalScore(), (int)(long)myUser.getTotalQRCode());
+            myPlayerCollection.update(userID, values);
+        }, error -> {
+            System.out.println("Error calculating score: " + error);
+        });
+    }
 }

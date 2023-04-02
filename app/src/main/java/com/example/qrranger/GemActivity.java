@@ -60,12 +60,13 @@ public class GemActivity extends AppCompatActivity {
         gemLustre = cl.findViewById(R.id.lusterLevel);
 
         Intent intent = getIntent();
-        name = intent.getStringExtra("name");
+        //name = intent.getStringExtra("name");
         qr_id = intent.getStringExtra("qr_id");
 
 
         QRCollection qrc = new QRCollection(null);
         qrc.read(qr_id, data -> {
+            name = data.get("name").toString();
             points = data.get("points").toString();
             gem_data = (Map) data.get("gem_id");
             setViews();

@@ -6,7 +6,7 @@
     android:layout_height="match_parent">
 
     <ImageView
-        android:id="@+id/shape"
+        android:id="@+id/background"
         android:layout_width="113dp"
         android:layout_height="121dp"
         app:layout_constraintBottom_toBottomOf="parent"
@@ -17,7 +17,7 @@
         app:layout_constraintVertical_bias="0.026"
         tools:srcCompat="@tools:sample/avatars" />
     <ImageView
-        android:id="@+id/background"
+        android:id="@+id/shape"
         android:layout_width="113dp"
         android:layout_height="121dp"
         app:layout_constraintBottom_toBottomOf="parent"

@@ -88,6 +88,7 @@ public class ProfileFragment extends Fragment {
                                     getAndSetList(myUser.getPlayerId());
                                     MainActivity mainActivity = (MainActivity) getActivity();
                                     mainActivity.replaceFragment(new ProfileFragment());
+                                    adapter.notifyDataSetChanged();
                                 }
                             }
                         }
@@ -263,7 +264,7 @@ public class ProfileFragment extends Fragment {
                         //if (qrNames.size() == qrCodeCollection.size()) {
                             // All QR names retrieved, update list view
                             //if (qrNames != null){
-                            ArrayAdapter<String> adapter = new QRLIstArrayAdapter(getContext(), qrCodeCollection);
+                            adapter = new QRLIstArrayAdapter(getContext(), qrCodeCollection);
                             listView.setAdapter(adapter);}
                         //}
                     //}, error -> {

@@ -81,11 +81,11 @@ public class GemActivity extends AppCompatActivity {
             public void onClick(View view) {
                 // need to add array adapter to handle delete
                 // error on return from activity
-//                deleted = true;
-//                Intent returnIntent = new Intent();
-//                returnIntent.putExtra("dataDeleted", deleted);
-//                returnIntent.putExtra("qr_id", qr_id); // Pass the modified object back to the first activity
-//                setResult(RESULT_OK, returnIntent);
+                deleted = true;
+                Intent returnIntent = new Intent();
+                returnIntent.putExtra("dataDeleted", deleted);
+                returnIntent.putExtra("qr_id", qr_id); // Pass the modified object back to the first activity
+                setResult(RESULT_OK, returnIntent);
                 finish();
             }
         });

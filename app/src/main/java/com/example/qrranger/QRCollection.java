@@ -133,19 +133,17 @@ public class QRCollection extends Database_Controls{
      *
      * @param QR_ID The unique identifier for the QR code.
      * @param name The name of the QR code.
-     * @param url The URL associated with the QR code.
      * @param points The points earned when scanning the QR code.
      * @param gem The gem ID associated with the QR code.
      * @return A HashMap containing the key-value pairs for the QR code fields.
      */
-    public Map createValues(String QR_ID, String name, String url, Integer points, gemID gem)
+    public Map createValues(String QR_ID, String name, Integer points, gemID gem)
     {
         // This represents the fields in the player collection
         // can add or remove fields here
         Map <String, Object> values = new HashMap<>();
         values.put("qr_id", QR_ID);
         values.put("name", name);
-        values.put("url", url);
         values.put("points", points);
         values.put("gem_id", gem);
         return values;

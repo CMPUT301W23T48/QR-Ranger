@@ -54,13 +54,11 @@ public class GemFragment extends Fragment {
         qrCollection.read(id, data ->{
             String qrId = Objects.requireNonNull(data.get("qr_id").toString());
             String name = Objects.requireNonNull(data.get("name").toString());
-            String url = Objects.requireNonNull(data.get("url").toString());
             Integer points = (Integer) data.get("points");
             gemID gem = (gemID) data.get("gem_id");
 
             qrCode.setName(name);
             qrCode.setPoints(points);
-            qrCode.setUrl(url);
             qrCode.setGemId(gem);
         }, error -> {
             Log.e(TAG, "Error when loading QR from database.");

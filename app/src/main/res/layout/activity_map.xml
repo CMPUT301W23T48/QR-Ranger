@@ -5,12 +5,23 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <fragment
-        xmlns:tools="http://schemas.android.com/tools"
+    <com.google.android.gms.maps.MapView
+        android:id="@+id/mapView"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:id="@+id/map"
-        tools:context=".MapActivity"
-        android:name="com.google.android.gms.maps.SupportMapFragment"
-        tools:layout="@layout/activity_main" />
+        android:layout_height="596dp"
+        android:layout_below="@+id/MapSearchBar"
+        android:layout_marginTop="5dp" />
+
+    <SearchView
+        android:id="@+id/MapSearchBar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:queryHint="Enter location"
+        android:iconifiedByDefault="false"
+        android:layout_marginHorizontal="16dp"
+        android:layout_marginBottom="16dp"
+        android:background="@drawable/map_search" />
+
+
+
 </RelativeLayout>

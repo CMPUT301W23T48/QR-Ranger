@@ -22,7 +22,7 @@ import java.util.Objects;
 public class QRLIstArrayAdapter extends ArrayAdapter<String> {
 
     private QRCollection qrCollection = new QRCollection(null);
-    private QRCode qrCode = new QRCode("123456789", "uouo");
+    private QRCode qrCode = new QRCode();
     private Map gem_data;
     public QRLIstArrayAdapter(Context context, ArrayList<String> qrID){
         super(context, 0, qrID);

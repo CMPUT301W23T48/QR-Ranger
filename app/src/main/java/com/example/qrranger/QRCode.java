@@ -32,12 +32,12 @@ public class QRCode {
      * and repopulating it, no need to generate a new gemID as
      * it already exists
      */
-    public QRCode(String id, gemID gemId) {
-        this.id = id;
-        this.gemId = gemId;
-        this.name = gemId.gemName(id);
-        this.points = calculateScore(id);
-        this.geoLocation = "Unknown";
+    public QRCode() {
+//        this.id = id;
+//        this.gemId = gemId;
+//        this.name = gemId.gemName(id);
+//        this.points = calculateScore(id);
+//        this.geoLocation = "Unknown";
     }
 
     /**

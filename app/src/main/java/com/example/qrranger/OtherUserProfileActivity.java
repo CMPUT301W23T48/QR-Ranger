@@ -87,7 +87,6 @@ public class OtherUserProfileActivity extends AppCompatActivity {
         myUser.setPlayerId(intent.getStringExtra("userID"));
         myUser.setQrCodeCollection(intent.getStringArrayListExtra("qr_code_ids"));
 
-//        getAndSetList(myUser);
         getAndSetList(myUser.getPlayerId());
         getAndSetRank(intent.getStringExtra("userID"));
     }
@@ -109,34 +108,6 @@ public class OtherUserProfileActivity extends AppCompatActivity {
         });
     }
 
-//    public void getAndSetList(Player user){
-//        OtherUserProfileActivity.this.runOnUiThread(new Runnable() {
-//            @Override
-//            public void run() {
-//                // code that modifies the adapter
-//                ArrayList<String> qrCodeCollection = user.getQrCodeCollection();
-//                ArrayList<String> qrNames = new ArrayList<>();
-//                QRCollection qrc = new QRCollection(null);
-//                for (String qrCode : qrCodeCollection) {
-//                    qrc.read(qrCode, data -> {
-//                        // qr found
-//                        qrNames.add(data.get("name").toString());
-//                        if (qrNames.size() == qrCodeCollection.size()) {
-//                            // All QR names retrieved, update list view
-//                            ArrayAdapter<String> adapter = new ArrayAdapter<>(OtherUserProfileActivity.this,
-//                                    android.R.layout.simple_list_item_1, qrNames);
-//                            qrList.setAdapter(adapter);
-//                        }
-//                    }, error -> {
-//                        // qr not found, cannot set values
-//                        System.out.println("Error getting player data: " + error);
-//                    });
-//
-//                }
-//            }
-//        });
-//
-//    }
 
     public void getAndSetList(String userID){
         OtherUserProfileActivity.this.runOnUiThread(new Runnable() {

@@ -10,17 +10,14 @@ import org.junit.Test;
 public class QRCodeTest {
     @Test
     public void testGettersAndSettersOfQRCode(){
-        QRCode test = new QRCode("9a86a0b4c6d85bf937e174b39055a156","https://www.youtube.com/");
+        QRCode test = new QRCode("9a86a0b4c6d85bf937e174b39055a156");
         System.out.println(test.getId());
         System.out.println(test.getName());
-        System.out.println(test.getUrl());
         System.out.println(test.getGeoLocation());
         System.out.println(test.getGemID());
         System.out.println("\n");
 
         test.setGeoLocation("17635 Stony Plain Rd, Edmonton, AB T5S 1E3");
-        test.setUrl("https://www.dennys.ca/restaurant/alberta/edmonton-west/");
-        System.out.println(test.getUrl());
         System.out.println(test.getGeoLocation());
 
 
@@ -35,7 +32,7 @@ public class QRCodeTest {
      * method works properly
      **/
     public void testScoreCalculator(){
-        QRCode test = new QRCode("696ce4dbd7bb57cbfe58b64f530f428b74999cb37e2ee60980490cd9552de3a6","https://www.youtube.com/");
+        QRCode test = new QRCode("696ce4dbd7bb57cbfe58b64f530f428b74999cb37e2ee60980490cd9552de3a6");
         test.setPoints(QRCode.calculateScore(test.getId()));
         System.out.println(test.getPoints());
 

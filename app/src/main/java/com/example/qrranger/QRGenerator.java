@@ -24,7 +24,7 @@ public class QRGenerator {
     public QRGenerator() {
         qrCollection = new QRCollection(null);
         playerCollection = new PlayerCollection(null);
-        qr = new QRCode("12345689", "None");
+        qr = new QRCode("12345689");
     }
 
     /**
@@ -51,14 +51,12 @@ public class QRGenerator {
                 qrCollection.read(qrData, data -> {
                     String qrId = Objects.requireNonNull(data.get("qr_id").toString());
                     String name = Objects.requireNonNull(data.get("name").toString());
-                    String url = Objects.requireNonNull(data.get("url").toString());
                     Integer points = (Integer) data.get("points");
                     gemID gem = (gemID) data.get("gem_id");
 
-//                    qr = new QRCode(qrId, url, gem);
+//                    qr = new QRCode(qrId, gem);
                     qr.setID(qrId);
                     qr.setName(name);
-                    qr.setUrl(url);
                     qr.setPoints(points);
                     qr.setGemId(gem);
                 }, error -> {
@@ -76,12 +74,11 @@ public class QRGenerator {
                 // qr = new QRCode(hash, qrData);
                 qr.setID(hash);
                 qr.setName(gem.gemName(qrData));
-                qr.setUrl(qrData);
                 qr.setPoints(QRCode.calculateScore(qrData));
                 qr.setGemId(qr.getGemID());
 
                 // Add the new QR to the database:
-                Map values = qrCollection.createValues(hash, qr.getName(), qrData, qr.getPoints(), qr.getGemID());
+                Map values = qrCollection.createValues(hash, qr.getName(), qr.getPoints(), qr.getGemID());
                 qrCollection.create(values);
             }
         });

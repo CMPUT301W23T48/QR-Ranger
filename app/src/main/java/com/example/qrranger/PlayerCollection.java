@@ -509,6 +509,47 @@ public class PlayerCollection extends Database_Controls {
     }
 
 
+    public void calcScore(String userID, Consumer<Integer> onSuccess, Consumer<Exception> onError) {
+        // Get the player document with the given userID
+        Query playerQuery = collection.whereEqualTo("userID", userID);
+        Database db = Database.getInstance();
+        CollectionReference qrCodeCollection = db.getCollection("qr_codes");
+
+        playerQuery.get().addOnCompleteListener(task -> {
+            if (task.isSuccessful()) {
+                // Get the player's qr_code_ids
+                List<String> qrCodeIds = new ArrayList<>();
+                for (QueryDocumentSnapshot document : task.getResult()) {
+                    qrCodeIds = (List<String>) document.get("qr_code_ids");
+                }
+
+                // Fetch the QR codes with the given ids
+                AtomicInteger score = new AtomicInteger(0);
+                AtomicInteger counter = new AtomicInteger(qrCodeIds.size());
+
+                for (String qrCodeId : qrCodeIds) {
+                    qrCodeCollection.document(qrCodeId).get().addOnCompleteListener(qrCodeTask -> {
+                        if (qrCodeTask.isSuccessful()) {
+                            DocumentSnapshot qrCodeDocument = qrCodeTask.getResult();
+                            if (qrCodeDocument.exists()) {
+                                int points = qrCodeDocument.getLong("points").intValue();
+                                score.addAndGet(points);
+                            }
+
+                            if (counter.decrementAndGet() == 0) {
+                                onSuccess.accept(score.get());
+                            }
+                        } else {
+                            onError.accept(qrCodeTask.getException());
+                        }
+                    });
+                }
+            } else {
+                onError.accept(task.getException());
+            }
+        });
+    }
+
 
 
 }

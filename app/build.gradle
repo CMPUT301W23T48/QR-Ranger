@@ -59,4 +59,6 @@ dependencies {
     //Required for Maps SDK
     implementation 'com.google.android.gms:play-services-maps:18.1.0'
 
+    //Required for Maps
+    implementation 'com.karumi:dexter:6.2.2'
 }

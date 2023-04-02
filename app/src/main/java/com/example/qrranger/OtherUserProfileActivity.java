@@ -88,6 +88,7 @@ public class OtherUserProfileActivity extends AppCompatActivity {
         myUser.setQrCodeCollection(intent.getStringArrayListExtra("qr_code_ids"));
 
 //        getAndSetList(myUser);
+        getAndSetList(myUser.getPlayerId());
         getAndSetRank(intent.getStringExtra("userID"));
     }
 
@@ -137,4 +138,16 @@ public class OtherUserProfileActivity extends AppCompatActivity {
 //
 //    }
 
+    public void getAndSetList(String userID){
+        OtherUserProfileActivity.this.runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                // code that modifies the adapter
+                ArrayList<String> qrCodeCollection = myUser.getQrCodeCollection();
+
+                ArrayAdapter<String> adapter = new QRLIstArrayAdapter(OtherUserProfileActivity.this, qrCodeCollection);
+                qrList.setAdapter(adapter);}
+
+        });
+    }
 }

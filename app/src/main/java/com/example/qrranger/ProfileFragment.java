@@ -223,7 +223,7 @@ public class ProfileFragment extends Fragment {
         Intent intent = new Intent(getActivity(), GemActivity.class);
         String qr_id = myUser.getQrCodeCollection().get(index);
         intent.putExtra("qr_id", qr_id);
-        intent.putExtra("name", name);
+        //intent.putExtra("name", name);
         startGemForResult.launch(intent);
     }
 
@@ -254,26 +254,25 @@ public class ProfileFragment extends Fragment {
             public void run() {
                 // code that modifies the adapter
                 ArrayList<String> qrCodeCollection = myUser.getQrCodeCollection();
-                ArrayList<String> qrNames = new ArrayList<>();
-                QRCollection qrc = new QRCollection(null);
-                for (String qrCode : qrCodeCollection) {
-                    qrc.read(qrCode, data -> {
+                //ArrayList<String> qrNames = new ArrayList<>();
+                //QRCollection qrc = new QRCollection(null);
+                //for (String qrCode : qrCodeCollection) {
+                    //qrc.read(qrCode, data -> {
                         // qr found
-                        qrNames.add(data.get("name").toString());
-                        if (qrNames.size() == qrCodeCollection.size()) {
+                        //qrNames.add(data.get("name").toString());
+                        //if (qrNames.size() == qrCodeCollection.size()) {
                             // All QR names retrieved, update list view
-                            if (qrNames != null){
-                            ArrayAdapter<String> adapter = new ArrayAdapter<>(getContext(),
-                                    android.R.layout.simple_list_item_1, qrNames);
+                            //if (qrNames != null){
+                            ArrayAdapter<String> adapter = new QRLIstArrayAdapter(getContext(), qrCodeCollection);
                             listView.setAdapter(adapter);}
-                        }
-                    }, error -> {
+                        //}
+                    //}, error -> {
                         // qr not found, cannot set values
-                        System.out.println("Error getting player data: " + error);
-                    });
+                        //System.out.println("Error getting player data: " + error);
+                    //});
 
-                }
-            }
+                //}
+            //}
         });
     }
 

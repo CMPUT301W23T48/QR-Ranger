@@ -508,7 +508,15 @@ public class PlayerCollection extends Database_Controls {
         return future;
     }
 
-
+    /**
+     * Calculates the score for a user based on the sum of points from the QR codes they have collected.
+     * The userID is used to fetch the user's QR code ids, which are then used to query the QR codes
+     * and their associated points.
+     *
+     * @param userID     The user's unique identifier for querying the user's document and their collected QR codes.
+     * @param onSuccess  A Consumer<Integer> to be called when the score calculation is successful. The Consumer accepts the calculated score as a parameter.
+     * @param onError    A Consumer<Exception> to be called when an error occurs during the score calculation. The Consumer accepts the Exception as a parameter.
+     */
     public void calcScore(String userID, Consumer<Integer> onSuccess, Consumer<Exception> onError) {
         // Get the player document with the given userID
         Query playerQuery = collection.whereEqualTo("userID", userID);
@@ -528,10 +536,11 @@ public class PlayerCollection extends Database_Controls {
                 AtomicInteger counter = new AtomicInteger(qrCodeIds.size());
 
                 for (String qrCodeId : qrCodeIds) {
-                    qrCodeCollection.document(qrCodeId).get().addOnCompleteListener(qrCodeTask -> {
+                    qrCodeCollection.whereEqualTo("qr_id", qrCodeId).get().addOnCompleteListener(qrCodeTask -> {
                         if (qrCodeTask.isSuccessful()) {
-                            DocumentSnapshot qrCodeDocument = qrCodeTask.getResult();
-                            if (qrCodeDocument.exists()) {
+                            QuerySnapshot qrCodeQuerySnapshot = qrCodeTask.getResult();
+                            if (!qrCodeQuerySnapshot.isEmpty()) {
+                                DocumentSnapshot qrCodeDocument = qrCodeQuerySnapshot.getDocuments().get(0);
                                 int points = qrCodeDocument.getLong("points").intValue();
                                 score.addAndGet(points);
                             }
@@ -549,7 +558,5 @@ public class PlayerCollection extends Database_Controls {
             }
         });
     }
-
-
 
 }

@@ -1,8 +1,11 @@
 package com.example.qrranger;
 
+import android.app.Activity;
+
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.LinearLayout;
@@ -59,6 +62,19 @@ public class OtherUserProfileActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 finish();
+            }
+        });
+
+        qrList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+                OtherUserProfileActivity.this.runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        String name = adapterView.getItemAtPosition(i).toString();
+                        startGemActivity(name, i);
+                    }
+                });
             }
         });
 
@@ -120,5 +136,14 @@ public class OtherUserProfileActivity extends AppCompatActivity {
                 qrList.setAdapter(adapter);}
 
         });
+    }
+
+    private void startGemActivity(String name, Integer index)
+    {
+        Intent intent = new Intent(OtherUserProfileActivity.this, OtherUserGemView.class);
+        String qr_id = myUser.getQrCodeCollection().get(index);
+        intent.putExtra("qr_id", qr_id);
+        //intent.putExtra("name", name);
+        startActivity(intent);
     }
 }

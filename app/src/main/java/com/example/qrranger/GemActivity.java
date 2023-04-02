@@ -27,6 +27,8 @@ public class GemActivity extends AppCompatActivity {
     private Button deleteButton;
     private Button commentsButton;
     private Button geoLocation;
+    private Button usersThatScannedButton;
+    private Button backButton;
     private String name;
     private String qr_id;
     private String points;
@@ -48,6 +50,8 @@ public class GemActivity extends AppCompatActivity {
         qrScore = cl.findViewById(R.id.gemValue);
         deleteButton = cl.findViewById(R.id.delete);
         commentsButton = cl.findViewById(R.id.comments);
+        backButton = cl.findViewById(R.id.gem_view_back_button);
+        usersThatScannedButton = cl.findViewById(R.id.users_that_scanned);
         gemShape = cl.findViewById(R.id.gem);
         backgroundColor = cl.findViewById(R.id.backgroundColor);
         gemBorder = cl.findViewById(R.id.borderType);
@@ -98,6 +102,22 @@ public class GemActivity extends AppCompatActivity {
                 Intent intent = new Intent(GemActivity.this, CommentActivity.class);
                 intent.putExtra("qr_id", qr_id);
                 startActivity(intent);
+            }
+        });
+
+        usersThatScannedButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(GemActivity.this, UsersThatScannedActivity.class);
+                intent.putExtra("qr_id", qr_id);
+                startActivity(intent);
+            }
+        });
+
+        backButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                finish();
             }
         });
 

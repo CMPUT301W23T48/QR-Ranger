@@ -3,16 +3,13 @@ package com.example.qrranger;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
-import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.constraintlayout.widget.ConstraintLayout;
 
-import java.util.HashMap;
 import java.util.Map;
 
 /**
@@ -29,6 +26,7 @@ public class GemActivity extends AppCompatActivity {
     private ImageView gemLustre;
     private Button deleteButton;
     private Button commentsButton;
+    private Button geoLocation;
     private Button usersThatScannedButton;
     private Button backButton;
     private String name;
@@ -58,6 +56,7 @@ public class GemActivity extends AppCompatActivity {
         backgroundColor = cl.findViewById(R.id.backgroundColor);
         gemBorder = cl.findViewById(R.id.borderType);
         gemLustre = cl.findViewById(R.id.lusterLevel);
+        geoLocation = cl.findViewById(R.id.geoLocation);
 
         Intent intent = getIntent();
         name = intent.getStringExtra("name");
@@ -87,6 +86,13 @@ public class GemActivity extends AppCompatActivity {
 //                returnIntent.putExtra("qr_id", qr_id); // Pass the modified object back to the first activity
 //                setResult(RESULT_OK, returnIntent);
                 finish();
+            }
+        });
+        geoLocation.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(GemActivity.this, geoLocationView.class);
+                startActivity(intent);
             }
         });
 

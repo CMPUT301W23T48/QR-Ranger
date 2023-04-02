@@ -1,14 +1,8 @@
 package com.example.qrranger;
 
 import static android.content.ContentValues.TAG;
-import static android.content.Intent.getIntent;
 
 import android.os.Bundle;
-
-import androidx.fragment.app.Fragment;
-import androidx.fragment.app.FragmentManager;
-import androidx.fragment.app.FragmentTransaction;
-
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -16,9 +10,9 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
 
-import java.util.ArrayList;
+import androidx.fragment.app.Fragment;
+
 import java.util.Objects;
 
 public class GemFragment extends Fragment {
@@ -30,6 +24,7 @@ public class GemFragment extends Fragment {
     private ImageView gemBorder;
     private ImageView gemLustre;
     private Button deleteButton;
+
 
     private QRCode qrCode;
     private PlayerCollection playerCollection;
@@ -51,6 +46,7 @@ public class GemFragment extends Fragment {
         gemLustre = view.findViewById(R.id.lusterLevel);
         deleteButton = view.findViewById(R.id.delete);
 
+
         // Retrieve the id of the qr that was clicked on.
         String id = getArguments().getString("qr_id");
 
@@ -71,6 +67,7 @@ public class GemFragment extends Fragment {
         });
 
         updateUi();
+        ;
 
         // Deleting the QR code from the account.
         deleteButton.setOnClickListener(new View.OnClickListener() {

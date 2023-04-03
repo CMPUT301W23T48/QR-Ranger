@@ -3,6 +3,7 @@ package com.example.qrranger;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.Matrix;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.view.View;
@@ -112,6 +113,15 @@ public class geoLocationView extends AppCompatActivity {
         @Override
         protected void onPostExecute(Bitmap bitmap) {
             imageView.setImageBitmap(bitmap);
+
+            // Get the current image matrix
+            Matrix matrix = imageView.getImageMatrix();
+
+            // Rotate the matrix by -90 degrees counter-clockwise
+            matrix.postRotate(-90);
+
+            // Apply the new matrix to the ImageView
+            imageView.setImageMatrix(matrix);
         }
     }
 

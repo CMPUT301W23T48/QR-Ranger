@@ -176,6 +176,15 @@ public class ProfileFragment extends Fragment {
 
         return view;
     }
+
+    /**
+
+     Sets the values of the user object based on the data retrieved from the database using the given userID.
+
+     It then calls other methods to update and set various UI elements with the retrieved data.
+
+     @param userID The unique identifier of the user whose data is to be retrieved.
+     */
     public void setValues(String userID){
         // get data from userID
         myPlayerCollection.read(userID, data -> {
@@ -363,7 +372,12 @@ public class ProfileFragment extends Fragment {
         });
     }
 
+    /**
 
+     Asynchronously retrieves the total number of QR codes for a given user ID and updates the corresponding
+     UI elements with the retrieved count. Also sets the total QR code count for the current user.
+     @param userID the ID of the user for whom the total QR code count should be retrieved
+     */
     private void getAndSetTotalQRCodes(String userID)
     {
         CompletableFuture<Integer> futureCount = myPlayerCollection.countTotalQRCodes(userID);
@@ -378,7 +392,13 @@ public class ProfileFragment extends Fragment {
         });
     }
 
+    /**
 
+     Retrieves and sets the total score of the user with the given userID from the database.
+     Updates the UI and the user object with the retrieved score, and also updates the user's document
+     in the database with the new total score.
+     @param userID The userID of the user whose score needs to be retrieved and updated.
+     */
     private void getAndSetTotalScore(String userID) {
         myPlayerCollection.calcScore(userID, score -> {
             System.out.println("Total score for user " + userID + ": " + score);

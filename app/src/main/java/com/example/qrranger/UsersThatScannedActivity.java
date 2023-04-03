@@ -21,7 +21,18 @@ public class UsersThatScannedActivity extends AppCompatActivity {
     private String qr_id;
     private ArrayAdapter<String> adapter;
 
+    /**
 
+     This method is called when the activity is created. It initializes the layout of the activity and retrieves the
+
+     QR code ID from the intent. It then initializes the user list and populates it with the usernames of the users
+
+     who have scanned the QR code. If there is an error retrieving the usernames, it displays an error message.
+
+     Finally, it sets an OnClickListener on the back button to finish the activity when clicked.
+
+     @param savedInstanceState A Bundle object containing the activity's previously saved state, or null if there was none.
+     */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);

@@ -123,7 +123,14 @@ public class OtherUserProfileActivity extends AppCompatActivity {
             return null;
         });
     }
+    /**
 
+     This method retrieves the QR code collection associated with the given user ID and sets it in the
+
+     ListView of QR codes in the Other User Profile activity.
+
+     @param userID the ID of the user whose QR code collection is to be retrieved and displayed
+     */
 
     public void getAndSetList(String userID){
         OtherUserProfileActivity.this.runOnUiThread(new Runnable() {
@@ -137,7 +144,12 @@ public class OtherUserProfileActivity extends AppCompatActivity {
 
         });
     }
+    /**
 
+     Starts the OtherUserGemView activity with the QR code ID of the selected gem.
+     @param name The name of the selected gem (unused).
+     @param index The index of the selected gem in the QR code collection.
+     */
     private void startGemActivity(String name, Integer index)
     {
         Intent intent = new Intent(OtherUserProfileActivity.this, OtherUserGemView.class);

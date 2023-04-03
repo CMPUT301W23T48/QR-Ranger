@@ -163,13 +163,14 @@ public class QRScannerActivity extends AppCompatActivity{
         confirmButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                try {
-                    generator.addQRToAccount(qrCode.getId());
+                if(generator.addQRToAccount(qrCode.getId())) {
                     takePhoto();
                 }
-                catch (IllegalArgumentException e) {
+                else {
                     // QR is already in account.
                     Toast.makeText(getBaseContext(), "QR is already in account!", Toast.LENGTH_SHORT).show();
+                    Intent returnToMain = new Intent(getBaseContext(), MainActivity.class);
+                    startActivity(returnToMain);
                 }
             }
         });

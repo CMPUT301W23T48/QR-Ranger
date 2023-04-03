@@ -18,13 +18,14 @@ import java.util.concurrent.CompletableFuture;
 public class QRGenerator {
     private QRCollection qrCollection;
     private PlayerCollection playerCollection;
-
+    private boolean qrAdded;
     private QRCode qr;
 
     public QRGenerator() {
         qrCollection = new QRCollection(null);
         playerCollection = new PlayerCollection(null);
         qr = new QRCode("12345689");
+        qrAdded = false;
     }
 
     public QRCode getQr() {
@@ -99,7 +100,7 @@ public class QRGenerator {
      * @throws IllegalArgumentException
      *      Thrown when QR being added is already linked to the account.
      */
-    public void addQRToAccount(String qrId) throws IllegalArgumentException {
+    public boolean addQRToAccount(String qrId) throws IllegalArgumentException {
 
         playerCollection = new PlayerCollection(null);
         UserState state = UserState.getInstance();
@@ -109,15 +110,18 @@ public class QRGenerator {
             //Check if the qr is already added to the player's profile.
             ArrayList<String> codeList = Objects.requireNonNull((ArrayList<String>) data.get("qr_code_ids"));
             if(codeList.contains(qrId)) {
-                throw new IllegalArgumentException("QR Code is already in account!");
+                qrAdded = false;
             }
             else {
                 // Add the QR to the player database.
                 playerCollection.add_QR_to_players(userId, qrId);
+                qrAdded = true;
             }
         }, error -> {
             Log.e(TAG, "Error when reading Player from database.");
         });
+
+        return qrAdded;
     }
 
     /**

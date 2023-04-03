@@ -95,7 +95,7 @@ public class MapFragment extends Fragment implements OnMapReadyCallback{
         });
 
         // Load the QR codes and add markers for each of them
-        loadQRCodes();
+        //loadQRCodes();
 
         return view;
     }

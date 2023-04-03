@@ -251,7 +251,7 @@ public class MapFragment extends Fragment implements OnMapReadyCallback{
      * Loads QR codes from the Firestore database and adds markers for each QR code on the map.
      */
     private void loadQRCodes() {
-        Database db = Database.getInstance();
+        DatabaseModel db = DatabaseModel.getInstance();
         CollectionReference qrc = db.getCollection("qr_codes");
         qrc.get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
             @Override

@@ -3,8 +3,6 @@ package com.example.qrranger;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
 
-import com.google.firebase.firestore.auth.User;
-
 import org.junit.Test;
 
 import java.util.ArrayList;
@@ -20,7 +18,7 @@ public class PlayerCollectionTest {
 
     @Test
     public void testCreate() throws InterruptedException {
-        Database db = Database.getInstance();
+        DatabaseModel db = DatabaseModel.getInstance();
         PlayerCollection pc = new PlayerCollection(db);
 
         // create a map with sample data
@@ -46,7 +44,7 @@ public class PlayerCollectionTest {
     }
 
     public void read_test() throws InterruptedException{
-        Database db = Database.getInstance();
+        DatabaseModel db = DatabaseModel.getInstance();
         PlayerCollection pc = new PlayerCollection(db);
 
         Player myTestUser = new Player();

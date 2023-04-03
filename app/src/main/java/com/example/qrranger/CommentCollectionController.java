@@ -18,12 +18,12 @@ import java.util.Map;
 import java.util.concurrent.CompletableFuture;
 import java.util.function.Consumer;
 
-public class CommentCollection extends Database_Controls{
+public class CommentCollectionController extends Database_Controls{
     CollectionReference collection;
 
-    public CommentCollection(Database db) {
+    public CommentCollectionController(DatabaseModel db) {
         if (db == null) {
-            db = Database.getInstance();
+            db = DatabaseModel.getInstance();
         }
         collection = db.getCollection("comments");
     }

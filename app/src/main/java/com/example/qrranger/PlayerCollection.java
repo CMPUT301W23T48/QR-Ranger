@@ -35,9 +35,9 @@ public class PlayerCollection extends Database_Controls {
      * Constructor for PlayerCollection.
      * @param db Database instance, pass null to use the default instance.
      */
-    public PlayerCollection(Database db) {
+    public PlayerCollection(DatabaseModel db) {
         if (db == null) {
-            db = Database.getInstance();
+            db = DatabaseModel.getInstance();
         }
         collection = db.getCollection("players");
     }
@@ -318,7 +318,7 @@ public class PlayerCollection extends Database_Controls {
 
         // get the players document
         Query query = collection.whereEqualTo("userID", userID);
-        Database db = Database.getInstance();
+        DatabaseModel db = DatabaseModel.getInstance();
         CollectionReference qrCodesCollection = db.getCollection("qr_codes");
 
         query.get().addOnSuccessListener(queryDocumentSnapshots -> {
@@ -521,7 +521,7 @@ public class PlayerCollection extends Database_Controls {
     public void calcScore(String userID, Consumer<Integer> onSuccess, Consumer<Exception> onError) {
         // Get the player document with the given userID
         Query playerQuery = collection.whereEqualTo("userID", userID);
-        Database db = Database.getInstance();
+        DatabaseModel db = DatabaseModel.getInstance();
         CollectionReference qrCodeCollection = db.getCollection("qr_codes");
 
         playerQuery.get().addOnCompleteListener(task -> {

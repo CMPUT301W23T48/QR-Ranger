@@ -50,7 +50,7 @@ public class ProfileFragment extends Fragment {
     private ImageView myHighestImage[] = new ImageView[4];
     private ImageView myLowestImage[] = new ImageView[4];
     private Map gem_data[] = new Map[2];
-    PlayerCollection myPlayerCollection = new PlayerCollection(Database.getInstance());
+    PlayerCollection myPlayerCollection = new PlayerCollection(DatabaseModel.getInstance());
 
     /**
      * This code defines an ActivityResultLauncher that launches an activity for a result and

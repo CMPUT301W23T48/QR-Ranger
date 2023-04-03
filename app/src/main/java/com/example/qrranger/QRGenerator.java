@@ -46,10 +46,10 @@ public class QRGenerator {
      */
     public CompletableFuture<Void> generateQR(String qrData) {
         qrCollection = new QRCollection(null);
-
+        String hash = SHA256Hash(qrData);
 
         // Generate a new QR if it doesn't already exist or pull the existing one from the db.
-        CompletableFuture<Boolean> future = qrCollection.checkQRExists(qrData);
+        CompletableFuture<Boolean> future = qrCollection.checkQRExists(hash);
         CompletableFuture<Void> secondFuture = future.thenAccept(qrExists -> {
             if (qrExists) {
                 // Pull existing QR from the DB.
@@ -59,7 +59,7 @@ public class QRGenerator {
                     Integer points = (Integer) data.get("points");
                     gemID gem = (gemID) data.get("gem_id");
 
-//                    qr = new QRCode(qrId, gem);
+//                  qr = new QRCode(qrId, gem);
                     qr.setID(qrId);
                     qr.setName(name);
                     qr.setPoints(points);
@@ -72,8 +72,6 @@ public class QRGenerator {
             }
             else {
                 // QR doesn't exist, so generate a new one!
-                String hash = SHA256Hash(qrData);
-
                 gemID gem = new gemID();
 
                 // Create the QRCode object.

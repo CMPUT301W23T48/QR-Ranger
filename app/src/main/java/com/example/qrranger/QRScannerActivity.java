@@ -142,7 +142,12 @@ public class QRScannerActivity extends AppCompatActivity{
 
                                 startActivity(returnIntent);
                             }
+                        }
+                        else if (result.getResultCode() == RESULT_CANCELED) {
+                            //Return to the main activity.
+                            Intent returnIntent = new Intent(getBaseContext(), MainActivity.class);
 
+                            startActivity(returnIntent);
                         }
                     }
                 });

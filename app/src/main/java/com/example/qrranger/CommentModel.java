@@ -3,7 +3,7 @@ package com.example.qrranger;
 /**
  * This class represents a Comment object with information about the author, the associated QR code, and the comment text.
  */
-public class Comment {
+public class CommentModel {
 
     private String authorID;
     private String QR_ID;
@@ -13,7 +13,7 @@ public class Comment {
     /**
      * Default empty constructor for creating a Comment object.
      */
-    public Comment(){
+    public CommentModel(){
     }
 
     /**

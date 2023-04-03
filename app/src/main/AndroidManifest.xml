@@ -44,7 +44,7 @@
             android:name=".GemActivity"
             android:exported="true" />
         <activity
-            android:name=".CommentActivity"
+            android:name=".CommentView"
             android:exported="true" />
         <activity
             android:name=".UsersThatScannedActivity"

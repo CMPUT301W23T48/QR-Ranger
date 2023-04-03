@@ -86,7 +86,7 @@ public class OtherUserGemView extends AppCompatActivity {
         commentsButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent intent = new Intent(OtherUserGemView.this, CommentActivity.class);
+                Intent intent = new Intent(OtherUserGemView.this, CommentView.class);
                 intent.putExtra("qr_id", qr_id);
                 startActivity(intent);
             }

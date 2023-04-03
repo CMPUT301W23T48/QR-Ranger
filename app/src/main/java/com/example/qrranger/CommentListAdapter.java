@@ -16,7 +16,7 @@ import java.util.List;
  * CommentListAdapter is a custom ArrayAdapter for displaying comments in a ListView.
  * It takes a list of Comment objects and binds the data to the corresponding views.
  */
-public class CommentListAdapter extends ArrayAdapter<Comment> {
+public class CommentListAdapter extends ArrayAdapter<CommentModel> {
     private final LayoutInflater inflater;
 
     /**
@@ -24,7 +24,7 @@ public class CommentListAdapter extends ArrayAdapter<Comment> {
      * @param context The current context.
      * @param comments The list of Comment objects to be displayed.
      */
-    public CommentListAdapter(@NonNull Context context, List<Comment> comments) {
+    public CommentListAdapter(@NonNull Context context, List<CommentModel> comments) {
         super(context, 0, comments);
         inflater = LayoutInflater.from(context);
     }
@@ -43,7 +43,7 @@ public class CommentListAdapter extends ArrayAdapter<Comment> {
             convertView = inflater.inflate(R.layout.comment_list_item_view, parent, false);
         }
 
-        Comment comment = getItem(position);
+        CommentModel comment = getItem(position);
         TextView commentAuthor = convertView.findViewById(R.id.comment_author);
         TextView commentText = convertView.findViewById(R.id.comment_text);
 

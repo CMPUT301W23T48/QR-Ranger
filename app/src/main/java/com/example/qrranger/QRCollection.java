@@ -30,10 +30,10 @@ public class QRCollection extends Database_Controls{
      *
      * @param db The instance of the Database class.
      */
-    public QRCollection(Database db) {
+    public QRCollection(DatabaseModel db) {
         if (db == null)
         {
-            db = Database.getInstance();
+            db = DatabaseModel.getInstance();
         }
         collection = db.getCollection("qr_codes");
     }

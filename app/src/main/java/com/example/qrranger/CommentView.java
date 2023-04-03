@@ -31,11 +31,11 @@ import java.util.Objects;
  * CommentActivity allows users to view, add, and delete comments related to a specific QR code.
  * This activity fetches comments from the Firestore database, and updates the UI accordingly.
  */
-public class CommentActivity extends AppCompatActivity {
+public class CommentView extends AppCompatActivity {
 
     private ListView commentsListView;
     private CommentListAdapter commentListAdapter;
-    private List<Comment> commentsList;
+    private List<CommentModel> commentsList;
     private FirebaseFirestore firebaseFirestore;
     private String QR_ID;
     private Button backButton;
@@ -79,7 +79,7 @@ public class CommentActivity extends AppCompatActivity {
         commentsListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                Comment clickedComment = commentsList.get(position);
+                CommentModel clickedComment = commentsList.get(position);
                 showDeleteCommentDialog(clickedComment);
             }
         });
@@ -96,7 +96,7 @@ public class CommentActivity extends AppCompatActivity {
             public void onComplete(@NonNull Task<QuerySnapshot> task) {
                 if (task.isSuccessful()) {
                     for (QueryDocumentSnapshot document : task.getResult()) {
-                        Comment comment = new Comment();
+                        CommentModel comment = new CommentModel();
                         comment.setQr_id(document.get("QR_ID").toString());
                         comment.setAuthor(document.get("author").toString());
                         comment.setAuthorID(document.get("author_id").toString());
@@ -148,7 +148,7 @@ public class CommentActivity extends AppCompatActivity {
      * @param commentText The text of the comment to be saved.
      */
     private void saveComment(String commentText) {
-        CommentCollection cc = new CommentCollection(null);
+        CommentCollectionController cc = new CommentCollectionController(null);
         PlayerCollection pc = new PlayerCollection(null);
         UserState us = UserState.getInstance();
         String userID = us.getUserID();
@@ -158,7 +158,7 @@ public class CommentActivity extends AppCompatActivity {
             cc.create(values);
 
             // Add a new Comment object to the commentsList
-            Comment newComment = new Comment();
+            CommentModel newComment = new CommentModel();
             newComment.setAuthorID(userID);
             newComment.setQr_id(QR_ID);
             newComment.setAuthor(username);
@@ -177,7 +177,7 @@ public class CommentActivity extends AppCompatActivity {
      * of a comment.
      * @param comment The Comment object to be deleted.
      **/
-    private void showDeleteCommentDialog(final Comment comment) {
+    private void showDeleteCommentDialog(final CommentModel comment) {
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
 
         builder.setTitle("Delete Comment")
@@ -202,12 +202,12 @@ public class CommentActivity extends AppCompatActivity {
      * Deletes a comment from the Firestore database and updates the UI.
      * @param comment The Comment object to be deleted.
      */
-    private void deleteComment(Comment comment) {
+    private void deleteComment(CommentModel comment) {
         UserState us = UserState.getInstance();
         String userID = us.getUserID();
         String authorID = comment.getAuthorID();
-        Database db = Database.getInstance();
-        CommentCollection cc = new CommentCollection(db);
+        DatabaseModel db = DatabaseModel.getInstance();
+        CommentCollectionController cc = new CommentCollectionController(db);
         if (Objects.equals(authorID, userID)){
             System.out.println(comment.getQR_id() + comment.getAuthor() + comment.getComment());
             Query query = db.getCollection("comments")

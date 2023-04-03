@@ -58,7 +58,11 @@ public class SearchResultsActivity extends AppCompatActivity {
             }
         });
     }
+/**
 
+ This method starts the OtherUserProfileActivity with the details of the user whose data is passed as a parameter.
+ @param data a Map containing the details of the user whose profile is being accessed. The keys for the Map are:
+ **/
     private void startOtherUserProfileActivity(Map<String, Object> data){
         Intent intent = new Intent(SearchResultsActivity.this, OtherUserProfileActivity.class);
         intent.putExtra("username", data.get("username").toString());

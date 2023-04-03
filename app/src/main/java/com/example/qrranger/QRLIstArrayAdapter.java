@@ -29,6 +29,20 @@ public class QRLIstArrayAdapter extends ArrayAdapter<String> {
     }
     @NonNull
     @Override
+    /**
+
+     This method inflates the layout for each item in the list and sets the values of the views
+
+     for that item based on the data retrieved from the QR code collection in the database.
+
+     @param position the position of the item in the list
+
+     @param convertView the view that will be converted
+
+     @param parent the parent viewgroup
+
+     @return the view with the values set for the item at the specified position
+     */
     public View getView(int position, @Nullable View convertView, @NonNull ViewGroup parent){
         View view;
         if(convertView == null){
@@ -46,22 +60,10 @@ public class QRLIstArrayAdapter extends ArrayAdapter<String> {
 
         qrCollection.read(id, data ->{
             String qrId = Objects.requireNonNull(data.get("name").toString());
-            //String name = Objects.requireNonNull(data.get("name").toString());
-            //String url = Objects.requireNonNull(data.get("url").toString());
-            //Integer points = (Integer) data.get("points");
-            //gemID gem = (gemID) data.get("gem_id");
-
             qrCode.setName(qrId);
             gem_data = (Map) data.get("gem_id");
-            //qrCode.setPoints(points);
-            //qrCode.setUrl(url);
-            //qrCode.setGemId(gem);
 
             qrName.setText(qrCode.getName());
-//            qrShape.setImageResource(qrCode.getGemID().getGemType());
-//            qrLustre.setImageResource(qrCode.getGemID().getLusterLevel());
-//            qrBorder.setImageResource(qrCode.getGemID().getBoarder());
-//            qrBackGround.setImageResource(qrCode.getGemID().getBgColor());
 
 
             qrBackGround.setImageResource((int) (long) gem_data.get("bgColor"));

@@ -29,6 +29,15 @@ public class SettingActivity extends AppCompatActivity {
     private PlayerCollection myPlayerCollection = new PlayerCollection(null);
     private Switch geoSwitch ;
 
+    /**
+
+     This is the activity class for the settings page. It allows the user to update their profile information,
+     including their username, phone number, email, and geolocation settings. The activity reads the current user's data
+     from the database and displays it in the input fields. The user can update their information and save it to the database
+     by clicking the "Confirm" button. If the user tries to choose a username that is already taken, an error message is displayed.
+     The user's geolocation settings can be toggled on or off using a switch. If the switch is toggled, the user's geolocation
+     setting is updated in the database.
+     */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -107,7 +116,13 @@ public class SettingActivity extends AppCompatActivity {
             }
         });
 
+/**
 
+ Sets an OnClickListener for the backButton. When the button is clicked, the method is called which creates an Intent
+ containing information on whether settings have been changed and the modified myUser object. The Intent is passed back
+ to the first activity using the setResult method and then the current activity is finished.
+ @param view the view associated with the backButton
+ */
         backButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -118,7 +133,14 @@ public class SettingActivity extends AppCompatActivity {
                 finish();
             }
         });
+    /**
 
+    Sets up a listener for changes to the state of the geoSwitch button.
+    When the switch is toggled, updates the user's geolocation setting in the database.
+    @param geoSwitch the switch to listen for changes on
+    @param myUser the user whose geolocation setting will be updated
+    @param myPlayerCollection the database collection to update the user's information in
+    */
         geoSwitch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {

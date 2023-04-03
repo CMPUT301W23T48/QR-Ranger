@@ -1,9 +1,18 @@
 package com.example.qrranger;
 
 
-
+/**
+ * A utility class for calculating scores based on a given hash string.
+ */
 public class ScoreCalculator {
-
+    /**
+     * Calculates a score based on the input hash string.
+     * The score is determined by counting consecutive duplicate characters
+     * and using their hexadecimal values as the base in a power function.
+     *
+     * @param hash The input hash string used for score calculation.
+     * @return The calculated score as an Integer.
+     */
     public static Integer calculateScore(String hash) {
          // Calculate score
         /* From: geeksforgeeks.org

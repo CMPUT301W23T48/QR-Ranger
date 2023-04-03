@@ -80,7 +80,6 @@ public class ProfileFragment extends Fragment {
      * RESULT_OK, retrieves data from the intent, and updates the views of the activity if
      * the "dataDeleted" boolean extra is set to true.
      */
-
     private ActivityResultLauncher<Intent> startGemForResult =
             registerForActivityResult(new ActivityResultContracts.StartActivityForResult(),
                     result -> {
@@ -114,8 +113,9 @@ public class ProfileFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        View view = inflater.inflate(R.layout.fragment_profile, container, false);
+        View view = inflater.inflate(R.layout.profile_view, container, false);
 
+        // find views by id
         playerEmail = view.findViewById(R.id.ProfileUserEmail);
         playerName = view.findViewById(R.id.ProfileUserName);
         playerPhoneNumb = view.findViewById(R.id.ProfileUserPhoneNumber);
@@ -126,21 +126,20 @@ public class ProfileFragment extends Fragment {
         listView = view.findViewById(R.id.ProfileQR_list_view);
         highestQR = view.findViewById(R.id.highestScore);
         lowestQR = view.findViewById(R.id.lowestScore);
-
         myHighestImage[0] = view.findViewById(R.id.highestScoreImageBackgroud);
         myHighestImage[1] = view.findViewById(R.id.highetsScoreImageBorder);
         myHighestImage[2] = view.findViewById(R.id.highestScoreImageLuster);
         myHighestImage[3] = view.findViewById(R.id.highestScoreImageShape);
-
         myLowestImage[0] = view.findViewById(R.id.lowestScoreImageBackground);
         myLowestImage[1] = view.findViewById(R.id.lowestScoreBorder);
         myLowestImage[2] = view.findViewById(R.id.lowestScoreImageLuster);
         myLowestImage[3] = view.findViewById(R.id.lowestScoreImageShape);
 
-
+        // get user id
         UserState us = UserState.getInstance();
         String userID = us.getUserID();
 
+        // ensure user exists (ensures connection to correct database)
         CompletableFuture<Boolean> future = myPlayerCollection.checkUserExists(userID);
         future.thenAccept(userExists -> {
                     if (userExists) {
@@ -153,6 +152,7 @@ public class ProfileFragment extends Fragment {
 
                 });
 
+        // settings button starts settings activity
         mySettButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -160,6 +160,7 @@ public class ProfileFragment extends Fragment {
             }
         });
 
+        // list runs on UI thread since database operations are slow and async
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
@@ -214,7 +215,6 @@ public class ProfileFragment extends Fragment {
             setViews();
             }, error -> {
                 // Player not found, cannot set values
-                // perhaps change to default values for less chance of error during demo
                 System.out.println("Error getting player data: " + error);
         });
 
@@ -251,7 +251,6 @@ public class ProfileFragment extends Fragment {
         Intent intent = new Intent(getActivity(), GemActivity.class);
         String qr_id = myUser.getQrCodeCollection().get(index);
         intent.putExtra("qr_id", qr_id);
-        //intent.putExtra("name", name);
         startGemForResult.launch(intent);
     }
 

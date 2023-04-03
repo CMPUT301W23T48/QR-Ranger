@@ -31,6 +31,9 @@ import com.google.zxing.integration.android.IntentResult;
 
 import java.io.ByteArrayOutputStream;
 import java.util.ArrayList;
+import java.util.concurrent.CompletableFuture;
+
+import javax.annotation.meta.When;
 
 /**
  * Class used for scanning QR Codes and processing the data received by them.
@@ -49,12 +52,13 @@ public class QRScannerActivity extends AppCompatActivity{
     private QRCode qrCode;
     private String scanResult;
     private ActivityResultLauncher<Intent> pictureResultLauncher;
+    private ActivityResultLauncher<Intent> qrResultLauncher;
     private int CAMERA_PERMISSIONS_REQUEST_CODE = 100;
 
     @Override
     protected void onCreate(Bundle SavedInstanceBundle) {
         super.onCreate(SavedInstanceBundle);
-        setContentView(R.layout.activity_qr_scanner);
+        setContentView(R.layout.qr_scanner_view);
 
         // Populate view properties.
         rejectButton = findViewById(R.id.button_reject);
@@ -67,8 +71,45 @@ public class QRScannerActivity extends AppCompatActivity{
         gemLustre = findViewById(R.id.lusterLevel);
         generator = new QRGenerator();
 
+        qrResultLauncher = registerForActivityResult(
+                new ActivityResultContracts.StartActivityForResult(),
+                new ActivityResultCallback<ActivityResult>() {
+                    @Override
+                    public void onActivityResult(ActivityResult result) {
+                        if (result.getResultCode() == RESULT_OK) {
+                            // Get the result.
+                            IntentResult intentResult = IntentIntegrator.parseActivityResult(IntentIntegrator.REQUEST_CODE, result.getResultCode(), result.getData());
+                            if (intentResult != null && intentResult.getContents() != null) {
+                                scanResult = intentResult.getContents();
+                                CompletableFuture<Void> future = generator.generateQR(scanResult);
+                                // When this future completes, the data will have been successfully pulled.
+                                // Thus, use thenAccept() to update UI and QR data.
+                                future.thenAccept(completed -> {
+                                    qrCode = generator.getQr();
+                                    updateUi();
+                                });
+                            } else {
+                                // An error occurs and the scan returns no results.
+                                Log.e(TAG, "Error during QR scan.");
 
-        scanQR();
+                                // Return to the main activity rather than the scan page.
+                                Intent returnToMain = new Intent(getBaseContext(), MainActivity.class);
+                                startActivity(returnToMain);
+                            }
+                        }
+                        else if (result.getResultCode() == RESULT_CANCELED) {
+                            // Activates on back-button press out of the scanner.
+
+                            // Small popup notifying the user that the scan was cancelled, if so.
+                            Toast.makeText(getBaseContext(), "Scan Cancelled", Toast.LENGTH_SHORT).show();
+
+                            // Return to the main activity rather than the scan page.
+                            Intent returnToMain = new Intent(getBaseContext(), MainActivity.class);
+                            startActivity(returnToMain);
+                        }
+                    }
+                }
+        );
 
         /*
          * Similar to onActivityResult() seen below, but the
@@ -106,6 +147,9 @@ public class QRScannerActivity extends AppCompatActivity{
                     }
                 });
 
+        // Initiate the scan of a qr code.
+        scanQR();
+
         // If user rejects the QR code, go back to MainActivity.
         rejectButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -119,13 +163,14 @@ public class QRScannerActivity extends AppCompatActivity{
         confirmButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                try {
-                    generator.addQRToAccount(qrCode.getId());
+                if(generator.addQRToAccount(qrCode.getId())) {
                     takePhoto();
                 }
-                catch (IllegalArgumentException e) {
+                else {
                     // QR is already in account.
                     Toast.makeText(getBaseContext(), "QR is already in account!", Toast.LENGTH_SHORT).show();
+                    Intent returnToMain = new Intent(getBaseContext(), MainActivity.class);
+                    startActivity(returnToMain);
                 }
             }
         });
@@ -174,56 +219,7 @@ public class QRScannerActivity extends AppCompatActivity{
         supportedCodeFormats.add("QR_CODE");
         intentIntegrator.setDesiredBarcodeFormats(supportedCodeFormats);
 
-        intentIntegrator.initiateScan();
-    }
-
-    /**
-     * Activates once the QRScan activity has been completed. Retrieves the data collected when
-     * the QR code is scanned and stores it.
-     *
-     * @param requestCode The integer request code originally supplied to
-     *                    startActivityForResult(), allowing you to identify who this
-     *                    result came from.
-     * @param resultCode The integer result code returned by the child activity
-     *                   through its setResult().
-     * @param data An Intent, which can return result data to the caller
-     *               (various data can be attached to Intent "extras").
-     *
-     */
-    @Override
-    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
-
-        if (requestCode == IntentIntegrator.REQUEST_CODE && resultCode == RESULT_OK) {
-            // Get the result.
-            IntentResult intentResult = IntentIntegrator.parseActivityResult(requestCode, resultCode, data);
-            if (intentResult != null && intentResult.getRawBytes() != null) {
-                scanResult = intentResult.getRawBytes().toString();
-                qrCode = generator.generateQR(scanResult);
-                updateUi();
-            }
-            else if (intentResult != null && intentResult.getContents() != null) {
-                scanResult = intentResult.getContents();
-                qrCode = generator.generateQR(scanResult);
-                updateUi();
-            } else {
-                // An error occurs and the scan returns no results.
-                Log.e(TAG, "Error during QR scan.");
-
-                // Return to the main activity rather than the scan page.
-                Intent returnToMain = new Intent(getBaseContext(), MainActivity.class);
-                startActivity(returnToMain);
-            }
-        }
-        else if (requestCode == IntentIntegrator.REQUEST_CODE && resultCode == RESULT_CANCELED) {
-            // Activates on back-button press out of the scanner.
-
-            // Small popup notifying the user that the scan was cancelled, if so.
-            Toast.makeText(getBaseContext(), "Scan Cancelled", Toast.LENGTH_SHORT).show();
-
-            // Return to the main activity rather than the scan page.
-            Intent returnToMain = new Intent(getBaseContext(), MainActivity.class);
-            startActivity(returnToMain);
-        }
+        Intent scanQrIntent = intentIntegrator.createScanIntent();
+        qrResultLauncher.launch(scanQrIntent);
     }
 }

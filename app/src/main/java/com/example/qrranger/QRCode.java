@@ -33,11 +33,6 @@ public class QRCode {
      * it already exists
      */
     public QRCode() {
-//        this.id = id;
-//        this.gemId = gemId;
-//        this.name = gemId.gemName(id);
-//        this.points = calculateScore(id);
-//        this.geoLocation = "Unknown";
     }
 
     /**

@@ -40,7 +40,7 @@ public class CommentListAdapter extends ArrayAdapter<Comment> {
     @Override
     public View getView(int position, @Nullable View convertView, @NonNull ViewGroup parent) {
         if (convertView == null) {
-            convertView = inflater.inflate(R.layout.activity_comment_list_item, parent, false);
+            convertView = inflater.inflate(R.layout.comment_list_item_view, parent, false);
         }
 
         Comment comment = getItem(position);

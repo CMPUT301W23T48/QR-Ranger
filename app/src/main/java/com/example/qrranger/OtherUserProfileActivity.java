@@ -1,7 +1,5 @@
 package com.example.qrranger;
 
-import android.app.Activity;
-
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
@@ -43,7 +41,7 @@ public class OtherUserProfileActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_otheruser);
+        setContentView(R.layout.otheruser_view);
         Intent intent = getIntent();
 
         LinearLayout linearLayout = findViewById(R.id.OtherUserLL1);
@@ -124,12 +122,9 @@ public class OtherUserProfileActivity extends AppCompatActivity {
         });
     }
     /**
-
-     This method retrieves the QR code collection associated with the given user ID and sets it in the
-
-     ListView of QR codes in the Other User Profile activity.
-
-     @param userID the ID of the user whose QR code collection is to be retrieved and displayed
+     * This method retrieves the QR code collection associated with the given user ID and sets it in the
+     * ListView of QR codes in the Other User Profile activity.
+     * @param userID the ID of the user whose QR code collection is to be retrieved and displayed
      */
 
     public void getAndSetList(String userID){
@@ -145,10 +140,9 @@ public class OtherUserProfileActivity extends AppCompatActivity {
         });
     }
     /**
-
-     Starts the OtherUserGemView activity with the QR code ID of the selected gem.
-     @param name The name of the selected gem (unused).
-     @param index The index of the selected gem in the QR code collection.
+     * Starts the OtherUserGemView activity with the QR code ID of the selected gem.
+     * @param name The name of the selected gem (unused).
+     * @param index The index of the selected gem in the QR code collection.
      */
     private void startGemActivity(String name, Integer index)
     {

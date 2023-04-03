@@ -36,7 +36,7 @@ public class OtherUserGemView extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_ou_gemview);
+        setContentView(R.layout.ou_gemview_view);
 
         ConstraintLayout cl = findViewById(R.id.gem_layoutOU);
         nameView = cl.findViewById(R.id.gemNameOU);
@@ -51,7 +51,6 @@ public class OtherUserGemView extends AppCompatActivity {
         geoLocation = cl.findViewById(R.id.geoLocationOU);
 
         Intent intent = getIntent();
-        //name = intent.getStringExtra("name");
         qr_id = intent.getStringExtra("qr_id");
 
 
@@ -67,11 +66,10 @@ public class OtherUserGemView extends AppCompatActivity {
             System.out.println("Error getting player data: " + error);
         });
 
-/**
-
- Sets a click listener on the geoLocation view object. When the view is clicked,
- it starts a new activity called geoLocationView.
- */
+        /**
+         * Sets a click listener on the geoLocation view object. When the view is clicked,
+         * it starts a new activity called geoLocationView.
+         */
         geoLocation.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -79,13 +77,12 @@ public class OtherUserGemView extends AppCompatActivity {
                 startActivity(intent);
             }
         });
-/**
-
- Sets an onClickListener for the "commentsButton" button. When clicked,
- starts the "CommentActivity" activity with an intent that includes the
- "qr_id" string value.
- @param qr_id the string value of the QR code ID to pass to the CommentActivity
- */
+        /**
+         * Sets an onClickListener for the "commentsButton" button. When clicked,
+         * starts the "CommentActivity" activity with an intent that includes the
+         * "qr_id" string value.
+         * @param qr_id the string value of the QR code ID to pass to the CommentActivity
+         */
         commentsButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -94,11 +91,10 @@ public class OtherUserGemView extends AppCompatActivity {
                 startActivity(intent);
             }
         });
-/**
-
- Sets a listener to the "usersThatScannedButton" button which starts the UsersThatScannedActivity and
- passes the qr_id as an extra.
- */
+        /**
+         * Sets a listener to the "usersThatScannedButton" button which starts the UsersThatScannedActivity and
+         * passes the qr_id as an extra.
+         */
         usersThatScannedButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -107,10 +103,11 @@ public class OtherUserGemView extends AppCompatActivity {
                 startActivity(intent);
             }
         });
-/**
- * Sets an onClickListener for the backButton View. When the user clicks on the backButton,
- * the activity will finish and the user will be taken back to the previous activity.
- */
+
+        /**
+         * Sets an onClickListener for the backButton View. When the user clicks on the backButton,
+         * the activity will finish and the user will be taken back to the previous activity.
+         */
         backButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {

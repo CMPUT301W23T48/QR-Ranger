@@ -23,7 +23,11 @@ import com.google.firebase.auth.FirebaseUser;
 import java.util.Map;
 import java.util.concurrent.CompletableFuture;
 
-
+/**
+ * The main activity for the QR Ranger application.
+ * This activity initializes Firebase, handles user authentication,
+ * and manages the bottom navigation menu for switching between app features.
+ */
 public class MainActivity extends AppCompatActivity {
 
     private ActivityMainBinding binding;
@@ -31,6 +35,12 @@ public class MainActivity extends AppCompatActivity {
     private FirebaseAuth mAuth;
 
 
+    /**
+     * Initializes the activity, sets up UI components, Firebase authentication,
+     * and handles user sign-in and account creation.
+     *
+     * @param savedInstanceState Saved instance state bundle.
+     */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -118,6 +128,10 @@ public class MainActivity extends AppCompatActivity {
                 });
     }
 
+    /**
+     * Called when the activity is starting.
+     * Checks if the user is signed in and updates the UI accordingly.
+     */
     @Override
     public void onStart() {
         super.onStart();
@@ -126,6 +140,11 @@ public class MainActivity extends AppCompatActivity {
         //updateUI(currentUser);
     }
 
+    /**
+     * Replaces the current fragment with the specified fragment.
+     *
+     * @param fragment The fragment to replace the current fragment with.
+     */
     public void replaceFragment(Fragment fragment) {
         FragmentManager fragmentManager = getSupportFragmentManager();
         FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();

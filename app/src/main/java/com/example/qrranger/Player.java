@@ -4,11 +4,10 @@ import android.location.Location;
 
 import java.io.Serializable;
 import java.util.ArrayList;
-// player class represent players
+/**
+ * Sets Player class with attributes
+ */
 public class Player implements Serializable {
-    /**
-     * Sets Player class with attributes
-     */
     //player profile
     private String playerId;
     private String email;
@@ -16,8 +15,6 @@ public class Player implements Serializable {
     private String phoneNumber;
     private Long totalScore;
     private Long totalQRCode;
-
-
 
     /**
      * Provides attribute for allowing geolocation
@@ -30,10 +27,6 @@ public class Player implements Serializable {
      */
     private ArrayList<String> qrCodeCollection;
 
-    //player stats
-//    private QRCode leastScoring = qrCodeCollection.getLeast();
-//    private QRCode highestScoring = qrCodeCollection.getHighest();
-//    private int scoreTotal = qrCodeCollection.getTotal();
 
     /**
      * Allows location to be stored where the player scans a QR code
@@ -116,42 +109,4 @@ public class Player implements Serializable {
     }
     public Boolean getGeoLocationFlag() { return geoLocationSett; }
     public ArrayList<String> getQrCodeCollection() { return qrCodeCollection; }
-
-
-    /**
-     * Adds QR code to a player's collection
-     */
-    public void addQRCode(QRCode newQR){
-        qrCodeCollection.add(newQR.getId());
-    }
-
-    //remove QR Code
-//    public void removeQRCode(QRCode deleteQR){
-//        for(QRCode myQr : qrCodeCollection){
-//            if(myQr.getID() == deleteQR.getID()){
-//                qrCodeCollection.remove(myQr);
-//            }
-//        }
-//    }
-    /**
-     * When prompted, provides user location
-     */
-    public Location getLocation(){
-        return this.location;
-    }
-    //give information about geolocation setting
-    public boolean isGeoLocationSett() {
-        return geoLocationSett;
-    }
-
-
-    //give least score qr code
-//    public QRCode getLeastScoring() {
-//        return leastScoring;
-//    }
-//    //give highest score qr code
-//    public QRCode getHighestScoring() {
-//        return highestScoring;
-//    }
-
 }

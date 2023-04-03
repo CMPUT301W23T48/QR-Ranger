@@ -15,7 +15,6 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
 import java.util.ArrayList;
-import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 
@@ -46,18 +45,18 @@ public class QRLIstArrayAdapter extends ArrayAdapter<String> {
     public View getView(int position, @Nullable View convertView, @NonNull ViewGroup parent){
         View view;
         if(convertView == null){
-            view = LayoutInflater.from(getContext()).inflate(R.layout.qrlistcontent, parent, false);
+            view = LayoutInflater.from(getContext()).inflate(R.layout.qrlistcontent_view, parent, false);
         }else{
             view = convertView;
         }
         String id = getItem(position);
-
+        // find views
         TextView qrName = view.findViewById(R.id.qrName);
         ImageView qrShape = view.findViewById(R.id.shape);
         ImageView qrLustre = view.findViewById(R.id.luster);
         ImageView qrBorder = view.findViewById(R.id.border);
         ImageView qrBackGround = view.findViewById(R.id.background);
-
+        // set views based on data from db
         qrCollection.read(id, data ->{
             String qrId = Objects.requireNonNull(data.get("name").toString());
             qrCode.setName(qrId);

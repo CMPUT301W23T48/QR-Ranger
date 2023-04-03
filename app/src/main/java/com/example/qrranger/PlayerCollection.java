@@ -316,6 +316,7 @@ public class PlayerCollection extends Database_Controls {
     public CompletableFuture<Integer> getPlayerRank(String userID) {
         CompletableFuture<Integer> futureRank = new CompletableFuture<>();
 
+        // get the players document
         Query query = collection.whereEqualTo("userID", userID);
         Database db = Database.getInstance();
         CollectionReference qrCodesCollection = db.getCollection("qr_codes");
@@ -326,7 +327,7 @@ public class PlayerCollection extends Database_Controls {
             } else {
                 DocumentSnapshot documentSnapshot = queryDocumentSnapshots.getDocuments().get(0);
                 Object qrCodeIdsObj = documentSnapshot.get("qr_code_ids");
-
+                // assert list received
                 if (qrCodeIdsObj instanceof List) {
                     List<String> qrCodeIds = (List<String>) qrCodeIdsObj;
 
@@ -336,7 +337,7 @@ public class PlayerCollection extends Database_Controls {
                         List<Integer> pointsList = new ArrayList<>();
                         int totalQrCodes = qrCodeIds.size();
                         AtomicInteger processedQrCodes = new AtomicInteger();
-
+                        // find the highest qr code for the player and get the rank of that qr code among all qr codes
                         for (String qrCodeId : qrCodeIds) {
                             Query qrCodeQuery = qrCodesCollection.whereEqualTo("qr_id", qrCodeId);
                             qrCodeQuery.get().addOnSuccessListener(qrCodeQueryDocumentSnapshots -> {
@@ -390,9 +391,9 @@ public class PlayerCollection extends Database_Controls {
      * @param onError A Consumer that will be called with an exception when the search fails.
      */
     public void searchUser(String username, Consumer<Map<String, Object>> onSuccess, Consumer<Exception> onError) {
-        // returns the data for a user with the given userID
+        // returns the data for a user with the given username
         Query query = collection.whereEqualTo("username", username);
-
+        // since user names are unique we are able to search by username
         query.get().addOnCompleteListener(task -> {
             if (task.isSuccessful()) {
                 for (QueryDocumentSnapshot document : task.getResult()) {
@@ -491,7 +492,7 @@ public class PlayerCollection extends Database_Controls {
     public CompletableFuture<List<String>> getUsersWithQrId(String qr_id) {
         CompletableFuture<List<String>> future = new CompletableFuture<>();
         Query query = collection.whereArrayContains("qr_code_ids", qr_id);
-
+        // we get each user that has the same qr_id and return a list of their names
         query.get().addOnCompleteListener(task -> {
             if (task.isSuccessful()) {
                 List<String> usernames = new ArrayList<>();

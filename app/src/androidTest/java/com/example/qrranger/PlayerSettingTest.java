@@ -1,21 +1,22 @@
 package com.example.qrranger;
 
 
-import static androidx.test.espresso.Espresso.onData;
 import static androidx.test.espresso.Espresso.onView;
 import static androidx.test.espresso.action.ViewActions.click;
+import static androidx.test.espresso.action.ViewActions.closeSoftKeyboard;
+import static androidx.test.espresso.action.ViewActions.replaceText;
+import static androidx.test.espresso.assertion.ViewAssertions.matches;
 import static androidx.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static androidx.test.espresso.matcher.ViewMatchers.withContentDescription;
 import static androidx.test.espresso.matcher.ViewMatchers.withId;
+import static androidx.test.espresso.matcher.ViewMatchers.withParent;
 import static androidx.test.espresso.matcher.ViewMatchers.withText;
 import static org.hamcrest.Matchers.allOf;
-import static org.hamcrest.Matchers.anything;
 
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.ViewParent;
 
-import androidx.test.espresso.DataInteraction;
 import androidx.test.espresso.ViewInteraction;
 import androidx.test.ext.junit.rules.ActivityScenarioRule;
 import androidx.test.ext.junit.runners.AndroidJUnit4;
@@ -30,95 +31,90 @@ import org.junit.runner.RunWith;
 
 @LargeTest
 @RunWith(AndroidJUnit4.class)
-public class LeaderBoardTest {
+public class PlayerSettingTest {
 
     @Rule
     public ActivityScenarioRule<MainActivity> mActivityScenarioRule =
             new ActivityScenarioRule<>(MainActivity.class);
 
     @Test
-    public void leaderBoardTest() {
+    public void playerSettingTest() {
         ViewInteraction bottomNavigationItemView = onView(
-allOf(withId(R.id.stat), withContentDescription("Leaderboard"),
+allOf(withId(R.id.profile), withContentDescription("Profile"),
 childAtPosition(
 childAtPosition(
 withId(R.id.navigator),
 0),
-3),
+4),
 isDisplayed()));
         bottomNavigationItemView.perform(click());
         
-        ViewInteraction linearLayout = onView(
-allOf(withId(R.id.LeaderboardRank1LL),
+        ViewInteraction appCompatImageButton = onView(
+allOf(withId(R.id.ProfileSettingButton),
 childAtPosition(
-allOf(withId(R.id.LeaderboardLL1),
+allOf(withId(R.id.ProfileLL2),
 childAtPosition(
-withId(R.id.LeaderboardFragment),
+withId(R.id.ProfileLL1),
 0)),
-2),
+3),
 isDisplayed()));
-        linearLayout.perform(click());
+        appCompatImageButton.perform(click());
         
-        DataInteraction constraintLayout = onData(anything())
-.inAdapterView(allOf(withId(R.id.OUQR_list_view),
+        ViewInteraction appCompatEditText = onView(
+allOf(withId(R.id.SettingUsernameInput),
 childAtPosition(
-withId(R.id.OtherUserLL9),
-1)))
-.atPosition(1);
-        constraintLayout.perform(click());
-        
-        ViewInteraction materialButton = onView(
-allOf(withId(R.id.commentsOU), withText("Comments"),
+allOf(withId(R.id.SettingLL3),
 childAtPosition(
-allOf(withId(R.id.gem_layoutOU),
-childAtPosition(
-withId(android.R.id.content),
-0)),
-6),
-isDisplayed()));
-        materialButton.perform(click());
-        
-        ViewInteraction materialButton2 = onView(
-allOf(withId(R.id.comment_back_button), withText("Back"),
-childAtPosition(
-childAtPosition(
-withId(R.id.comments_ll),
-0),
+withId(R.id.SettingLL2),
+1)),
 0),
 isDisplayed()));
-        materialButton2.perform(click());
+        appCompatEditText.perform(replaceText("apples"), closeSoftKeyboard());
         
-        ViewInteraction materialButton3 = onView(
-allOf(withId(R.id.users_that_scannedOU), withText("Users"),
+        ViewInteraction appCompatEditText2 = onView(
+allOf(withId(R.id.SettingPhoneNumInput),
 childAtPosition(
-allOf(withId(R.id.gem_layoutOU),
+allOf(withId(R.id.SettingLL5),
 childAtPosition(
-withId(android.R.id.content),
-0)),
-8),
-isDisplayed()));
-        materialButton3.perform(click());
-        
-        ViewInteraction materialButton4 = onView(
-allOf(withId(R.id.users_that_scanned_back_button), withText("Back"),
-childAtPosition(
-childAtPosition(
-withId(R.id.users_that_scanned_ll),
+withId(R.id.SettingLL4),
+1)),
 0),
-1),
 isDisplayed()));
-        materialButton4.perform(click());
+        appCompatEditText2.perform(replaceText("1234567890"), closeSoftKeyboard());
         
-        ViewInteraction materialButton5 = onView(
-allOf(withId(R.id.gem_view_back_buttonOU), withText("Back"),
+        ViewInteraction appCompatEditText3 = onView(
+allOf(withId(R.id.SettingEmailInput),
 childAtPosition(
-allOf(withId(R.id.gem_layoutOU),
+allOf(withId(R.id.SettingLL7),
 childAtPosition(
-withId(android.R.id.content),
-0)),
-9),
+withId(R.id.SettingLL6),
+1)),
+0),
 isDisplayed()));
-        materialButton5.perform(click());
+        appCompatEditText3.perform(replaceText("apples@tree.com"), closeSoftKeyboard());
+        
+        ViewInteraction editText = onView(
+allOf(withId(R.id.SettingUsernameInput), withText("apples"),
+withParent(allOf(withId(R.id.SettingLL3),
+withParent(withId(R.id.SettingLL2)))),
+isDisplayed()));
+        editText.check(matches(withText("apples")));
+        
+        ViewInteraction editText2 = onView(
+allOf(withId(R.id.SettingPhoneNumInput), withText("1234567890"),
+withParent(allOf(withId(R.id.SettingLL5),
+withParent(withId(R.id.SettingLL4)))),
+isDisplayed()));
+        editText2.check(matches(withText("1234567890")));
+        
+        ViewInteraction editText3 = onView(
+allOf(withId(R.id.SettingEmailInput), withText("apples@tree.com"),
+withParent(allOf(withId(R.id.SettingLL7),
+withParent(withId(R.id.SettingLL6)))),
+isDisplayed()));
+        editText3.check(matches(withText("apples@tree.com")));
+        
+
         }
     
     private static Matcher<View> childAtPosition(

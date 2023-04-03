@@ -16,7 +16,7 @@ public class SearchResultsActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_search_results);
+        setContentView(R.layout.search_results_view);
 
         ListView listView = findViewById(R.id.search_results_list_view);
         Button backButton = findViewById(R.id.search_results_back_button);

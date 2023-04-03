@@ -1,7 +1,5 @@
 package com.example.qrranger;
 
-import android.app.Activity;
-
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
@@ -43,7 +41,7 @@ public class OtherUserProfileActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_otheruser);
+        setContentView(R.layout.otheruser_view);
         Intent intent = getIntent();
 
         LinearLayout linearLayout = findViewById(R.id.OtherUserLL1);

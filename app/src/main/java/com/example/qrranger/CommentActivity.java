@@ -48,7 +48,7 @@ public class CommentActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_comments);
+        setContentView(R.layout.comments_view);
 
         Intent intent = getIntent();
         QR_ID = intent.getStringExtra("qr_id");
@@ -118,7 +118,7 @@ public class CommentActivity extends AppCompatActivity {
     private void showAddCommentDialog() {
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
         LayoutInflater inflater = getLayoutInflater();
-        View view = inflater.inflate(R.layout.popup_comment_input, null);
+        View view = inflater.inflate(R.layout.popup_comment_input_view, null);
         final EditText commentInput = view.findViewById(R.id.comment_input);
 
         builder.setView(view)

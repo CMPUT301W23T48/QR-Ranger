@@ -63,13 +63,14 @@ public class QRGeneratorController {
                     String name = Objects.requireNonNull(data.get("name").toString());
                     Integer points = (Integer) data.get("points");
                     gemIDModel gem = (gemIDModel) data.get("gem_id");
+                    String qrLocation = (String) data.get("geoLocation");
 
 //                  qr = new QRCode(qrId, gem);
                     qr.setID(qrId);
                     qr.setName(name);
                     qr.setPoints(points);
                     qr.setGemId(gem);
-                    qr.setGeoLocation(location.toString());
+                    qr.setGeoLocation(qrLocation);
                 }, error -> {
                     // Send error message.
                     Log.e(TAG, "Error loading QR database entry.");

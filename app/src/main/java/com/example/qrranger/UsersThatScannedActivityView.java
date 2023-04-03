@@ -2,7 +2,6 @@ package com.example.qrranger;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.LinearLayout;
@@ -13,9 +12,8 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 
-public class UsersThatScannedActivity extends AppCompatActivity {
+public class UsersThatScannedActivityView extends AppCompatActivity {
     private Button backButton;
     private ListView userList;
     private String qr_id;
@@ -57,7 +55,7 @@ public class UsersThatScannedActivity extends AppCompatActivity {
                 .exceptionally(error -> {
                     runOnUiThread(() -> {
                         // Handle error, for example, by showing a Toast message
-                        Toast.makeText(UsersThatScannedActivity.this, "Error getting users: " + error, Toast.LENGTH_SHORT).show();
+                        Toast.makeText(UsersThatScannedActivityView.this, "Error getting users: " + error, Toast.LENGTH_SHORT).show();
                     });
                     return null;
                 });

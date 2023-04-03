@@ -29,28 +29,28 @@
 
 
         <activity
-            android:name=".SettingActivity"
+            android:name=".SettingActivityView"
             android:exported="true" />
         <activity
-            android:name=".OtherUserProfileActivity"
+            android:name=".OtherUserProfileActivityView"
             android:exported="true" />
         <activity
             android:name=".OtherUserGemView"
             android:exported="true" />
         <activity
-            android:name=".SearchResultsActivity"
+            android:name=".SearchResultsActivityView"
             android:exported="true" />
         <activity
-            android:name=".GemActivity"
+            android:name=".GemActivityView"
             android:exported="true" />
         <activity
             android:name=".CommentView"
             android:exported="true" />
         <activity
-            android:name=".UsersThatScannedActivity"
+            android:name=".UsersThatScannedActivityView"
             android:exported="true" />
         <activity
-            android:name=".MainActivity"
+            android:name=".MainActivityController"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />

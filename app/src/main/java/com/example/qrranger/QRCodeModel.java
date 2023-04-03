@@ -4,7 +4,7 @@ package com.example.qrranger;
  * The structure for the QR class
  * Also responsible for calculating the score of a QR code
  */
-public class QRCode {
+public class QRCodeModel {
     /**
      * Attributes of id, name, points,
      * geoLocation and gemID for QRCode cLass
@@ -13,15 +13,15 @@ public class QRCode {
     private String name;
     private Integer points;
     private String geoLocation;
-    private gemID gemId;
+    private gemIDModel gemId;
 
     /**
      * Initializer for generating a QRCode from scratch
      * responsible for generating a new gem ID
      */
-    public QRCode(String id) {
+    public QRCodeModel(String id) {
         this.id = id;
-        this.gemId = new gemID();
+        this.gemId = new gemIDModel();
         this.name = gemId.gemName(id);
         this.points = calculateScore(id);
         this.geoLocation = "Unknown";
@@ -32,7 +32,7 @@ public class QRCode {
      * and repopulating it, no need to generate a new gemID as
      * it already exists
      */
-    public QRCode() {
+    public QRCodeModel() {
     }
 
     /**
@@ -50,7 +50,7 @@ public class QRCode {
     public String getGeoLocation(){
         return geoLocation;
     }
-    public gemID getGemID() {
+    public gemIDModel getGemID() {
         return this.gemId;
     }
 
@@ -67,7 +67,7 @@ public class QRCode {
         this.geoLocation = GeoLocation;
     }
     public void setID(String ID) { this.id = ID; }
-    public void setGemId(gemID gem) { this.gemId = gem; }
+    public void setGemId(gemIDModel gem) { this.gemId = gem; }
 
 
     /**

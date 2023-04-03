@@ -18,7 +18,7 @@ import java.util.Map;
 import java.util.concurrent.CompletableFuture;
 import java.util.function.Consumer;
 
-public class CommentCollectionController extends Database_Controls{
+public class CommentCollectionController extends Database_Controller {
     CollectionReference collection;
 
     public CommentCollectionController(DatabaseModel db) {

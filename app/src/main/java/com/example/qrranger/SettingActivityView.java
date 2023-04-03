@@ -16,7 +16,7 @@ import java.util.Map;
 import java.util.Objects;
 import java.util.concurrent.CompletableFuture;
 
-public class SettingActivity extends AppCompatActivity {
+public class SettingActivityView extends AppCompatActivity {
     private Button backButton;
     private Button confirmButton;
     private EditText editUserName ;
@@ -50,7 +50,7 @@ public class SettingActivity extends AppCompatActivity {
         editEmail = findViewById(R.id.SettingEmailInput);
 
         Intent intent = getIntent();
-        Player myUser = (Player) intent.getSerializableExtra("myUser");
+        PlayerModel myUser = (PlayerModel) intent.getSerializableExtra("myUser");
 
         editUserName.setText(myUser.getUserName());
         editPhoneNumber.setText(myUser.getPhoneNumber());
@@ -74,7 +74,7 @@ public class SettingActivity extends AppCompatActivity {
                 // check that username unique
 
                 PlayerCollection pc = new PlayerCollection(null);
-                UserState us = UserState.getInstance();
+                UserStateModel us = UserStateModel.getInstance();
                 //check that username unique
                 CompletableFuture<Boolean> futureUnique = pc.checkUsernameUnique(username);
 
@@ -146,13 +146,13 @@ public class SettingActivity extends AppCompatActivity {
                 if (isChecked) {
                     // The switch is ON
                     myUser.setGeoLocationSett(true);
-                    UserState us = UserState.getInstance();
+                    UserStateModel us = UserStateModel.getInstance();
                     Map<String, Object> new_values = myPlayerCollection.createValues(us.getUserID(), myUser.getUserName(), myUser.getPhoneNumber(), myUser.getEmail(), myUser.getGeoLocationFlag(), Math.toIntExact(myUser.getTotalScore()), Math.toIntExact(myUser.getTotalQRCode()));
                     myPlayerCollection.update(us.getUserID(), new_values);
                 } else {
                     // The switch is OFF
                     myUser.setGeoLocationSett(false);
-                    UserState us = UserState.getInstance();
+                    UserStateModel us = UserStateModel.getInstance();
                     Map<String, Object> new_values = myPlayerCollection.createValues(us.getUserID(), myUser.getUserName(), myUser.getPhoneNumber(), myUser.getEmail(), myUser.getGeoLocationFlag(), Math.toIntExact(myUser.getTotalScore()), Math.toIntExact(myUser.getTotalQRCode()));
                     myPlayerCollection.update(us.getUserID(), new_values);
                 }

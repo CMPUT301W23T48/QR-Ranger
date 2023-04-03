@@ -4,14 +4,14 @@ package com.example.qrranger;
  * UserState is a singleton class that holds the state of the current user.
  * It provides methods to set and get the user ID.
  */
-public class UserState {
-    private static UserState single_instance = null;
+public class UserStateModel {
+    private static UserStateModel single_instance = null;
     private String userID;
 
     /**
      * Private constructor to prevent instantiation from other classes.
      */
-    private UserState(){
+    private UserStateModel(){
     }
 
     /**
@@ -20,11 +20,11 @@ public class UserState {
      *
      * @return The single instance of the UserState class.
      */
-    public static synchronized UserState getInstance()
+    public static synchronized UserStateModel getInstance()
     {
         if (single_instance == null)
         {
-            single_instance = new UserState();
+            single_instance = new UserStateModel();
         }
         return single_instance;
     }

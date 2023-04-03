@@ -22,7 +22,7 @@ import java.util.function.Consumer;
  * It provides methods to interact with the 'qr_codes' collection in the Firestore database.
  * The class allows you to create, read, update, and delete QR codes, as well as check if a QR code exists.
  */
-public class QRCollection extends Database_Controls{
+public class QRCollectionController extends Database_Controller {
     CollectionReference collection;
 
     /**
@@ -30,7 +30,7 @@ public class QRCollection extends Database_Controls{
      *
      * @param db The instance of the Database class.
      */
-    public QRCollection(DatabaseModel db) {
+    public QRCollectionController(DatabaseModel db) {
         if (db == null)
         {
             db = DatabaseModel.getInstance();
@@ -138,7 +138,7 @@ public class QRCollection extends Database_Controls{
      * @param gem The gem ID associated with the QR code.
      * @return A HashMap containing the key-value pairs for the QR code fields.
      */
-    public Map createValues(String QR_ID, String name, Integer points, gemID gem, String geolocation)
+    public Map createValues(String QR_ID, String name, Integer points, gemIDModel gem, String geolocation)
     {
         // This represents the fields in the player collection
         // can add or remove fields here

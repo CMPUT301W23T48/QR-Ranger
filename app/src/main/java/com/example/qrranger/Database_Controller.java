@@ -1,13 +1,5 @@
 package com.example.qrranger;
 
-import android.content.Context;
-import android.util.Log;
-
-import com.google.firebase.firestore.CollectionReference;
-import com.google.firebase.firestore.DocumentReference;
-import com.google.firebase.firestore.FirebaseFirestore;
-
-import java.util.ArrayList;
 import java.util.Map;
 import java.util.concurrent.CompletableFuture;
 import java.util.function.Consumer;
@@ -15,7 +7,7 @@ import java.util.function.Consumer;
  * An abstract class providing basic CRUD (Create, Read, Update, Delete) operations
  * for Firestore collections.
  */
-public abstract class Database_Controls {
+public abstract class Database_Controller {
 
     /**
      * Creates a new document in the Firestore collection with the provided values.

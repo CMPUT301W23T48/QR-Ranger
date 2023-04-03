@@ -13,7 +13,7 @@ import java.io.Serializable;
 import java.util.List;
 import java.util.Map;
 
-public class SearchFragment extends Fragment {
+public class SearchFragmentView extends Fragment {
     EditText searchInput;
     ImageButton confirmButton;
     PlayerCollection pc = new PlayerCollection(null);
@@ -59,7 +59,7 @@ public class SearchFragment extends Fragment {
      * @param data A list of maps containing the data of the similar users.
      */
     private void startSearchResultsActivity(List<Map<String, Object>> data) {
-        Intent intent = new Intent(requireActivity(), SearchResultsActivity.class);
+        Intent intent = new Intent(requireActivity(), SearchResultsActivityView.class);
         intent.putExtra("similarUsernames", (Serializable) data);
         startActivity(intent);
     }

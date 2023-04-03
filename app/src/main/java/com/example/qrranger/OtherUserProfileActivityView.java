@@ -19,7 +19,7 @@ import java.util.concurrent.CompletableFuture;
  * This Activity allows you to view another user's profile, showing their username,
  * email, phone number, rank, total score, and the number of QR codes they've collected.
  */
-public class OtherUserProfileActivity extends AppCompatActivity {
+public class OtherUserProfileActivityView extends AppCompatActivity {
 
     Button backButton;
     TextView usernameView;
@@ -29,7 +29,7 @@ public class OtherUserProfileActivity extends AppCompatActivity {
     TextView totalScoreView;
     TextView totalQRNumView;
     ListView qrList;
-    Player myUser = new Player();
+    PlayerModel myUser = new PlayerModel();
 
 
     /**
@@ -66,7 +66,7 @@ public class OtherUserProfileActivity extends AppCompatActivity {
         qrList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
-                OtherUserProfileActivity.this.runOnUiThread(new Runnable() {
+                OtherUserProfileActivityView.this.runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
                         String name = adapterView.getItemAtPosition(i).toString();
@@ -128,13 +128,13 @@ public class OtherUserProfileActivity extends AppCompatActivity {
      */
 
     public void getAndSetList(String userID){
-        OtherUserProfileActivity.this.runOnUiThread(new Runnable() {
+        OtherUserProfileActivityView.this.runOnUiThread(new Runnable() {
             @Override
             public void run() {
                 // code that modifies the adapter
                 ArrayList<String> qrCodeCollection = myUser.getQrCodeCollection();
 
-                ArrayAdapter<String> adapter = new QRLIstArrayAdapter(OtherUserProfileActivity.this, qrCodeCollection);
+                ArrayAdapter<String> adapter = new QRLIstArrayAdapter(OtherUserProfileActivityView.this, qrCodeCollection);
                 qrList.setAdapter(adapter);}
 
         });
@@ -146,7 +146,7 @@ public class OtherUserProfileActivity extends AppCompatActivity {
      */
     private void startGemActivity(String name, Integer index)
     {
-        Intent intent = new Intent(OtherUserProfileActivity.this, OtherUserGemView.class);
+        Intent intent = new Intent(OtherUserProfileActivityView.this, OtherUserGemView.class);
         String qr_id = myUser.getQrCodeCollection().get(index);
         intent.putExtra("qr_id", qr_id);
         //intent.putExtra("name", name);

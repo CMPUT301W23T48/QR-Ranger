@@ -54,7 +54,7 @@ import java.util.List;
  * The map shows the user's current location, allows searching for specific locations,
  * and displays markers for each QR code fetched from the Firestore database.
  */
-public class MapFragment extends Fragment implements OnMapReadyCallback{
+public class MapFragmentView extends Fragment implements OnMapReadyCallback{
 
 
     //Initialize Variables

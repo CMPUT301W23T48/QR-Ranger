@@ -15,7 +15,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
-public class LeaderboardFragment extends Fragment {
+public class LeaderboardFragmentView extends Fragment {
 
     TextView rank1Username;
     TextView rank2Username;
@@ -186,7 +186,7 @@ public class LeaderboardFragment extends Fragment {
      */
     private void startOtherUserProfile(Map<String,Object> data) {
         // send the info in data as intent for the new activity
-        Intent intent = new Intent(getActivity(), OtherUserProfileActivity.class);
+        Intent intent = new Intent(getActivity(), OtherUserProfileActivityView.class);
         intent.putExtra("username", data.get("username").toString());
         intent.putExtra("email", data.get("email").toString());
         intent.putExtra("phoneNumber", data.get("phoneNumber").toString());

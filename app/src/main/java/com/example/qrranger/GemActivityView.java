@@ -16,7 +16,7 @@ import java.util.Map;
  * An Activity class that displays the details of a specific gem, retrieved
  * from a QR code.
  */
-public class GemActivity extends AppCompatActivity {
+public class GemActivityView extends AppCompatActivity {
 
     private TextView nameView;
     private TextView qrScore;
@@ -63,7 +63,7 @@ public class GemActivity extends AppCompatActivity {
         qr_id = intent.getStringExtra("qr_id");
 
 
-        QRCollection qrc = new QRCollection(null);
+        QRCollectionController qrc = new QRCollectionController(null);
         qrc.read(qr_id, data -> {
             name = data.get("name").toString();
             points = data.get("points").toString();
@@ -92,7 +92,7 @@ public class GemActivity extends AppCompatActivity {
         geoLocation.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent intent = new Intent(GemActivity.this, geoLocationView.class);
+                Intent intent = new Intent(GemActivityView.this, geoLocationView.class);
                 intent.putExtra("qr_id", qr_id);
                 startActivity(intent);
             }
@@ -101,7 +101,7 @@ public class GemActivity extends AppCompatActivity {
         commentsButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent intent = new Intent(GemActivity.this, CommentView.class);
+                Intent intent = new Intent(GemActivityView.this, CommentView.class);
                 intent.putExtra("qr_id", qr_id);
                 startActivity(intent);
             }
@@ -110,7 +110,7 @@ public class GemActivity extends AppCompatActivity {
         usersThatScannedButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent intent = new Intent(GemActivity.this, UsersThatScannedActivity.class);
+                Intent intent = new Intent(GemActivityView.this, UsersThatScannedActivityView.class);
                 intent.putExtra("qr_id", qr_id);
                 startActivity(intent);
             }

@@ -47,8 +47,8 @@ public class PlayerCollectionTest {
         DatabaseModel db = DatabaseModel.getInstance();
         PlayerCollection pc = new PlayerCollection(db);
 
-        Player myTestUser = new Player();
-        UserState testUserState = UserState.getInstance();
+        PlayerModel myTestUser = new PlayerModel();
+        UserStateModel testUserState = UserStateModel.getInstance();
         String testStringID = testUserState.getUserID();
 
         pc.read(testStringID, data -> {

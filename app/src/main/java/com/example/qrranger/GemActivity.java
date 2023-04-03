@@ -130,11 +130,10 @@ public class GemActivity extends AppCompatActivity {
     public void setViews(){
         nameView.setText(name);
         qrScore.setText(points);
-        gemShape.setImageResource((int) (long) gem_data.get("gemType"));
         backgroundColor.setImageResource((int) (long) gem_data.get("bgColor"));
         gemBorder.setImageResource((int) (long) gem_data.get("boarder"));
         gemLustre.setImageResource((int) (long) gem_data.get("lusterLevel"));
-
+        gemShape.setImageResource((int) (long) gem_data.get("gemType"));
     }
 
 }

@@ -52,6 +52,12 @@ public class ProfileFragment extends Fragment {
     private Map gem_data[] = new Map[2];
     PlayerCollection myPlayerCollection = new PlayerCollection(Database.getInstance());
 
+    /**
+     * This code defines an ActivityResultLauncher that launches an activity for a result and
+     * handles the result in a callback function. The function checks if the result code is
+     * RESULT_OK, retrieves data from the intent, and updates the views of the activity if
+     * the "dataChanged" boolean extra is set to true.
+     */
     private ActivityResultLauncher<Intent> startSettingsForResult =
             registerForActivityResult(new ActivityResultContracts.StartActivityForResult(),
                     result -> {
@@ -67,6 +73,13 @@ public class ProfileFragment extends Fragment {
                             }
                         }
                     });
+
+    /**
+     * This code defines an ActivityResultLauncher that launches an activity for a result and
+     * handles the result in a callback function. The function checks if the result code is
+     * RESULT_OK, retrieves data from the intent, and updates the views of the activity if
+     * the "dataDeleted" boolean extra is set to true.
+     */
 
     private ActivityResultLauncher<Intent> startGemForResult =
             registerForActivityResult(new ActivityResultContracts.StartActivityForResult(),
@@ -260,25 +273,8 @@ public class ProfileFragment extends Fragment {
             public void run() {
                 // code that modifies the adapter
                 ArrayList<String> qrCodeCollection = myUser.getQrCodeCollection();
-                //ArrayList<String> qrNames = new ArrayList<>();
-                //QRCollection qrc = new QRCollection(null);
-                //for (String qrCode : qrCodeCollection) {
-                    //qrc.read(qrCode, data -> {
-                        // qr found
-                        //qrNames.add(data.get("name").toString());
-                        //if (qrNames.size() == qrCodeCollection.size()) {
-                            // All QR names retrieved, update list view
-                            //if (qrNames != null){
                             adapter = new QRLIstArrayAdapter(getContext(), qrCodeCollection);
                             listView.setAdapter(adapter);}
-                        //}
-                    //}, error -> {
-                        // qr not found, cannot set values
-                        //System.out.println("Error getting player data: " + error);
-                    //});
-
-                //}
-            //}
         });
     }
 

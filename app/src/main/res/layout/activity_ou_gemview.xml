@@ -4,21 +4,21 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:id="@+id/gem_layout">
+    android:id="@+id/gem_layoutOU">
 
     <TextView
-        android:id="@+id/gemName"
+        android:id="@+id/gemNameOU"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="@string/app_name"
         android:textColor="@color/black"
-        app:layout_constraintBottom_toTopOf="@+id/backgroundColor"
+        app:layout_constraintBottom_toTopOf="@+id/backgroundColorOU"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
     <TextView
-        android:id="@+id/gemValue"
+        android:id="@+id/gemValueOU"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="@string/app_name"
@@ -27,13 +27,14 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.498"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/backgroundColor"
+        app:layout_constraintTop_toBottomOf="@+id/backgroundColorOU"
         app:layout_constraintVertical_bias="0.057" />
 
     <ImageView
-        android:id="@+id/backgroundColor"
+        android:id="@+id/backgroundColorOU"
         android:layout_width="150dp"
         android:layout_height="150dp"
+        android:background="#007C7777"
         android:contentDescription="@string/app_name"
         android:cropToPadding="true"
         app:layout_constraintBottom_toBottomOf="parent"
@@ -41,12 +42,14 @@
         app:layout_constraintHorizontal_bias="0.498"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.126" />
+        app:layout_constraintVertical_bias="0.126"
+        app:srcCompat="@drawable/bgblue" />
 
     <ImageView
-        android:id="@+id/borderType"
+        android:id="@+id/borderTypeOU"
         android:layout_width="150dp"
         android:layout_height="150dp"
+        android:background="#007C7777"
         android:contentDescription="@string/app_name"
         android:cropToPadding="false"
         app:layout_constraintBottom_toBottomOf="parent"
@@ -54,12 +57,14 @@
         app:layout_constraintHorizontal_bias="0.498"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.126" />
+        app:layout_constraintVertical_bias="0.126"
+        app:srcCompat="@drawable/blackborder" />
 
     <ImageView
-        android:id="@+id/gem"
+        android:id="@+id/gemOU"
         android:layout_width="150dp"
         android:layout_height="150dp"
+        android:background="#007C7777"
         android:contentDescription="@string/app_name"
         android:cropToPadding="false"
         app:layout_constraintBottom_toBottomOf="parent"
@@ -67,12 +72,14 @@
         app:layout_constraintHorizontal_bias="0.498"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.126" />
+        app:layout_constraintVertical_bias="0.126"
+        app:srcCompat="@drawable/bluegem2" />
 
     <ImageView
-        android:id="@+id/lusterLevel"
+        android:id="@+id/lusterLevelOU"
         android:layout_width="150dp"
         android:layout_height="150dp"
+        android:background="#007C7777"
         android:contentDescription="@string/app_name"
         android:cropToPadding="false"
         app:layout_constraintBottom_toBottomOf="parent"
@@ -80,22 +87,13 @@
         app:layout_constraintHorizontal_bias="0.498"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.126" />
+        app:layout_constraintVertical_bias="0.126"
+        app:srcCompat="@drawable/lusterlevel3"
+        tools:srcCompat="@drawable/lusterlevel3" />
+
 
     <Button
-        android:id="@+id/delete"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Delete"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.498"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.826" />
-
-    <Button
-        android:id="@+id/comments"
+        android:id="@+id/commentsOU"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Comments"
@@ -107,7 +105,7 @@
         app:layout_constraintVertical_bias="0.657" />
 
     <Button
-        android:id="@+id/geoLocation"
+        android:id="@+id/geoLocationOU"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Geo Location"
@@ -117,7 +115,7 @@
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_bias="0.499" />
     <Button
-        android:id="@+id/users_that_scanned"
+        android:id="@+id/users_that_scannedOU"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Users"
@@ -128,7 +126,7 @@
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_bias="0.726" />
     <Button
-        android:id="@+id/gem_view_back_button"
+        android:id="@+id/gem_view_back_buttonOU"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="@string/Back"

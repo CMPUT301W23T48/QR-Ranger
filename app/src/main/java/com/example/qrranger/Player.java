@@ -4,7 +4,7 @@ import android.location.Location;
 
 import java.io.Serializable;
 import java.util.ArrayList;
-
+// player class represent players
 public class Player implements Serializable {
     /**
      * Sets Player class with attributes

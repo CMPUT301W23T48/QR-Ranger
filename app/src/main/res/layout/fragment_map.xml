@@ -18,6 +18,8 @@
             android:layout_height="wrap_content"
             android:orientation="horizontal">
 
+
+
             <EditText
                 android:id="@+id/MapSearch"
                 android:layout_width="291dp"
@@ -53,3 +55,4 @@
 
     </LinearLayout>
 </FrameLayout>
+

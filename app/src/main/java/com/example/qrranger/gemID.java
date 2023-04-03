@@ -1,6 +1,20 @@
 package com.example.qrranger;
 
+import android.content.Context;
+import android.content.res.AssetManager;
+import android.util.Log;
+
+import java.io.BufferedReader;
+import java.io.FileReader;
+import java.io.IOException;
+import java.io.InputStream;
+import java.math.BigInteger;
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Random;
+import java.util.Scanner;
 
 public class gemID {
     private int bgColor;
@@ -9,6 +23,7 @@ public class gemID {
     private int lusterLevel;
     private String gemName;
 
+    private myNameDictionary myDict = new myNameDictionary();
     public gemID() {
         //Creates gem ID
         Random generator = new Random();
@@ -33,56 +48,57 @@ public class gemID {
         setLusterLevel(gemLustre[randomIndex]);
     }
     public String gemName(String hash) {
-        //Takes hash and turns it into a binary array
-        StringBuilder result = new StringBuilder();
-        char[] hashChars = hash.toCharArray();
-        for (char aChar: hashChars){
-            result.append(
-                    String.format("%8s", Integer.toBinaryString(aChar))
-                            .replaceAll(" ", "0")
-            );
-        }
-        result.toString();
-        System.out.println(hashChars);
-        String name = "";
-        if (hashChars[0] == '0') {
-            name += "Clear ";
-        } else {
-            name += "Smokey ";
-        }
-        if (hashChars[1] == '0') {
-            name += "Shiny ";
-        } else {
-            name += "Dull ";
-        }
-        if (hashChars[2] == '0') {
-            name += "Rare ";
-        } else {
-            name += "Common ";
-        }
-        if (hashChars[3] == '0') {
-            name += "Flawless ";
-        } else {
-            name += "Spotless ";
-        }
-        if (hashChars[4] == '0') {
-            name += "BO";
-        } else {
-            name += "Lo";
-        }
-        if (hashChars[5] == '0') {
-            name += "Sho ";
-        } else {
-            name += "Kou ";
-        }
-        if (hashChars[6] == '0') {
-            name += "Quartz";
-        } else {
-            name += "Diamond";
-        }
-        return name;
-    }
+//        ArrayList<String> lines = new ArrayList<String>();
+//        ArrayList<String> lines1 = new ArrayList<String>();
+//       try {
+//            BufferedReader reader = new BufferedReader(new FileReader("Noun.txt"));
+//            BufferedReader reader1 = new BufferedReader(new FileReader("Adjectives.txt"));
+//            if(reader == null){
+//                System.out.println("yo;o");
+//            }
+//            String line = reader.readLine();
+//            String line1 = reader1.readLine();
+//            while (line != null) {
+//                lines.add(line);
+//                line = reader.readLine();
+//                System.out.println(line);
+//            }
+//            reader.close();
+//            while(line1 != null){
+//                lines1.add(line1);
+//                line1 = reader1.readLine();
+//            }
+//            reader1.close();
+//        } catch (IOException e) {
+//           System.out.println("yo;odf");
+//            e.printStackTrace();
+//            return null;
+//        }
+        //this.name1 = lines.toArray(new String[lines.size()]);
+        //this.name2 = lines.toArray(new String[lines.size()]);
+    try {
+        // Generate SHA-256 hash from input string
 
+        MessageDigest messageDigest = MessageDigest.getInstance("SHA-256");
+        byte[] hashBytes = messageDigest.digest(hash.getBytes());
+        BigInteger hashValue = new BigInteger(1, hashBytes);
+
+        // Use hash value to select different kind of name
+        int adjectiveIndex = hashValue.mod(BigInteger.valueOf(myDict.adjectivesDict().length)).intValue();
+        int nounIndex = hashValue.mod(BigInteger.valueOf(myDict.nounsDict().length)).intValue();
+
+        // Combine adjective and noun to form funny name
+        String adjective = myDict.adjectivesDict()[adjectiveIndex];
+        String noun = myDict.nounsDict()[nounIndex];
+        String name = adjective + " " + noun;
+
+        return name;
+    }catch (NoSuchAlgorithmException e) {
+        // Handle exception if SHA-256 algorithm is not available
+        e.printStackTrace();
+        return null;
+    }
+    }
     //Getters for gem representation
     public int getBgColor() {
         return bgColor;
@@ -108,4 +124,5 @@ public class gemID {
     public void setLusterLevel(int lusterLevel) {
         this.lusterLevel = lusterLevel;
     }
+
 }

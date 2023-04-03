@@ -40,6 +40,7 @@ public class MapFragment extends Fragment implements OnMapReadyCallback{
 
     private boolean isPermissionGranted;
 
+
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
     }
@@ -135,17 +136,7 @@ public class MapFragment extends Fragment implements OnMapReadyCallback{
 
 
     public void init(View view){
-        Button btnViewMap = view.findViewById(R.id.viewMap);
 
-        btnViewMap.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                //Start a new Map activity when button is clicked
-                Toast.makeText(getActivity(), "Button clicked", Toast.LENGTH_SHORT).show();
-                Intent intent  = new Intent(getActivity(), MapActivity.class);
-                startActivity(intent);
-            }
-        });
     }
 
     //Function for getting device location permission

@@ -5,27 +5,51 @@
     android:layout_height="match_parent"
     android:id="@+id/MapFragment"
     tools:context=".MapFragment">
+
     <LinearLayout
         android:id="@+id/MapLL1"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:layout_width="wrap_content"
+        android:layout_height="653dp"
         android:orientation="vertical">
-        <SearchView
-            android:id="@+id/MapSearchBar"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:queryHint="Enter location"
-            android:iconifiedByDefault="false"
-            android:layout_marginHorizontal="16dp"
-            android:layout_marginBottom="16dp"
-            android:background="@drawable/map_search"/>
 
-        <Button
-            android:id="@+id/viewMap"
-            android:layout_width="match_parent"
+        <LinearLayout
+            android:id="@+id/MapLL2"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="View Map" />
+            android:orientation="horizontal">
+
+            <EditText
+                android:id="@+id/MapSearch"
+                android:layout_width="291dp"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="10dp"
+                android:layout_marginTop="10dp"
+                android:background="@android:color/background_light"
+                android:hint="Enter Location Name"
+                android:padding="10dp"
+                android:textSize="15dp" />
+
+            <Button
+                android:id="@+id/MapFindButton"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="10dp"
+                android:text="Find" />
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/MapLL3"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="right"
+            android:orientation="horizontal" />
+
+        <com.google.android.gms.maps.MapView
+            android:id="@+id/mapView"
+            android:layout_width="match_parent"
+            android:layout_height="578dp"
+            android:layout_marginTop="5dp" />
 
     </LinearLayout>
-
 </FrameLayout>

@@ -54,7 +54,7 @@ public class QRScannerActivity extends AppCompatActivity{
     @Override
     protected void onCreate(Bundle SavedInstanceBundle) {
         super.onCreate(SavedInstanceBundle);
-        setContentView(R.layout.activity_qr_scanner);
+        setContentView(R.layout.qr_scanner_view);
 
         // Populate view properties.
         rejectButton = findViewById(R.id.button_reject);

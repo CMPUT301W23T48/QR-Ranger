@@ -35,7 +35,7 @@ public class GemFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        View view = inflater.inflate(R.layout.fragment_gemview, container, false);
+        View view = inflater.inflate(R.layout.gem_showcase_view, container, false);
 
         // Link all the layout components to the fragment.
         qrTitle = view.findViewById(R.id.gemName);

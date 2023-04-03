@@ -43,7 +43,7 @@ public class GemActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.fragment_gemview);
+        setContentView(R.layout.gem_showcase_view);
 
         ConstraintLayout cl = findViewById(R.id.gem_layout);
         nameView = cl.findViewById(R.id.gemName);

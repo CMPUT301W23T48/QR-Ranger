@@ -36,7 +36,7 @@ public class OtherUserGemView extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_ou_gemview);
+        setContentView(R.layout.ou_gemview_view);
 
         ConstraintLayout cl = findViewById(R.id.gem_layoutOU);
         nameView = cl.findViewById(R.id.gemNameOU);

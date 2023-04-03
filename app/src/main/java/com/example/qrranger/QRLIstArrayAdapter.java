@@ -15,7 +15,6 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
 import java.util.ArrayList;
-import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 
@@ -46,7 +45,7 @@ public class QRLIstArrayAdapter extends ArrayAdapter<String> {
     public View getView(int position, @Nullable View convertView, @NonNull ViewGroup parent){
         View view;
         if(convertView == null){
-            view = LayoutInflater.from(getContext()).inflate(R.layout.qrlistcontent, parent, false);
+            view = LayoutInflater.from(getContext()).inflate(R.layout.qrlistcontent_view, parent, false);
         }else{
             view = convertView;
         }

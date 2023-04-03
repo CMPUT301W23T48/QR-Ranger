@@ -1,20 +1,24 @@
 package com.example.qrranger;
 
 
+import static androidx.test.espresso.Espresso.onData;
 import static androidx.test.espresso.Espresso.onView;
 import static androidx.test.espresso.action.ViewActions.click;
 import static androidx.test.espresso.action.ViewActions.closeSoftKeyboard;
 import static androidx.test.espresso.action.ViewActions.replaceText;
 import static androidx.test.espresso.matcher.ViewMatchers.isDisplayed;
+import static androidx.test.espresso.matcher.ViewMatchers.withClassName;
 import static androidx.test.espresso.matcher.ViewMatchers.withContentDescription;
 import static androidx.test.espresso.matcher.ViewMatchers.withId;
-import static androidx.test.espresso.matcher.ViewMatchers.withText;
 import static org.hamcrest.Matchers.allOf;
+import static org.hamcrest.Matchers.anything;
+import static org.hamcrest.Matchers.is;
 
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.ViewParent;
 
+import androidx.test.espresso.DataInteraction;
 import androidx.test.espresso.ViewInteraction;
 import androidx.test.ext.junit.rules.ActivityScenarioRule;
 import androidx.test.ext.junit.runners.AndroidJUnit4;
@@ -26,7 +30,9 @@ import org.hamcrest.TypeSafeMatcher;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-
+/**
+ * Tests the search view
+ */
 @LargeTest
 @RunWith(AndroidJUnit4.class)
 public class SearchTest {
@@ -69,16 +75,13 @@ public class SearchTest {
                         isDisplayed()));
         appCompatImageButton.perform(click());
 
-        ViewInteraction materialButton = onView(
-                allOf(withId(R.id.OUBackButton), withText("Back"),
+        DataInteraction materialTextView = onData(anything())
+                .inAdapterView(allOf(withId(R.id.search_results_list_view),
                         childAtPosition(
-                                allOf(withId(R.id.OtherUserLL3),
-                                        childAtPosition(
-                                                withId(R.id.OtherUserLL2),
-                                                0)),
-                                3),
-                        isDisplayed()));
-        materialButton.perform(click());
+                                withClassName(is("android.widget.LinearLayout")),
+                                1)))
+                .atPosition(0);
+        materialTextView.perform(click());
     }
 
     private static Matcher<View> childAtPosition(

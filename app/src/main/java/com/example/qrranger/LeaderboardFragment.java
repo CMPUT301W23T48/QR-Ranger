@@ -163,19 +163,26 @@ public class LeaderboardFragment extends Fragment {
      */
     public void setViews(List<Map<String, Object>> top6Players)
     {
-        rank1Username.setText(top6Players.get(0).get("username").toString());
-        rank2Username.setText(top6Players.get(1).get("username").toString());
-        rank3Username.setText(top6Players.get(2).get("username").toString());
-        rank4Username.setText(top6Players.get(3).get("username").toString());
-        rank5Username.setText(top6Players.get(4).get("username").toString());
-        rank6Username.setText(top6Players.get(5).get("username").toString());
-
-        rank1Score.setText(top6Players.get(0).get("totalScore").toString());
-        rank2Score.setText(top6Players.get(1).get("totalScore").toString());
-        rank3Score.setText(top6Players.get(2).get("totalScore").toString());
-        rank4Score.setText(top6Players.get(3).get("totalScore").toString());
-        rank5Score.setText(top6Players.get(4).get("totalScore").toString());
-        rank6Score.setText(top6Players.get(5).get("totalScore").toString());
+        if (top6Players.size() >= 1 ) {
+            rank1Username.setText(top6Players.get(0).get("username").toString());
+            rank1Score.setText(top6Players.get(0).get("totalScore").toString());
+        }
+        if (top6Players.size() >= 2) {
+            rank2Username.setText(top6Players.get(1).get("username").toString());
+            rank2Score.setText(top6Players.get(1).get("totalScore").toString());
+        } else if (top6Players.size() >= 3) {
+            rank3Username.setText(top6Players.get(2).get("username").toString());
+            rank3Score.setText(top6Players.get(2).get("totalScore").toString());
+        } else if (top6Players.size() >= 4) {
+            rank4Username.setText(top6Players.get(3).get("username").toString());
+            rank4Score.setText(top6Players.get(3).get("totalScore").toString());
+        } else if (top6Players.size() >= 5) {
+            rank5Username.setText(top6Players.get(4).get("username").toString());
+            rank5Score.setText(top6Players.get(4).get("totalScore").toString());
+        } else if (top6Players.size() >= 6) {
+            rank6Username.setText(top6Players.get(5).get("username").toString());
+            rank6Score.setText(top6Players.get(5).get("totalScore").toString());
+        }
     }
 
 

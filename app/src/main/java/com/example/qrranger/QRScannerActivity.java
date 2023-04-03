@@ -71,9 +71,6 @@ public class QRScannerActivity extends AppCompatActivity{
         gemLustre = findViewById(R.id.lusterLevel);
         generator = new QRGenerator();
 
-
-        scanQR();
-
         qrResultLauncher = registerForActivityResult(
                 new ActivityResultContracts.StartActivityForResult(),
                 new ActivityResultCallback<ActivityResult>() {
@@ -112,7 +109,7 @@ public class QRScannerActivity extends AppCompatActivity{
                         }
                     }
                 }
-        )
+        );
 
         /*
          * Similar to onActivityResult() seen below, but the
@@ -149,6 +146,9 @@ public class QRScannerActivity extends AppCompatActivity{
                         }
                     }
                 });
+
+        // Initiate the scan of a qr code.
+        scanQR();
 
         // If user rejects the QR code, go back to MainActivity.
         rejectButton.setOnClickListener(new View.OnClickListener() {

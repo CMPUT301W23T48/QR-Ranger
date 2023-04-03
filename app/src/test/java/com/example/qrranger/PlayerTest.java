@@ -11,9 +11,9 @@ public class PlayerTest extends TestCase {
     @Test
 
     public void testPlayerChangeMethods(){
-        Player player = new Player();
+        PlayerModel player = new PlayerModel();
         boolean False = false;
-        gemID gemID = new gemID();
+        gemIDModel gemID = new gemIDModel();
         player.setPlayerId("2122101");
         player.setEmail("raymond6@ualberta.ca");
         player.setUserName("raymond");

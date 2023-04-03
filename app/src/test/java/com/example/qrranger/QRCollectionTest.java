@@ -15,7 +15,7 @@ public class QRCollectionTest extends TestCase {
     @Test
     public void testCreate() throws InterruptedException{
         DatabaseModel db = DatabaseModel.getInstance();
-        QRCollection qrCollection = new QRCollection(db);
+        QRCollectionController qrCollection = new QRCollectionController(db);
 
         // Create a Map of field-value pairs for the new document
         Map<String, Object> values = new HashMap<>();

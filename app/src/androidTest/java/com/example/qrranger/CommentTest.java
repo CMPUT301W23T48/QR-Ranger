@@ -38,8 +38,8 @@ import org.junit.runner.RunWith;
 public class CommentTest {
 
     @Rule
-    public ActivityScenarioRule<MainActivity> mActivityScenarioRule =
-            new ActivityScenarioRule<>(MainActivity.class);
+    public ActivityScenarioRule<MainActivityController> mActivityScenarioRule =
+            new ActivityScenarioRule<>(MainActivityController.class);
     /**
      * Tests to comment functionality of gems
      */

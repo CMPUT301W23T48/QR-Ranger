@@ -150,7 +150,7 @@ public class CommentView extends AppCompatActivity {
     private void saveComment(String commentText) {
         CommentCollectionController cc = new CommentCollectionController(null);
         PlayerCollection pc = new PlayerCollection(null);
-        UserState us = UserState.getInstance();
+        UserStateModel us = UserStateModel.getInstance();
         String userID = us.getUserID();
         pc.read(userID, data -> {
             String username = data.get("username").toString();
@@ -203,7 +203,7 @@ public class CommentView extends AppCompatActivity {
      * @param comment The Comment object to be deleted.
      */
     private void deleteComment(CommentModel comment) {
-        UserState us = UserState.getInstance();
+        UserStateModel us = UserStateModel.getInstance();
         String userID = us.getUserID();
         String authorID = comment.getAuthorID();
         DatabaseModel db = DatabaseModel.getInstance();

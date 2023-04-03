@@ -27,7 +27,7 @@ import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.function.Consumer;
 
-public class PlayerCollection extends Database_Controls {
+public class PlayerCollection extends Database_Controller {
 
     CollectionReference collection;
 

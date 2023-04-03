@@ -4,14 +4,18 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
+import android.widget.CompoundButton;
 import android.widget.EditText;
 import android.widget.LinearLayout;
+import android.widget.Switch;
 
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.google.android.material.snackbar.Snackbar;
 
+import java.util.ArrayList;
 import java.util.Map;
+import java.util.Objects;
 import java.util.concurrent.CompletableFuture;
 
 public class SettingActivity extends AppCompatActivity {
@@ -22,6 +26,9 @@ public class SettingActivity extends AppCompatActivity {
     private EditText editEmail;
     private Boolean settingsChanged = false;
 
+    private PlayerCollection myPlayerCollection = new PlayerCollection(null);
+    private Switch geoSwitch ;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -29,6 +36,7 @@ public class SettingActivity extends AppCompatActivity {
 
         confirmButton =findViewById(R.id.SettingSubmitButton);
         backButton = findViewById(R.id.SettingBackButton);
+        geoSwitch = findViewById(R.id.SettingSwitch);
 
         editPhoneNumber = findViewById(R.id.SettingPhoneNumInput);
         editUserName = findViewById(R.id.SettingUsernameInput);
@@ -41,6 +49,17 @@ public class SettingActivity extends AppCompatActivity {
         editPhoneNumber.setText(myUser.getPhoneNumber());
         editEmail.setText(myUser.getEmail());
 
+        myPlayerCollection.read(myUser.getPlayerId(), data -> {
+            // player found so handle code using data here
+            settingsChanged = Boolean.valueOf(Objects.requireNonNull(data.get("geolocation_setting")).toString());
+            myUser.setGeoLocationSett(settingsChanged);
+        }, error -> {
+            // Player not found, cannot set values
+            // perhaps change to default values for less chance of error during demo
+            System.out.println("Error getting player data: " + error);
+        });
+
+        geoSwitch.setChecked(settingsChanged);
         confirmButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -64,7 +83,6 @@ public class SettingActivity extends AppCompatActivity {
                         System.out.println("Username Unique");
                         // Username unique so update database
                         myUser.setUserName(username);
-                        settingsChanged = true;
 
                         Map<String, Object> new_values = pc.createValues(us.getUserID(), myUser.getUserName(), myUser.getPhoneNumber(), myUser.getEmail(), myUser.getGeoLocationFlag(), Math.toIntExact(myUser.getTotalScore()), Math.toIntExact(myUser.getTotalQRCode()));
                         pc.update(us.getUserID(), new_values);
@@ -98,6 +116,26 @@ public class SettingActivity extends AppCompatActivity {
                 returnIntent.putExtra("myUser", myUser); // Pass the modified object back to the first activity
                 setResult(RESULT_OK, returnIntent);
                 finish();
+            }
+        });
+
+        geoSwitch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                // Do something when the switch's state changes
+                if (isChecked) {
+                    // The switch is ON
+                    myUser.setGeoLocationSett(true);
+                    UserState us = UserState.getInstance();
+                    Map<String, Object> new_values = myPlayerCollection.createValues(us.getUserID(), myUser.getUserName(), myUser.getPhoneNumber(), myUser.getEmail(), myUser.getGeoLocationFlag(), Math.toIntExact(myUser.getTotalScore()), Math.toIntExact(myUser.getTotalQRCode()));
+                    myPlayerCollection.update(us.getUserID(), new_values);
+                } else {
+                    // The switch is OFF
+                    myUser.setGeoLocationSett(false);
+                    UserState us = UserState.getInstance();
+                    Map<String, Object> new_values = myPlayerCollection.createValues(us.getUserID(), myUser.getUserName(), myUser.getPhoneNumber(), myUser.getEmail(), myUser.getGeoLocationFlag(), Math.toIntExact(myUser.getTotalScore()), Math.toIntExact(myUser.getTotalQRCode()));
+                    myPlayerCollection.update(us.getUserID(), new_values);
+                }
             }
         });
     }

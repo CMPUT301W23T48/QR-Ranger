@@ -36,7 +36,8 @@
                 android:layout_marginTop="5dp"
                 android:background="@drawable/search_search"
                 android:iconifiedByDefault="false"
-                android:queryHint="Enter username" />
+                android:queryHint="Enter username"
+                android:paddingLeft="10dp"/>
 
             <ImageButton
                 android:id="@+id/SearchSubmitButton"

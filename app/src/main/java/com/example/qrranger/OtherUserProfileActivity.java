@@ -1,8 +1,11 @@
 package com.example.qrranger;
 
+import android.app.Activity;
+
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.LinearLayout;
@@ -14,6 +17,10 @@ import androidx.appcompat.app.AppCompatActivity;
 import java.util.ArrayList;
 import java.util.concurrent.CompletableFuture;
 
+/**
+ * This Activity allows you to view another user's profile, showing their username,
+ * email, phone number, rank, total score, and the number of QR codes they've collected.
+ */
 public class OtherUserProfileActivity extends AppCompatActivity {
 
     Button backButton;
@@ -27,6 +34,12 @@ public class OtherUserProfileActivity extends AppCompatActivity {
     Player myUser = new Player();
 
 
+    /**
+     * When the activity is created, we set up the views and populate them
+     * with the user's profile data from the Intent.
+     *
+     * @param savedInstanceState A Bundle containing the saved state of the activity.
+     */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -52,8 +65,26 @@ public class OtherUserProfileActivity extends AppCompatActivity {
             }
         });
 
+        qrList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+                OtherUserProfileActivity.this.runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        String name = adapterView.getItemAtPosition(i).toString();
+                        startGemActivity(name, i);
+                    }
+                });
+            }
+        });
+
     }
 
+    /**
+     * Sets up the views with the appropriate data from the Intent.
+     *
+     * @param intent An Intent containing the user's profile data.
+     */
     public void setViews(Intent intent) {
         usernameView.setText(intent.getStringExtra("username"));
         myUser.setUserName(intent.getStringExtra("username"));
@@ -72,10 +103,15 @@ public class OtherUserProfileActivity extends AppCompatActivity {
         myUser.setPlayerId(intent.getStringExtra("userID"));
         myUser.setQrCodeCollection(intent.getStringArrayListExtra("qr_code_ids"));
 
-//        getAndSetList(myUser);
+        getAndSetList(myUser.getPlayerId());
         getAndSetRank(intent.getStringExtra("userID"));
     }
 
+    /**
+     * Retrieves and sets the rank for the user with the specified user ID.
+     *
+     * @param userID The user ID of the user whose rank we want to fetch and display.
+     */
     public void getAndSetRank(String userID) {
         PlayerCollection pc = new PlayerCollection(null);
         CompletableFuture<Integer> rankFuture = pc.getPlayerRank(userID);
@@ -88,33 +124,26 @@ public class OtherUserProfileActivity extends AppCompatActivity {
         });
     }
 
-//    public void getAndSetList(Player user){
-//        OtherUserProfileActivity.this.runOnUiThread(new Runnable() {
-//            @Override
-//            public void run() {
-//                // code that modifies the adapter
-//                ArrayList<String> qrCodeCollection = user.getQrCodeCollection();
-//                ArrayList<String> qrNames = new ArrayList<>();
-//                QRCollection qrc = new QRCollection(null);
-//                for (String qrCode : qrCodeCollection) {
-//                    qrc.read(qrCode, data -> {
-//                        // qr found
-//                        qrNames.add(data.get("name").toString());
-//                        if (qrNames.size() == qrCodeCollection.size()) {
-//                            // All QR names retrieved, update list view
-//                            ArrayAdapter<String> adapter = new ArrayAdapter<>(OtherUserProfileActivity.this,
-//                                    android.R.layout.simple_list_item_1, qrNames);
-//                            qrList.setAdapter(adapter);
-//                        }
-//                    }, error -> {
-//                        // qr not found, cannot set values
-//                        System.out.println("Error getting player data: " + error);
-//                    });
-//
-//                }
-//            }
-//        });
-//
-//    }
 
+    public void getAndSetList(String userID){
+        OtherUserProfileActivity.this.runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                // code that modifies the adapter
+                ArrayList<String> qrCodeCollection = myUser.getQrCodeCollection();
+
+                ArrayAdapter<String> adapter = new QRLIstArrayAdapter(OtherUserProfileActivity.this, qrCodeCollection);
+                qrList.setAdapter(adapter);}
+
+        });
+    }
+
+    private void startGemActivity(String name, Integer index)
+    {
+        Intent intent = new Intent(OtherUserProfileActivity.this, OtherUserGemView.class);
+        String qr_id = myUser.getQrCodeCollection().get(index);
+        intent.putExtra("qr_id", qr_id);
+        //intent.putExtra("name", name);
+        startActivity(intent);
+    }
 }

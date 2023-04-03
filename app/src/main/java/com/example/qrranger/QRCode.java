@@ -6,12 +6,11 @@ package com.example.qrranger;
  */
 public class QRCode {
     /**
-     * Attributes of id, name, url, points,
+     * Attributes of id, name, points,
      * geoLocation and gemID for QRCode cLass
      */
     private String id;
     private String name;
-    private String url;
     private Integer points;
     private String geoLocation;
     private gemID gemId;
@@ -20,11 +19,10 @@ public class QRCode {
      * Initializer for generating a QRCode from scratch
      * responsible for generating a new gem ID
      */
-    public QRCode(String id, String url) {
+    public QRCode(String id) {
         this.id = id;
         this.gemId = new gemID();
         this.name = gemId.gemName(id);
-        this.url = url;
         this.points = calculateScore(id);
         this.geoLocation = "Unknown";
     }
@@ -34,26 +32,22 @@ public class QRCode {
      * and repopulating it, no need to generate a new gemID as
      * it already exists
      */
-    public QRCode(String id, String url, gemID gemId) {
-        this.id = id;
-        this.gemId = gemId;
-        this.name = gemId.gemName(id);
-        this.url = url;
-        this.points = calculateScore(id);
-        this.geoLocation = "Unknown";
+    public QRCode() {
+//        this.id = id;
+//        this.gemId = gemId;
+//        this.name = gemId.gemName(id);
+//        this.points = calculateScore(id);
+//        this.geoLocation = "Unknown";
     }
 
     /**
-     * Getters for the QRCode id, name, url, points, geoLocation and gemID
+     * Getters for the QRCode id, name, points, geoLocation and gemID
      */
     public String getId() {
         return id;
     }
     public String getName() {
         return name;
-    }
-    public String getUrl() {
-        return url;
     }
     public Integer getPoints() {
         return points;
@@ -66,13 +60,10 @@ public class QRCode {
     }
 
     /**
-     * Setters for the name, url, points and geoLocation
+     * Setters for the name, points and geoLocation
      */
     public void setName(String name) {
         this.name = name;
-    }
-    public void setUrl(String url) {
-        this.url = url;
     }
     public void setPoints(Integer points) {
         this.points = points;

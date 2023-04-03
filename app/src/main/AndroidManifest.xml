@@ -1,13 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools">
-    <uses-permission android:name="android.permission.INTERNET"></uses-permission>
-    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION"></uses-permission>
-    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION"></uses-permission>
-    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE"></uses-permission>
-    <uses-permission android:name="com.google.android.providers.gsf.permission.READ_GSERVICES"></uses-permission>
+
     <application
-        android:allowBackup="true"
+        android:allowBackup="false"
         android:dataExtractionRules="@xml/data_extraction_rules"
         android:fullBackupContent="@xml/backup_rules"
         android:icon="@mipmap/ic_launcher"
@@ -15,18 +11,42 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.QRRanger"
         tools:targetApi="31">
-        <activity
-            android:name=".MapActivity"
-            android:exported="false" />
+
         <activity
             android:name=".SettingActivity"
-            android:exported="true"></activity>
+            android:exported="true">
+        </activity>
+
         <activity
             android:name=".OtherUserProfileActivity"
-            android:exported="true"></activity>
+            android:exported="true">
+        </activity>
+
+        <activity
+            android:name=".OtherUserGemView"
+            android:exported="true">
+        </activity>
+
+        <activity
+            android:name=".SearchResultsActivity"
+            android:exported="true">
+        </activity>
+
         <activity
             android:name=".GemActivity"
-            android:exported="true"></activity>
+            android:exported="true">
+        </activity>
+
+        <activity
+            android:name=".CommentActivity"
+            android:exported="true">
+        </activity>
+
+        <activity
+            android:name=".UsersThatScannedActivity"
+            android:exported="true">
+        </activity>
+
         <activity
             android:name=".MainActivity"
             android:exported="true">
@@ -36,10 +56,13 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".QRScannerActivity" />
-        <meta-data
-            android:name="com.google.android.geo.API_KEY"
-            android:value="AIzaSyA-k5uoEpq2OLpqSf4e9ns8Mi0Hc32RoO0"/>
+        <activity
+            android:name=".geoLocationView"
+            android:exported="true">
+        </activity>
+
+        <activity
+            android:name=".QRScannerActivity"/>
     </application>
 
 </manifest>

@@ -4,35 +4,39 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
+import android.widget.CompoundButton;
 import android.widget.EditText;
 import android.widget.LinearLayout;
+import android.widget.Switch;
 
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.google.android.material.snackbar.Snackbar;
 
+import java.util.ArrayList;
 import java.util.Map;
+import java.util.Objects;
 import java.util.concurrent.CompletableFuture;
 
 public class SettingActivity extends AppCompatActivity {
     private Button backButton;
-    private Button confirmButton, confirmButton2, confirmButton3;
+    private Button confirmButton;
     private EditText editUserName ;
     private EditText editPhoneNumber;
     private EditText editEmail;
     private Boolean settingsChanged = false;
+
+    private PlayerCollection myPlayerCollection = new PlayerCollection(null);
+    private Switch geoSwitch ;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_setting);
 
-        LinearLayout linearLayout = findViewById(R.id.SettingLL3);
-        confirmButton = linearLayout.findViewById(R.id.SettingUsernameSubmitButton);
-        LinearLayout linearLayout1 = findViewById(R.id.SettingLL5);
-        confirmButton2 = linearLayout1.findViewById(R.id.SettingPhoneNumSubmitButton);
-        LinearLayout linearLayout2 = findViewById(R.id.SettingLL7);
-        confirmButton3 = linearLayout2.findViewById(R.id.SettingEmailSubmitButton);
+        confirmButton =findViewById(R.id.SettingSubmitButton);
+        backButton = findViewById(R.id.SettingBackButton);
+        geoSwitch = findViewById(R.id.SettingSwitch);
 
         editPhoneNumber = findViewById(R.id.SettingPhoneNumInput);
         editUserName = findViewById(R.id.SettingUsernameInput);
@@ -45,34 +49,17 @@ public class SettingActivity extends AppCompatActivity {
         editPhoneNumber.setText(myUser.getPhoneNumber());
         editEmail.setText(myUser.getEmail());
 
-
-        confirmButton2.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                String phoneNumb = editPhoneNumber.getText().toString();
-                myUser.setPhoneNumber(phoneNumb);
-                settingsChanged = true;
-
-                // update database
-                PlayerCollection pc = new PlayerCollection(null);
-                UserState us = UserState.getInstance();
-                Map<String, Object> new_values = pc.createValues(us.getUserID(), myUser.getUserName(), myUser.getPhoneNumber(), myUser.getEmail(), myUser.getGeoLocationFlag(), Math.toIntExact(myUser.getTotalScore()), Math.toIntExact(myUser.getTotalQRCode()));
-                pc.update(us.getUserID(), new_values);
-
-                Snackbar snackbar = Snackbar.make(view, "Saved", Snackbar.LENGTH_LONG);
-                // Add an action to the Snackbar
-                snackbar.setAction("OK", new View.OnClickListener() {
-                    @Override
-                    public void onClick(View view) {
-                        // This is called when the "OK" button on the Snackbar is clicked
-                    }
-                });
-
-                // Show the Snackbar
-                snackbar.show();
-            }
+        myPlayerCollection.read(myUser.getPlayerId(), data -> {
+            // player found so handle code using data here
+            settingsChanged = Boolean.valueOf(Objects.requireNonNull(data.get("geolocation_setting")).toString());
+            myUser.setGeoLocationSett(settingsChanged);
+        }, error -> {
+            // Player not found, cannot set values
+            // perhaps change to default values for less chance of error during demo
+            System.out.println("Error getting player data: " + error);
         });
 
+        geoSwitch.setChecked(settingsChanged);
         confirmButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -83,12 +70,19 @@ public class SettingActivity extends AppCompatActivity {
                 UserState us = UserState.getInstance();
                 //check that username unique
                 CompletableFuture<Boolean> futureUnique = pc.checkUsernameUnique(username);
+
+                String phoneNumb = editPhoneNumber.getText().toString();
+                myUser.setPhoneNumber(phoneNumb);
+
+
+                String email = editEmail.getText().toString();
+                myUser.setEmail(email);
+
                 futureUnique.thenAccept(usernameUnique -> {
                     if (usernameUnique) {
                         System.out.println("Username Unique");
                         // Username unique so update database
                         myUser.setUserName(username);
-                        settingsChanged = true;
 
                         Map<String, Object> new_values = pc.createValues(us.getUserID(), myUser.getUserName(), myUser.getPhoneNumber(), myUser.getEmail(), myUser.getGeoLocationFlag(), Math.toIntExact(myUser.getTotalScore()), Math.toIntExact(myUser.getTotalQRCode()));
                         pc.update(us.getUserID(), new_values);
@@ -99,6 +93,10 @@ public class SettingActivity extends AppCompatActivity {
                     } else {
                         // not unique so use a snackbar to inform the user
                         System.out.println("Username Not Unique");
+
+                        Map<String, Object> new_values = pc.createValues(us.getUserID(), myUser.getUserName(), myUser.getPhoneNumber(), myUser.getEmail(), myUser.getGeoLocationFlag(), Math.toIntExact(myUser.getTotalScore()), Math.toIntExact(myUser.getTotalQRCode()));
+                        pc.update(us.getUserID(), new_values);
+
                         Snackbar snackbar2 = Snackbar.make(view, "Username Already Taken.", Snackbar.LENGTH_LONG);
                         snackbar2.show();
                     }
@@ -109,35 +107,7 @@ public class SettingActivity extends AppCompatActivity {
             }
         });
 
-        confirmButton3.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                String email = editEmail.getText().toString();
-                myUser.setEmail(email);
-                settingsChanged = true;
-                // update database
-                PlayerCollection pc = new PlayerCollection(null);
-                UserState us = UserState.getInstance();
-                Map<String, Object> new_values = pc.createValues(us.getUserID(), myUser.getUserName(), myUser.getPhoneNumber(), myUser.getEmail(), myUser.getGeoLocationFlag(), Math.toIntExact(myUser.getTotalScore()), Math.toIntExact(myUser.getTotalQRCode()));
-                pc.update(us.getUserID(), new_values);
 
-                Snackbar snackbar = Snackbar.make(view, "Saved", Snackbar.LENGTH_LONG);
-
-                // Add an action to the Snack bar
-                snackbar.setAction("OK", new View.OnClickListener() {
-                    @Override
-                    public void onClick(View view) {
-                        // This is called when the "OK" button on the Snackbar is clicked
-                    }
-                });
-
-                // Show the Snackbar
-                snackbar.show();
-            }
-        });
-
-
-        backButton = findViewById(R.id.SettingBackButton);
         backButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -146,6 +116,26 @@ public class SettingActivity extends AppCompatActivity {
                 returnIntent.putExtra("myUser", myUser); // Pass the modified object back to the first activity
                 setResult(RESULT_OK, returnIntent);
                 finish();
+            }
+        });
+
+        geoSwitch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                // Do something when the switch's state changes
+                if (isChecked) {
+                    // The switch is ON
+                    myUser.setGeoLocationSett(true);
+                    UserState us = UserState.getInstance();
+                    Map<String, Object> new_values = myPlayerCollection.createValues(us.getUserID(), myUser.getUserName(), myUser.getPhoneNumber(), myUser.getEmail(), myUser.getGeoLocationFlag(), Math.toIntExact(myUser.getTotalScore()), Math.toIntExact(myUser.getTotalQRCode()));
+                    myPlayerCollection.update(us.getUserID(), new_values);
+                } else {
+                    // The switch is OFF
+                    myUser.setGeoLocationSett(false);
+                    UserState us = UserState.getInstance();
+                    Map<String, Object> new_values = myPlayerCollection.createValues(us.getUserID(), myUser.getUserName(), myUser.getPhoneNumber(), myUser.getEmail(), myUser.getGeoLocationFlag(), Math.toIntExact(myUser.getTotalScore()), Math.toIntExact(myUser.getTotalQRCode()));
+                    myPlayerCollection.update(us.getUserID(), new_values);
+                }
             }
         });
     }

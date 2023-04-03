@@ -1,53 +1,26 @@
 package com.example.qrranger;
 
-
-import android.Manifest;
-
-import android.content.Intent;
-import android.content.pm.PackageManager;
-import android.net.Uri;
 import android.os.Bundle;
-import android.provider.Settings;
+
+import androidx.fragment.app.Fragment;
+
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import androidx.core.content.ContextCompat;
-import androidx.fragment.app.Fragment;
 
-
-import com.google.android.gms.maps.CameraUpdateFactory;
-import com.google.android.gms.maps.GoogleMap;
-import com.google.android.gms.maps.MapView;
-import com.google.android.gms.maps.OnMapReadyCallback;
-import com.google.android.gms.maps.model.LatLng;
-import com.google.android.gms.maps.model.MarkerOptions;
-import com.karumi.dexter.Dexter;
-import com.karumi.dexter.PermissionToken;
-import com.karumi.dexter.listener.PermissionDeniedResponse;
-import com.karumi.dexter.listener.PermissionGrantedResponse;
-import com.karumi.dexter.listener.PermissionRequest;
-import com.karumi.dexter.listener.single.PermissionListener;
-import android.content.Context;
-import android.widget.Button;
-import android.widget.Toast;
-
-public class MapFragment extends Fragment implements OnMapReadyCallback{
 
 
     //Initialize Variables
     public MapView mapView;
     private GoogleMap gMap;
 
-    private boolean isPermissionGranted;
-
-    public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-    }
+public class MapFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
+
         View view = inflater.inflate(R.layout.fragment_map, container, false);
 
         mapView = (MapView) view.findViewById(R.id.mapView);

@@ -149,7 +149,7 @@ public class CommentView extends AppCompatActivity {
      */
     private void saveComment(String commentText) {
         CommentCollectionController cc = new CommentCollectionController(null);
-        PlayerCollection pc = new PlayerCollection(null);
+        PlayerCollectionController pc = new PlayerCollectionController(null);
         UserStateModel us = UserStateModel.getInstance();
         String userID = us.getUserID();
         pc.read(userID, data -> {

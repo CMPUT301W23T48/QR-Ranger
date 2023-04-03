@@ -38,7 +38,7 @@ public class SearchResultsActivityView extends AppCompatActivity {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
                 String username = adapterView.getItemAtPosition(i).toString();
-                PlayerCollection pc = new PlayerCollection(null);
+                PlayerCollectionController pc = new PlayerCollectionController(null);
                 pc.searchUser(username, data -> {
                     if (data != null){
                         System.out.println("Clicked User ID: " + data.get("userID"));

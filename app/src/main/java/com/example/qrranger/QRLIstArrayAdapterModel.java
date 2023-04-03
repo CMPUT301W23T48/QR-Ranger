@@ -18,12 +18,12 @@ import java.util.ArrayList;
 import java.util.Map;
 import java.util.Objects;
 
-public class QRLIstArrayAdapter extends ArrayAdapter<String> {
+public class QRLIstArrayAdapterModel extends ArrayAdapter<String> {
 
     private QRCollectionController qrCollection = new QRCollectionController(null);
     private QRCodeModel qrCode = new QRCodeModel();
     private Map gem_data;
-    public QRLIstArrayAdapter(Context context, ArrayList<String> qrID){
+    public QRLIstArrayAdapterModel(Context context, ArrayList<String> qrID){
         super(context, 0, qrID);
     }
     @NonNull

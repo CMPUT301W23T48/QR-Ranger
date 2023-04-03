@@ -24,7 +24,7 @@ public class SettingActivityView extends AppCompatActivity {
     private EditText editEmail;
     private Boolean settingsChanged = false;
 
-    private PlayerCollection myPlayerCollection = new PlayerCollection(null);
+    private PlayerCollectionController myPlayerCollection = new PlayerCollectionController(null);
     private Switch geoSwitch ;
 
     /**
@@ -73,7 +73,7 @@ public class SettingActivityView extends AppCompatActivity {
                 String username = editUserName.getText().toString();
                 // check that username unique
 
-                PlayerCollection pc = new PlayerCollection(null);
+                PlayerCollectionController pc = new PlayerCollectionController(null);
                 UserStateModel us = UserStateModel.getInstance();
                 //check that username unique
                 CompletableFuture<Boolean> futureUnique = pc.checkUsernameUnique(username);

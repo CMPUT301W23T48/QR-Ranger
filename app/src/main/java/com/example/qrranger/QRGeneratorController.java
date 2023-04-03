@@ -2,7 +2,10 @@ package com.example.qrranger;
 
 import static android.content.ContentValues.TAG;
 
+import android.location.Location;
 import android.util.Log;
+
+import com.google.zxing.qrcode.encoder.QRCode;
 
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
@@ -15,15 +18,17 @@ import java.util.concurrent.CompletableFuture;
  * Generates QR Codes from their scan data.
  * Also responsible for saving QRCodes to the database and linking them to the user profile.
  */
-public class QRGenerator {
+public class QRGeneratorController {
     private QRCollectionController qrCollection;
-    private PlayerCollection playerCollection;
+    private PlayerCollectionController playerCollection;
     private boolean qrAdded;
     private QRCodeModel qr;
 
-    public QRGenerator() {
+    private Location location;
+
+    public QRGeneratorController() {
         qrCollection = new QRCollectionController(null);
-        playerCollection = new PlayerCollection(null);
+        playerCollection = new PlayerCollectionController(null);
         qr = new QRCodeModel("12345689");
         qrAdded = false;
     }
@@ -44,7 +49,7 @@ public class QRGenerator {
      *      The generated or retrieved QRCode instance.
      *
      */
-    public CompletableFuture<Void> generateQR(String qrData) {
+    public CompletableFuture<Void> generateQR(String qrData, Location location) {
         qrCollection = new QRCollectionController(null);
         String hash = SHA256Hash(qrData);
 
@@ -64,7 +69,7 @@ public class QRGenerator {
                     qr.setName(name);
                     qr.setPoints(points);
                     qr.setGemId(gem);
-                    qr.setGeoLocation("0,0");
+                    qr.setGeoLocation(location.toString());
                 }, error -> {
                     // Send error message.
                     Log.e(TAG, "Error loading QR database entry.");
@@ -78,9 +83,9 @@ public class QRGenerator {
                 // qr = new QRCode(hash, qrData);
                 qr.setID(hash);
                 qr.setName(gem.gemName(qrData));
-                qr.setPoints(QRCode.calculateScore(qrData));
+                qr.setPoints(QRCodeModel.calculateScore(qrData));
                 qr.setGemId(qr.getGemID());
-                qr.setGeoLocation("0,0");
+                qr.setGeoLocation(location.toString());
 
                 // Add the new QR to the database:
                 Map values = qrCollection.createValues(hash, qr.getName(), qr.getPoints(), qr.getGemID(), qr.getGeoLocation());
@@ -98,9 +103,9 @@ public class QRGenerator {
      * @throws IllegalArgumentException
      *      Thrown when QR being added is already linked to the account.
      */
-    public boolean addQRToAccount(String qrId) throws IllegalArgumentException {
+    public boolean addQRToAccount(String qrId) {
 
-        playerCollection = new PlayerCollection(null);
+        playerCollection = new PlayerCollectionController(null);
         UserStateModel state = UserStateModel.getInstance();
         String userId = state.getUserID();
 
@@ -150,4 +155,9 @@ public class QRGenerator {
             throw new RuntimeException(e);
         }
     }
+
+    private void getLocation() {
+
+    }
 }
+

@@ -64,7 +64,7 @@ public class MainActivityController extends AppCompatActivity {
                     replaceFragment(new SearchFragmentView());
                     break;
                 case R.id.add:
-                    Intent launchScanner = new Intent(getBaseContext(), QRScannerActivity.class);
+                    Intent launchScanner = new Intent(getBaseContext(), QRScannerActivityView.class);
                     startActivity(launchScanner);
                     break;
                 case R.id.stat:
@@ -87,7 +87,7 @@ public class MainActivityController extends AppCompatActivity {
                             FirebaseUser user = mAuth.getCurrentUser();
                             //updateUI(user);
                             // create user
-                            PlayerCollection pc = new PlayerCollection(null);
+                            PlayerCollectionController pc = new PlayerCollectionController(null);
                             CompletableFuture<Boolean> future = pc.checkUserExists(user.getUid());
                             future.thenAccept(userExists -> {
                                 if (userExists) {

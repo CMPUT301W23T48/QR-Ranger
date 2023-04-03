@@ -61,7 +61,7 @@
         <activity
             android:name=".geoLocationView"
             android:exported="true" />
-        <activity android:name=".QRScannerActivity" />
+        <activity android:name=".QRScannerActivityView" />
     </application>
 
 </manifest>

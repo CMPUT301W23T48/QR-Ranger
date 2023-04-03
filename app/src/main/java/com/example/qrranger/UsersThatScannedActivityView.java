@@ -46,7 +46,7 @@ public class UsersThatScannedActivityView extends AppCompatActivity {
         adapter = new ArrayAdapter<>(this, android.R.layout.simple_list_item_1, new ArrayList<>());
         userList.setAdapter(adapter);
 
-        PlayerCollection playerCollection = new PlayerCollection(null);
+        PlayerCollectionController playerCollection = new PlayerCollectionController(null);
 
         playerCollection.getUsersWithQrId(qr_id)
                 .thenAccept(usernames -> {

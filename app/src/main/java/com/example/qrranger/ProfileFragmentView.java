@@ -50,7 +50,7 @@ public class ProfileFragmentView extends Fragment {
     private ImageView myHighestImage[] = new ImageView[4];
     private ImageView myLowestImage[] = new ImageView[4];
     private Map gem_data[] = new Map[2];
-    PlayerCollection myPlayerCollection = new PlayerCollection(DatabaseModel.getInstance());
+    PlayerCollectionController myPlayerCollection = new PlayerCollectionController(DatabaseModel.getInstance());
 
     /**
      * This code defines an ActivityResultLauncher that launches an activity for a result and
@@ -280,7 +280,7 @@ public class ProfileFragmentView extends Fragment {
             @Override
             public void run() {
                 ArrayList<String> qrCodeCollection = myUser.getQrCodeCollection();
-                            adapter = new QRLIstArrayAdapter(getContext(), qrCodeCollection);
+                            adapter = new QRLIstArrayAdapterModel(getContext(), qrCodeCollection);
                             listView.setAdapter(adapter);}
         });
     }
@@ -293,7 +293,7 @@ public class ProfileFragmentView extends Fragment {
      * @param lowestPointsTextView  The TextView displaying the lowest scoring QR code.
      */
     private void setHighestLowest(String userID, TextView highestPointsTextView, TextView lowestPointsTextView) {
-        PlayerCollection pc = new PlayerCollection(null);
+        PlayerCollectionController pc = new PlayerCollectionController(null);
         QRCollectionController qrc = new QRCollectionController(null);
 
         pc.read(userID, userData -> {

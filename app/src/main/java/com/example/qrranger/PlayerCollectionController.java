@@ -27,7 +27,7 @@ import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.function.Consumer;
 
-public class PlayerCollection extends Database_Controller {
+public class PlayerCollectionController extends Database_Controller {
 
     CollectionReference collection;
 
@@ -35,7 +35,7 @@ public class PlayerCollection extends Database_Controller {
      * Constructor for PlayerCollection.
      * @param db Database instance, pass null to use the default instance.
      */
-    public PlayerCollection(DatabaseModel db) {
+    public PlayerCollectionController(DatabaseModel db) {
         if (db == null) {
             db = DatabaseModel.getInstance();
         }

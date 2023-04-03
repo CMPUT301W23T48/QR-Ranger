@@ -16,7 +16,7 @@ import java.util.Map;
 public class SearchFragmentView extends Fragment {
     EditText searchInput;
     ImageButton confirmButton;
-    PlayerCollection pc = new PlayerCollection(null);
+    PlayerCollectionController pc = new PlayerCollectionController(null);
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,

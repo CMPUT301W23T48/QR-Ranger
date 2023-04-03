@@ -27,7 +27,7 @@ public class GemFragmentView extends Fragment {
 
 
     private QRCodeModel qrCode;
-    private PlayerCollection playerCollection;
+    private PlayerCollectionController playerCollection;
     private QRCollectionController qrCollection;
     private UserStateModel state;
 
@@ -76,7 +76,7 @@ public class GemFragmentView extends Fragment {
                 String playerId = state.getUserID();
 
                 // Remove the qr from the account.
-                playerCollection = new PlayerCollection(null);
+                playerCollection = new PlayerCollectionController(null);
                 playerCollection.delete_QR_from_players(playerId, qrCode.getId());
 
                 // Switch fragments to the User Profile.

@@ -70,7 +70,7 @@ public class LeaderboardFragmentView extends Fragment {
         rank5LL = view.findViewById(R.id.LeaderboardRank5LL);
         rank6LL = view.findViewById(R.id.LeaderboardRank6LL);
 
-        PlayerCollection pc = new PlayerCollection(null);
+        PlayerCollectionController pc = new PlayerCollectionController(null);
         pc.getTop6Players(
                 top6Players -> {
                     // handle successful retrieval of top 3 players

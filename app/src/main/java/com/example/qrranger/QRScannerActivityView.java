@@ -5,6 +5,7 @@ import static android.content.ContentValues.TAG;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
+import android.location.Location;
 import android.os.Bundle;
 import android.provider.MediaStore;
 import android.util.Log;
@@ -18,10 +19,16 @@ import androidx.activity.result.ActivityResult;
 import androidx.activity.result.ActivityResultCallback;
 import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContracts;
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 
+import com.google.android.gms.location.FusedLocationProviderClient;
+import com.google.android.gms.location.LocationServices;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.android.gms.tasks.Task;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
@@ -35,7 +42,7 @@ import java.util.concurrent.CompletableFuture;
 /**
  * Class used for scanning QR Codes and processing the data received by them.
  */
-public class QRScannerActivity extends AppCompatActivity{
+public class QRScannerActivityView extends AppCompatActivity {
     private Button rejectButton;
     private Button confirmButton;
     private TextView qrTitle;
@@ -45,12 +52,14 @@ public class QRScannerActivity extends AppCompatActivity{
     private ImageView gemBorder;
     private ImageView gemLustre;
     private Bitmap locationImage;
-    private QRGenerator generator;
+    private QRGeneratorController generator;
     private QRCodeModel qrCode;
     private String scanResult;
+    private Location qrLocation;
     private ActivityResultLauncher<Intent> pictureResultLauncher;
     private ActivityResultLauncher<Intent> qrResultLauncher;
-    private int CAMERA_PERMISSIONS_REQUEST_CODE = 100;
+    private FusedLocationProviderClient fusedLocationClient;
+    private final int CAMERA_PERMISSIONS_REQUEST_CODE = 100;
 
     @Override
     protected void onCreate(Bundle SavedInstanceBundle) {
@@ -66,7 +75,11 @@ public class QRScannerActivity extends AppCompatActivity{
         backgroundColor = findViewById(R.id.backgroundColor);
         gemBorder = findViewById(R.id.borderType);
         gemLustre = findViewById(R.id.lusterLevel);
-        generator = new QRGenerator();
+        generator = new QRGeneratorController();
+
+        fusedLocationClient = LocationServices.getFusedLocationProviderClient(this);
+
+        qrLocation = null;
 
         qrResultLauncher = registerForActivityResult(
                 new ActivityResultContracts.StartActivityForResult(),
@@ -78,13 +91,16 @@ public class QRScannerActivity extends AppCompatActivity{
                             IntentResult intentResult = IntentIntegrator.parseActivityResult(IntentIntegrator.REQUEST_CODE, result.getResultCode(), result.getData());
                             if (intentResult != null && intentResult.getContents() != null) {
                                 scanResult = intentResult.getContents();
-                                CompletableFuture<Void> future = generator.generateQR(scanResult);
+
+                                CompletableFuture<Void> future = generator.generateQR(scanResult, qrLocation);
                                 // When this future completes, the data will have been successfully pulled.
                                 // Thus, use thenAccept() to update UI and QR data.
                                 future.thenAccept(completed -> {
                                     qrCode = generator.getQr();
                                     updateUi();
                                 });
+
+
                             } else {
                                 // An error occurs and the scan returns no results.
                                 Log.e(TAG, "Error during QR scan.");
@@ -178,6 +194,31 @@ public class QRScannerActivity extends AppCompatActivity{
         });
     }
 
+    @Override
+    protected void onResume() {
+        super.onResume();
+
+        // Check to get location permission.
+        if (ActivityCompat.checkSelfPermission(this, android.Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, android.Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+            // TODO: Consider calling
+            //    ActivityCompat#requestPermissions
+            // here to request the missing permissions, and then overriding
+            //   public void onRequestPermissionsResult(int requestCode, String[] permissions,
+            //                                          int[] grantResults)
+            // to handle the case where the user grants the permission. See the documentation
+            // for ActivityCompat#requestPermissions for more details.
+            return;
+        }
+
+        // Get the last location.
+        fusedLocationClient.getLastLocation().addOnSuccessListener(this, new OnSuccessListener<Location>() {
+            @Override
+            public void onSuccess(Location location) {
+                qrLocation = location;
+            }
+        });
+    }
+
     private void updateUi() {
         gemShape.setImageResource(qrCode.getGemID().getGemType());
         gemLustre.setImageResource(qrCode.getGemID().getLusterLevel());
@@ -199,7 +240,7 @@ public class QRScannerActivity extends AppCompatActivity{
         // Ask for camera permissions, or the camera will not open.
         if (ContextCompat.checkSelfPermission(getBaseContext(), android.Manifest.permission.CAMERA)
                 == PackageManager.PERMISSION_DENIED) {
-            ActivityCompat.requestPermissions(QRScannerActivity.this, new String[]{android.Manifest.permission.CAMERA}, CAMERA_PERMISSIONS_REQUEST_CODE);
+            ActivityCompat.requestPermissions(QRScannerActivityView.this, new String[]{android.Manifest.permission.CAMERA}, CAMERA_PERMISSIONS_REQUEST_CODE);
         }
 
         // Launch the photo activity with the launcher.

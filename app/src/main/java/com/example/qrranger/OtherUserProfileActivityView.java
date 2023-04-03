@@ -111,7 +111,7 @@ public class OtherUserProfileActivityView extends AppCompatActivity {
      * @param userID The user ID of the user whose rank we want to fetch and display.
      */
     public void getAndSetRank(String userID) {
-        PlayerCollection pc = new PlayerCollection(null);
+        PlayerCollectionController pc = new PlayerCollectionController(null);
         CompletableFuture<Integer> rankFuture = pc.getPlayerRank(userID);
         rankFuture.thenAccept(rank -> {
             System.out.println("Player rank: " + rank);
@@ -134,7 +134,7 @@ public class OtherUserProfileActivityView extends AppCompatActivity {
                 // code that modifies the adapter
                 ArrayList<String> qrCodeCollection = myUser.getQrCodeCollection();
 
-                ArrayAdapter<String> adapter = new QRLIstArrayAdapter(OtherUserProfileActivityView.this, qrCodeCollection);
+                ArrayAdapter<String> adapter = new QRLIstArrayAdapterModel(OtherUserProfileActivityView.this, qrCodeCollection);
                 qrList.setAdapter(adapter);}
 
         });

@@ -19,7 +19,7 @@ public class PlayerCollectionTest {
     @Test
     public void testCreate() throws InterruptedException {
         DatabaseModel db = DatabaseModel.getInstance();
-        PlayerCollection pc = new PlayerCollection(db);
+        PlayerCollectionController pc = new PlayerCollectionController(db);
 
         // create a map with sample data
         Map<String, Object> values = new HashMap<>();
@@ -45,7 +45,7 @@ public class PlayerCollectionTest {
 
     public void read_test() throws InterruptedException{
         DatabaseModel db = DatabaseModel.getInstance();
-        PlayerCollection pc = new PlayerCollection(db);
+        PlayerCollectionController pc = new PlayerCollectionController(db);
 
         PlayerModel myTestUser = new PlayerModel();
         UserStateModel testUserState = UserStateModel.getInstance();

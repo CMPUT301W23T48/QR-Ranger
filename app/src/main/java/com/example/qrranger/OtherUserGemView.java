@@ -54,7 +54,7 @@ public class OtherUserGemView extends AppCompatActivity {
         qr_id = intent.getStringExtra("qr_id");
 
 
-        QRCollection qrc = new QRCollection(null);
+        QRCollectionController qrc = new QRCollectionController(null);
         qrc.read(qr_id, data -> {
             name = data.get("name").toString();
             points = data.get("points").toString();
@@ -86,7 +86,7 @@ public class OtherUserGemView extends AppCompatActivity {
         commentsButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent intent = new Intent(OtherUserGemView.this, CommentActivity.class);
+                Intent intent = new Intent(OtherUserGemView.this, CommentView.class);
                 intent.putExtra("qr_id", qr_id);
                 startActivity(intent);
             }
@@ -98,7 +98,7 @@ public class OtherUserGemView extends AppCompatActivity {
         usersThatScannedButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent intent = new Intent(OtherUserGemView.this, UsersThatScannedActivity.class);
+                Intent intent = new Intent(OtherUserGemView.this, UsersThatScannedActivityView.class);
                 intent.putExtra("qr_id", qr_id);
                 startActivity(intent);
             }

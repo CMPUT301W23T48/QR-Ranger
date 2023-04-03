@@ -28,7 +28,7 @@ import java.util.concurrent.CompletableFuture;
  * This activity initializes Firebase, handles user authentication,
  * and manages the bottom navigation menu for switching between app features.
  */
-public class MainActivity extends AppCompatActivity {
+public class MainActivityController extends AppCompatActivity {
 
     private ActivityMainBinding binding;
 
@@ -52,26 +52,26 @@ public class MainActivity extends AppCompatActivity {
         // Initialize Firebase Auth
         mAuth = FirebaseAuth.getInstance();
 
-        replaceFragment(new MapFragment());
+        replaceFragment(new MapFragmentView());
         binding.navigator.setBackground(null);
 
         binding.navigator.setOnItemSelectedListener(item -> {
             switch (item.getItemId()){
                 case R.id.map:
-                    replaceFragment(new MapFragment());
+                    replaceFragment(new MapFragmentView());
                     break;
                 case R.id.search:
-                    replaceFragment(new SearchFragment());
+                    replaceFragment(new SearchFragmentView());
                     break;
                 case R.id.add:
                     Intent launchScanner = new Intent(getBaseContext(), QRScannerActivity.class);
                     startActivity(launchScanner);
                     break;
                 case R.id.stat:
-                    replaceFragment(new LeaderboardFragment());
+                    replaceFragment(new LeaderboardFragmentView());
                     break;
                 case R.id.profile:
-                    replaceFragment(new ProfileFragment());
+                    replaceFragment(new ProfileFragmentView());
                     break;
             }
             return true;
@@ -93,7 +93,7 @@ public class MainActivity extends AppCompatActivity {
                                 if (userExists) {
                                     System.out.println("User exists");
                                     // User exists so continue to launch profile screen
-                                    UserState us = UserState.getInstance();
+                                    UserStateModel us = UserStateModel.getInstance();
                                     us.setUserID(user.getUid());
                                 } else {
                                     // FIRST TIME LOGIN
@@ -105,7 +105,7 @@ public class MainActivity extends AppCompatActivity {
                                         // Create the new player with a unique default username
                                         Map<String, Object> values = pc.createValues(user.getUid(), uniqueUsername, "Not Set", "Not Set", false, 0, 0);
                                         pc.create(values);
-                                        UserState us = UserState.getInstance();
+                                        UserStateModel us = UserStateModel.getInstance();
                                         us.setUserID(user.getUid());
                                     }).exceptionally(ex -> {
                                         // Handle the error
@@ -120,7 +120,7 @@ public class MainActivity extends AppCompatActivity {
                         } else {
                             // If sign in fails, display a message to the user.
                             Log.w(TAG, "signInAnonymously:failure", task.getException());
-                            Toast.makeText(MainActivity.this, "Authentication failed.",
+                            Toast.makeText(MainActivityController.this, "Authentication failed.",
                                     Toast.LENGTH_SHORT).show();
                             //updateUI(null);
                         }

@@ -4,7 +4,7 @@ package com.example.qrranger;
 /**
  * A utility class for calculating scores based on a given hash string.
  */
-public class ScoreCalculator {
+public class ScoreCalculatorController {
     /**
      * Calculates a score based on the input hash string.
      * The score is determined by counting consecutive duplicate characters

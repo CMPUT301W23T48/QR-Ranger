@@ -12,7 +12,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
-public class SearchResultsActivity extends AppCompatActivity {
+public class SearchResultsActivityView extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -64,7 +64,7 @@ public class SearchResultsActivity extends AppCompatActivity {
  @param data a Map containing the details of the user whose profile is being accessed. The keys for the Map are:
  **/
     private void startOtherUserProfileActivity(Map<String, Object> data){
-        Intent intent = new Intent(SearchResultsActivity.this, OtherUserProfileActivity.class);
+        Intent intent = new Intent(SearchResultsActivityView.this, OtherUserProfileActivityView.class);
         intent.putExtra("username", data.get("username").toString());
         intent.putExtra("email", data.get("email").toString());
         intent.putExtra("phoneNumber", data.get("phoneNumber").toString());

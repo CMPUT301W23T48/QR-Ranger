@@ -5,16 +5,16 @@ import com.google.firebase.firestore.FirebaseFirestore;
 /**
  * A singleton class for accessing the Firebase Firestore database.
  */
-public class Database {
+public class DatabaseModel {
 
-    private static Database single_instance = null;
+    private static DatabaseModel single_instance = null;
 
     private FirebaseFirestore db;
 
     /**
      * Private constructor to ensure the singleton pattern is followed.
      */
-    private Database(){
+    private DatabaseModel(){
         db = FirebaseFirestore.getInstance();
     }
 
@@ -33,11 +33,11 @@ public class Database {
      *
      * @return The singleton instance of the Database class.
      */
-    public static synchronized Database getInstance()
+    public static synchronized DatabaseModel getInstance()
     {
         if (single_instance == null)
         {
-            single_instance = new Database();
+            single_instance = new DatabaseModel();
         }
         return single_instance;
     }

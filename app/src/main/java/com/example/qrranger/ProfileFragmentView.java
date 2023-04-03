@@ -31,8 +31,8 @@ import java.util.concurrent.atomic.AtomicInteger;
  * total QR codes collected, profile rank, and lists the collected QR codes.
  * Allows the user to navigate to the Settings and Gem activities.
  */
-public class ProfileFragment extends Fragment {
-    Player myUser = new Player();
+public class ProfileFragmentView extends Fragment {
+    PlayerModel myUser = new PlayerModel();
     private TextView playerName;
     private TextView playerEmail;
     private Map<String, Object> value = new HashMap<>();
@@ -50,7 +50,7 @@ public class ProfileFragment extends Fragment {
     private ImageView myHighestImage[] = new ImageView[4];
     private ImageView myLowestImage[] = new ImageView[4];
     private Map gem_data[] = new Map[2];
-    PlayerCollection myPlayerCollection = new PlayerCollection(Database.getInstance());
+    PlayerCollection myPlayerCollection = new PlayerCollection(DatabaseModel.getInstance());
 
     /**
      * This code defines an ActivityResultLauncher that launches an activity for a result and
@@ -67,7 +67,7 @@ public class ProfileFragment extends Fragment {
                                 boolean dataChanged = data.getBooleanExtra("dataChanged", false);
                                 if (dataChanged) {
                                     System.out.println("Data changed");
-                                    myUser = (Player) data.getSerializableExtra("myUser");
+                                    myUser = (PlayerModel) data.getSerializableExtra("myUser");
                                     setViews();
                                 }
                             }
@@ -92,8 +92,8 @@ public class ProfileFragment extends Fragment {
                                     String qr_id = data.getStringExtra("qr_id");
                                     myPlayerCollection.delete_QR_from_players(myUser.getPlayerId(), qr_id);
                                     getAndSetList(myUser.getPlayerId());
-                                    MainActivity mainActivity = (MainActivity) getActivity();
-                                    mainActivity.replaceFragment(new ProfileFragment());
+                                    MainActivityController mainActivity = (MainActivityController) getActivity();
+                                    mainActivity.replaceFragment(new ProfileFragmentView());
                                     adapter.notifyDataSetChanged();
                                 }
                             }
@@ -136,7 +136,7 @@ public class ProfileFragment extends Fragment {
         myLowestImage[3] = view.findViewById(R.id.lowestScoreImageShape);
 
         // get user id
-        UserState us = UserState.getInstance();
+        UserStateModel us = UserStateModel.getInstance();
         String userID = us.getUserID();
 
         // ensure user exists (ensures connection to correct database)
@@ -235,7 +235,7 @@ public class ProfileFragment extends Fragment {
      * Starts the SettingsActivity and passes the user data to it.
      */
     private void startSettingsActivity() {
-        Intent intent = new Intent(getActivity(), SettingActivity.class);
+        Intent intent = new Intent(getActivity(), SettingActivityView.class);
         intent.putExtra("myUser", myUser); // pass the user data to the settings activity
         startSettingsForResult.launch(intent);
     }
@@ -248,7 +248,7 @@ public class ProfileFragment extends Fragment {
      */
     private void startGemActivity(String name, Integer index)
     {
-        Intent intent = new Intent(getActivity(), GemActivity.class);
+        Intent intent = new Intent(getActivity(), GemActivityView.class);
         String qr_id = myUser.getQrCodeCollection().get(index);
         intent.putExtra("qr_id", qr_id);
         startGemForResult.launch(intent);
@@ -294,7 +294,7 @@ public class ProfileFragment extends Fragment {
      */
     private void setHighestLowest(String userID, TextView highestPointsTextView, TextView lowestPointsTextView) {
         PlayerCollection pc = new PlayerCollection(null);
-        QRCollection qrc = new QRCollection(null);
+        QRCollectionController qrc = new QRCollectionController(null);
 
         pc.read(userID, userData -> {
             List<String> qrIds = (List<String>) userData.get("qr_code_ids");

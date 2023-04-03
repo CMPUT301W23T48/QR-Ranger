@@ -7,7 +7,7 @@ import java.util.ArrayList;
 /**
  * Sets Player class with attributes
  */
-public class Player implements Serializable {
+public class PlayerModel implements Serializable {
     //player profile
     private String playerId;
     private String email;
@@ -32,10 +32,10 @@ public class Player implements Serializable {
      * Allows location to be stored where the player scans a QR code
      */
     private Location location;
-    public Player(){
+    public PlayerModel(){
     }
 
-    public Player(String userName, String phoneNumber, String email){
+    public PlayerModel(String userName, String phoneNumber, String email){
         this.userName = userName;
         this.phoneNumber = phoneNumber;
         this.email = email;

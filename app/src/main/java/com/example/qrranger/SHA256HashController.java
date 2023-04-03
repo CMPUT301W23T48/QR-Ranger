@@ -6,7 +6,7 @@ import java.security.NoSuchAlgorithmException;
  * Provided a String, this class will return the hash
  * equivalent of that String
  */
-public class SHA256Hash {
+public class SHA256HashController {
     public static String hash(String input) {
         try {
             MessageDigest md = MessageDigest.getInstance("SHA-256");

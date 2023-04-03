@@ -15,7 +15,7 @@ import androidx.fragment.app.Fragment;
 
 import java.util.Objects;
 
-public class GemFragment extends Fragment {
+public class GemFragmentView extends Fragment {
 
     private TextView qrTitle;
     private TextView qrScore;
@@ -26,10 +26,10 @@ public class GemFragment extends Fragment {
     private Button deleteButton;
 
 
-    private QRCode qrCode;
+    private QRCodeModel qrCode;
     private PlayerCollection playerCollection;
-    private QRCollection qrCollection;
-    private UserState state;
+    private QRCollectionController qrCollection;
+    private UserStateModel state;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -55,7 +55,7 @@ public class GemFragment extends Fragment {
             String qrId = Objects.requireNonNull(data.get("qr_id").toString());
             String name = Objects.requireNonNull(data.get("name").toString());
             Integer points = (Integer) data.get("points");
-            gemID gem = (gemID) data.get("gem_id");
+            gemIDModel gem = (gemIDModel) data.get("gem_id");
 
             qrCode.setName(name);
             qrCode.setPoints(points);
@@ -72,7 +72,7 @@ public class GemFragment extends Fragment {
             @Override
             public void onClick(View v) {
                 // Get the player instance.
-                state = UserState.getInstance();
+                state = UserStateModel.getInstance();
                 String playerId = state.getUserID();
 
                 // Remove the qr from the account.
@@ -80,7 +80,7 @@ public class GemFragment extends Fragment {
                 playerCollection.delete_QR_from_players(playerId, qrCode.getId());
 
                 // Switch fragments to the User Profile.
-                ((MainActivity) getActivity()).replaceFragment(new ProfileFragment());
+                ((MainActivityController) getActivity()).replaceFragment(new ProfileFragmentView());
             }
         });
 

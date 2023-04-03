@@ -16,19 +16,19 @@ import java.util.concurrent.CompletableFuture;
  * Also responsible for saving QRCodes to the database and linking them to the user profile.
  */
 public class QRGenerator {
-    private QRCollection qrCollection;
+    private QRCollectionController qrCollection;
     private PlayerCollection playerCollection;
     private boolean qrAdded;
-    private QRCode qr;
+    private QRCodeModel qr;
 
     public QRGenerator() {
-        qrCollection = new QRCollection(null);
+        qrCollection = new QRCollectionController(null);
         playerCollection = new PlayerCollection(null);
-        qr = new QRCode("12345689");
+        qr = new QRCodeModel("12345689");
         qrAdded = false;
     }
 
-    public QRCode getQr() {
+    public QRCodeModel getQr() {
         return this.qr;
     }
 
@@ -45,11 +45,11 @@ public class QRGenerator {
      *
      */
     public CompletableFuture<Void> generateQR(String qrData) {
-        qrCollection = new QRCollection(null);
-
+        qrCollection = new QRCollectionController(null);
+        String hash = SHA256Hash(qrData);
 
         // Generate a new QR if it doesn't already exist or pull the existing one from the db.
-        CompletableFuture<Boolean> future = qrCollection.checkQRExists(qrData);
+        CompletableFuture<Boolean> future = qrCollection.checkQRExists(hash);
         CompletableFuture<Void> secondFuture = future.thenAccept(qrExists -> {
             if (qrExists) {
                 // Pull existing QR from the DB.
@@ -57,9 +57,9 @@ public class QRGenerator {
                     String qrId = Objects.requireNonNull(data.get("qr_id").toString());
                     String name = Objects.requireNonNull(data.get("name").toString());
                     Integer points = (Integer) data.get("points");
-                    gemID gem = (gemID) data.get("gem_id");
+                    gemIDModel gem = (gemIDModel) data.get("gem_id");
 
-//                    qr = new QRCode(qrId, gem);
+//                  qr = new QRCode(qrId, gem);
                     qr.setID(qrId);
                     qr.setName(name);
                     qr.setPoints(points);
@@ -72,9 +72,7 @@ public class QRGenerator {
             }
             else {
                 // QR doesn't exist, so generate a new one!
-                String hash = SHA256Hash(qrData);
-
-                gemID gem = new gemID();
+                gemIDModel gem = new gemIDModel();
 
                 // Create the QRCode object.
                 // qr = new QRCode(hash, qrData);
@@ -103,7 +101,7 @@ public class QRGenerator {
     public boolean addQRToAccount(String qrId) throws IllegalArgumentException {
 
         playerCollection = new PlayerCollection(null);
-        UserState state = UserState.getInstance();
+        UserStateModel state = UserStateModel.getInstance();
         String userId = state.getUserID();
 
         playerCollection.read(userId, data -> {

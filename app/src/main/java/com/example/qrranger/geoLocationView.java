@@ -44,7 +44,7 @@ public class geoLocationView extends AppCompatActivity {
 
         Intent intent = getIntent();
         qr_id = intent.getStringExtra("qr_id");
-        QRCollection qrc = new QRCollection(null);
+        QRCollectionController qrc = new QRCollectionController(null);
 
         qrc.read(qr_id, data -> {
             image_id = data.get("qr_id").toString();

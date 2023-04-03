@@ -1,6 +1,6 @@
 package com.example.qrranger;
 
-import static com.example.qrranger.SHA256Hash.hash;
+import static com.example.qrranger.SHA256HashController.hash;
 
 import org.junit.Test;
 /**

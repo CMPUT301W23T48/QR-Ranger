@@ -18,7 +18,6 @@ import androidx.activity.result.ActivityResult;
 import androidx.activity.result.ActivityResultCallback;
 import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContracts;
-import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
@@ -32,8 +31,6 @@ import com.google.zxing.integration.android.IntentResult;
 import java.io.ByteArrayOutputStream;
 import java.util.ArrayList;
 import java.util.concurrent.CompletableFuture;
-
-import javax.annotation.meta.When;
 
 /**
  * Class used for scanning QR Codes and processing the data received by them.
@@ -49,7 +46,7 @@ public class QRScannerActivity extends AppCompatActivity{
     private ImageView gemLustre;
     private Bitmap locationImage;
     private QRGenerator generator;
-    private QRCode qrCode;
+    private QRCodeModel qrCode;
     private String scanResult;
     private ActivityResultLauncher<Intent> pictureResultLauncher;
     private ActivityResultLauncher<Intent> qrResultLauncher;
@@ -93,7 +90,7 @@ public class QRScannerActivity extends AppCompatActivity{
                                 Log.e(TAG, "Error during QR scan.");
 
                                 // Return to the main activity rather than the scan page.
-                                Intent returnToMain = new Intent(getBaseContext(), MainActivity.class);
+                                Intent returnToMain = new Intent(getBaseContext(), MainActivityController.class);
                                 startActivity(returnToMain);
                             }
                         }
@@ -104,7 +101,7 @@ public class QRScannerActivity extends AppCompatActivity{
                             Toast.makeText(getBaseContext(), "Scan Cancelled", Toast.LENGTH_SHORT).show();
 
                             // Return to the main activity rather than the scan page.
-                            Intent returnToMain = new Intent(getBaseContext(), MainActivity.class);
+                            Intent returnToMain = new Intent(getBaseContext(), MainActivityController.class);
                             startActivity(returnToMain);
                         }
                     }
@@ -138,11 +135,16 @@ public class QRScannerActivity extends AppCompatActivity{
                                 StorageReference geoImagesRef = storageRef.child("geoImages/"+qrCode.getId());
                                 UploadTask uploadTask = geoImagesRef.putBytes(data);
                                 // Return to the main activity with the image data.
-                                Intent returnIntent = new Intent(getBaseContext(), MainActivity.class);
+                                Intent returnIntent = new Intent(getBaseContext(), MainActivityController.class);
 
                                 startActivity(returnIntent);
                             }
+                        }
+                        else if (result.getResultCode() == RESULT_CANCELED) {
+                            //Return to the main activity.
+                            Intent returnIntent = new Intent(getBaseContext(), MainActivityController.class);
 
+                            startActivity(returnIntent);
                         }
                     }
                 });
@@ -154,7 +156,7 @@ public class QRScannerActivity extends AppCompatActivity{
         rejectButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent exitScannerIntent = new Intent(getBaseContext(), MainActivity.class);
+                Intent exitScannerIntent = new Intent(getBaseContext(), MainActivityController.class);
                 startActivity(exitScannerIntent);
             }
         });
@@ -169,7 +171,7 @@ public class QRScannerActivity extends AppCompatActivity{
                 else {
                     // QR is already in account.
                     Toast.makeText(getBaseContext(), "QR is already in account!", Toast.LENGTH_SHORT).show();
-                    Intent returnToMain = new Intent(getBaseContext(), MainActivity.class);
+                    Intent returnToMain = new Intent(getBaseContext(), MainActivityController.class);
                     startActivity(returnToMain);
                 }
             }

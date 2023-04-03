@@ -9,19 +9,19 @@ import java.util.Random;
  * Class representing a gem with various attributes, such as background color,
  * border, gem type, luster level, and gem name.
  */
-public class gemID {
+public class gemIDModel {
     private int bgColor;
     private int boarder;
     private int gemType;
     private int lusterLevel;
 
-    private myNameDictionary myDict = new myNameDictionary();
+    private myNameDictionaryModel myDict = new myNameDictionaryModel();
 
     /**
      * Constructor for the gemID class. Assigns background color,
      * border, gem type, and luster level to the gem.
      */
-    public gemID() {
+    public gemIDModel() {
         //Creates gem ID
         Random generator = new Random();
         //Randomly assign background color to Gem

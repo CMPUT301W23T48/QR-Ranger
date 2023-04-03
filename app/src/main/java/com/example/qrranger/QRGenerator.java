@@ -4,6 +4,8 @@ import static android.content.ContentValues.TAG;
 
 import android.util.Log;
 
+import com.google.zxing.qrcode.encoder.QRCode;
+
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.util.ArrayList;
@@ -64,7 +66,7 @@ public class QRGenerator {
                     qr.setName(name);
                     qr.setPoints(points);
                     qr.setGemId(gem);
-                    qr.setGeoLocation("0,0");
+                    qr.setGeoLocation("53.526782523764865,-113.52715405231827");
                 }, error -> {
                     // Send error message.
                     Log.e(TAG, "Error loading QR database entry.");
@@ -78,9 +80,9 @@ public class QRGenerator {
                 // qr = new QRCode(hash, qrData);
                 qr.setID(hash);
                 qr.setName(gem.gemName(qrData));
-                qr.setPoints(QRCode.calculateScore(qrData));
+                qr.setPoints(QRCodeModel.calculateScore(qrData));
                 qr.setGemId(qr.getGemID());
-                qr.setGeoLocation("0,0");
+                qr.setGeoLocation("53.526782523764865,-113.52715405231827");
 
                 // Add the new QR to the database:
                 Map values = qrCollection.createValues(hash, qr.getName(), qr.getPoints(), qr.getGemID(), qr.getGeoLocation());

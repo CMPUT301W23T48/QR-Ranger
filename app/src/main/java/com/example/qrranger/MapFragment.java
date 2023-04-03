@@ -5,6 +5,11 @@ import android.Manifest;
 
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.location.Address;
+import android.location.Geocoder;
+import android.location.Location;
+import android.location.LocationListener;
+import android.location.LocationManager;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.Settings;
@@ -30,7 +35,11 @@ import com.karumi.dexter.listener.PermissionRequest;
 import com.karumi.dexter.listener.single.PermissionListener;
 import android.content.Context;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.Toast;
+
+import java.io.IOException;
+import java.util.List;
 
 public class MapFragment extends Fragment implements OnMapReadyCallback{
 
@@ -53,38 +62,69 @@ public class MapFragment extends Fragment implements OnMapReadyCallback{
         mapView = (MapView) view.findViewById(R.id.mapView);
         mapView.onCreate(savedInstanceState);
 
-        //Checks if user gives permission to track device
-        /*
-        If permission is given, then google maps can track user location
-         */
+        // Checks if the user gives permission to track the device
         deviceLocationCheckPermission();
 
+        // Initialize the search button and EditText
+        Button findButton = view.findViewById(R.id.MapFindButton);
+        EditText searchEditText = view.findViewById(R.id.MapSearch);
 
+        // Set a click listener for the search button
+        findButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                String locationName = searchEditText.getText().toString();
+                searchLocation(locationName);
+            }
+        });
 
-        // Call the init method and pass the inflated View as a parameter
         return view;
     }
+
 
     @Override
     public void onMapReady(GoogleMap googleMap) {
         gMap = googleMap;
 
-        //Add a marker and move the camera
-        //Zoom in on Players current location
-        LatLng home = new LatLng(53.62619228224998, -113.43941918391658);
-        gMap.moveCamera(CameraUpdateFactory.newLatLngZoom(home, 15));
-        gMap.addMarker(new MarkerOptions().position(home).title("This is my home"));
-
-        /*
-        Checks if the Permission is granted
-         */
-
+        // Enable MyLocation layer if the permission is granted
         if (ContextCompat.checkSelfPermission(this.getContext(), Manifest.permission.ACCESS_FINE_LOCATION)
-                == PackageManager.PERMISSION_GRANTED){
+                == PackageManager.PERMISSION_GRANTED) {
             gMap.setMyLocationEnabled(true);
-        }
 
+            // Get the user's current location using LocationManager and LocationListener
+            LocationManager locationManager = (LocationManager) getActivity().getSystemService(Context.LOCATION_SERVICE);
+            LocationListener locationListener = new LocationListener() {
+                @Override
+                public void onLocationChanged(Location location) {
+                    // Move the camera to the user's current location
+                    LatLng currentLocation = new LatLng(location.getLatitude(), location.getLongitude());
+                    gMap.moveCamera(CameraUpdateFactory.newLatLngZoom(currentLocation, 18));
+
+                    // Stop location updates after the camera has moved to the user's current location
+                    locationManager.removeUpdates(this);
+                }
+
+                @Override
+                public void onStatusChanged(String provider, int status, Bundle extras) {
+                }
+
+                @Override
+                public void onProviderEnabled(String provider) {
+                }
+
+                @Override
+                public void onProviderDisabled(String provider) {
+                }
+            };
+
+            locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 0, 0, locationListener);
+        } else {
+            // Fall back to a default location if the permission is not granted
+            LatLng defaultLocation = new LatLng(53.62619228224998, -113.43941918391658);
+            gMap.moveCamera(CameraUpdateFactory.newLatLngZoom(defaultLocation, 15));
+        }
     }
+
 
     public void initMap(){
         mapView.getMapAsync(this);
@@ -165,7 +205,21 @@ public class MapFragment extends Fragment implements OnMapReadyCallback{
     }
 
     //Search Location Function
-    public void searchLocation(){
-
+    public void searchLocation(String locationName) {
+        Geocoder geocoder = new Geocoder(getContext());
+        List<Address> addresses;
+        try {
+            addresses = geocoder.getFromLocationName(locationName, 1);
+            if (addresses != null && !addresses.isEmpty()) {
+                Address address = addresses.get(0);
+                LatLng searchedLocation = new LatLng(address.getLatitude(), address.getLongitude());
+                gMap.animateCamera(CameraUpdateFactory.newLatLngZoom(searchedLocation, 15));
+            } else {
+                Toast.makeText(getContext(), "No location found", Toast.LENGTH_SHORT).show();
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
+
 }

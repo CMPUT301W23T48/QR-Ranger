@@ -33,7 +33,6 @@ import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentSnapshot;
-import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.GeoPoint;
 import com.google.firebase.firestore.QuerySnapshot;
 import com.karumi.dexter.Dexter;
@@ -50,6 +49,11 @@ import android.widget.Toast;
 import java.io.IOException;
 import java.util.List;
 
+/**
+ * A fragment displaying a map view for the user to see and interact with QR codes.
+ * The map shows the user's current location, allows searching for specific locations,
+ * and displays markers for each QR code fetched from the Firestore database.
+ */
 public class MapFragment extends Fragment implements OnMapReadyCallback{
 
 
@@ -59,6 +63,9 @@ public class MapFragment extends Fragment implements OnMapReadyCallback{
 
     private boolean isPermissionGranted;
 
+    /**
+     * Called when the fragment is created.
+     */
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
     }
@@ -94,6 +101,9 @@ public class MapFragment extends Fragment implements OnMapReadyCallback{
     }
 
 
+    /**
+     * Called when the map is ready for use.
+     */
     @Override
     public void onMapReady(GoogleMap googleMap) {
         gMap = googleMap;
@@ -137,10 +147,13 @@ public class MapFragment extends Fragment implements OnMapReadyCallback{
         }
     }
 
-
+    /**
+     * Initializes the map and sets the OnMapReadyCallback.
+     */
     public void initMap(){
         mapView.getMapAsync(this);
     }
+
 
     @Override
     public void onStart() {
@@ -184,14 +197,10 @@ public class MapFragment extends Fragment implements OnMapReadyCallback{
         mapView.onSaveInstanceState(outState);
     }
 
-    //Check user Permission to access the map
 
-
-    public void init(View view){
-
-    }
-
-    //Function for getting device location permission
+    /**
+     * Checks if the user has granted the required permission for device location access.
+     */
     private void deviceLocationCheckPermission(){
         Dexter.withContext(this.getContext()).withPermission(Manifest.permission.ACCESS_FINE_LOCATION).withListener(new PermissionListener() {
             @Override
@@ -216,7 +225,11 @@ public class MapFragment extends Fragment implements OnMapReadyCallback{
         }).check();
     }
 
-    //Search Location Function
+    /**
+     * Searches for a location based on the input string and moves the camera to that location.
+     *
+     * @param locationName The name of the location to search for.
+     */
     public void searchLocation(String locationName) {
         Geocoder geocoder = new Geocoder(getContext());
         List<Address> addresses;
@@ -234,6 +247,9 @@ public class MapFragment extends Fragment implements OnMapReadyCallback{
         }
     }
 
+    /**
+     * Loads QR codes from the Firestore database and adds markers for each QR code on the map.
+     */
     private void loadQRCodes() {
         Database db = Database.getInstance();
         CollectionReference qrc = db.getCollection("qr_codes");
@@ -250,8 +266,6 @@ public class MapFragment extends Fragment implements OnMapReadyCallback{
                             // Get the name and points information
                             String qrCodeName = document.getString("name");
                             String qrCodePoints = document.get("points").toString(); // Assuming points are stored as a String
-                            // If points are stored as a number (e.g., Long), use this instead:
-                            // String qrCodePoints = String.valueOf(document.getLong("points"));
 
                             // Build the marker title
                             String markerTitle = qrCodeName + " - " + qrCodePoints + " points";

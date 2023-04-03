@@ -12,33 +12,36 @@ import android.widget.ImageView;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
-import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 
-import com.google.firebase.firestore.FirebaseFirestore;
-
 import java.io.InputStream;
 
+/**
+ * An activity that displays a geo-tagged image based on the QR code id.
+ */
 public class geoLocationView extends AppCompatActivity {
-    private FirebaseFirestore firebaseFirestore;
     private FirebaseStorage firebaseStorage;
     private StorageReference storageReference;
     private String qr_id;
     private String image_id;
 
+    /**
+     * Initializes the activity, sets up UI components, and loads the
+     * geo-tagged image from Firebase Storage.
+     *
+     * @param savedInstanceState Saved instance state bundle.
+     */
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.geolocation_view);
         Button back = (Button) findViewById(R.id.back);
         ImageView imageView = (ImageView) findViewById(R.id.geoImageView); // Replace with your ImageView id
-        firebaseFirestore = FirebaseFirestore.getInstance();
         firebaseStorage = FirebaseStorage.getInstance();
         storageReference = firebaseStorage.getReference();
 
         Intent intent = getIntent();
-        firebaseFirestore = FirebaseFirestore.getInstance();
         qr_id = intent.getStringExtra("qr_id");
         QRCollection qrc = new QRCollection(null);
 
@@ -58,6 +61,13 @@ public class geoLocationView extends AppCompatActivity {
         });
     }
 
+    /**
+     * Loads an image from Firebase Storage using the provided image name
+     * and sets it to the specified ImageView.
+     *
+     * @param imageName The name of the image to load.
+     * @param imageView The ImageView to display the loaded image.
+     */
     private void loadImage(String imageName, ImageView imageView) {
         StorageReference imageRef = storageReference.child("geoImages/" + imageName);
         imageRef.getStream().addOnSuccessListener(taskSnapshot -> {
@@ -68,18 +78,37 @@ public class geoLocationView extends AppCompatActivity {
         });
     }
 
+    /**
+     * An AsyncTask to download an image from an InputStream and set it to an ImageView.
+     */
     private static class DownloadImageTask extends AsyncTask<InputStream, Void, Bitmap> {
         ImageView imageView;
 
+        /**
+         * Constructor for the DownloadImageTask class.
+         *
+         * @param imageView The ImageView to display the downloaded image.
+         */
         public DownloadImageTask(ImageView imageView) {
             this.imageView = imageView;
         }
 
+        /**
+         * Downloads the image from the InputStream in the background.
+         *
+         * @param inputStreams The InputStream array containing the image data.
+         * @return The Bitmap representation of the downloaded image.
+         */
         @Override
         protected Bitmap doInBackground(InputStream... inputStreams) {
             return BitmapFactory.decodeStream(inputStreams[0]);
         }
 
+        /**
+         * Sets the downloaded image to the ImageView.
+         *
+         * @param bitmap The Bitmap representation of the downloaded image.
+         */
         @Override
         protected void onPostExecute(Bitmap bitmap) {
             imageView.setImageBitmap(bitmap);

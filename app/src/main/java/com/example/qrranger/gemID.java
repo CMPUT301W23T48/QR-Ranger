@@ -1,29 +1,26 @@
 package com.example.qrranger;
 
-import android.content.Context;
-import android.content.res.AssetManager;
-import android.util.Log;
-
-import java.io.BufferedReader;
-import java.io.FileReader;
-import java.io.IOException;
-import java.io.InputStream;
 import java.math.BigInteger;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Random;
-import java.util.Scanner;
 
+/**
+ * Class representing a gem with various attributes, such as background color,
+ * border, gem type, luster level, and gem name.
+ */
 public class gemID {
     private int bgColor;
     private int boarder;
     private int gemType;
     private int lusterLevel;
-    private String gemName;
 
     private myNameDictionary myDict = new myNameDictionary();
+
+    /**
+     * Constructor for the gemID class. Assigns background color,
+     * border, gem type, and luster level to the gem.
+     */
     public gemID() {
         //Creates gem ID
         Random generator = new Random();
@@ -47,38 +44,16 @@ public class gemID {
         randomIndex = generator.nextInt(5);
         setLusterLevel(gemLustre[randomIndex]);
     }
+
+    /**
+     * Generates a gem name based on a hash of the input string.
+     *
+     * @param hash The input string to generate the hash and name from.
+     * @return The generated gem name.
+     */
     public String gemName(String hash) {
-//        ArrayList<String> lines = new ArrayList<String>();
-//        ArrayList<String> lines1 = new ArrayList<String>();
-//       try {
-//            BufferedReader reader = new BufferedReader(new FileReader("Noun.txt"));
-//            BufferedReader reader1 = new BufferedReader(new FileReader("Adjectives.txt"));
-//            if(reader == null){
-//                System.out.println("yo;o");
-//            }
-//            String line = reader.readLine();
-//            String line1 = reader1.readLine();
-//            while (line != null) {
-//                lines.add(line);
-//                line = reader.readLine();
-//                System.out.println(line);
-//            }
-//            reader.close();
-//            while(line1 != null){
-//                lines1.add(line1);
-//                line1 = reader1.readLine();
-//            }
-//            reader1.close();
-//        } catch (IOException e) {
-//           System.out.println("yo;odf");
-//            e.printStackTrace();
-//            return null;
-//        }
-        //this.name1 = lines.toArray(new String[lines.size()]);
-        //this.name2 = lines.toArray(new String[lines.size()]);
     try {
         // Generate SHA-256 hash from input string
-
         MessageDigest messageDigest = MessageDigest.getInstance("SHA-256");
         byte[] hashBytes = messageDigest.digest(hash.getBytes());
         BigInteger hashValue = new BigInteger(1, hashBytes);

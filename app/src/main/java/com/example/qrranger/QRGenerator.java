@@ -18,13 +18,18 @@ import java.util.concurrent.CompletableFuture;
 public class QRGenerator {
     private QRCollection qrCollection;
     private PlayerCollection playerCollection;
-
+    private boolean qrAdded;
     private QRCode qr;
 
     public QRGenerator() {
         qrCollection = new QRCollection(null);
         playerCollection = new PlayerCollection(null);
         qr = new QRCode("12345689");
+        qrAdded = false;
+    }
+
+    public QRCode getQr() {
+        return this.qr;
     }
 
     /**
@@ -39,13 +44,13 @@ public class QRGenerator {
      *      The generated or retrieved QRCode instance.
      *
      */
-    public QRCode generateQR(String qrData) {
+    public CompletableFuture<Void> generateQR(String qrData) {
         qrCollection = new QRCollection(null);
 
 
         // Generate a new QR if it doesn't already exist or pull the existing one from the db.
         CompletableFuture<Boolean> future = qrCollection.checkQRExists(qrData);
-        future.thenAccept(qrExists -> {
+        CompletableFuture<Void> secondFuture = future.thenAccept(qrExists -> {
             if (qrExists) {
                 // Pull existing QR from the DB.
                 qrCollection.read(qrData, data -> {
@@ -84,8 +89,7 @@ public class QRGenerator {
                 qrCollection.create(values);
             }
         });
-
-        return qr;
+        return secondFuture;
     }
 
     /**
@@ -96,7 +100,7 @@ public class QRGenerator {
      * @throws IllegalArgumentException
      *      Thrown when QR being added is already linked to the account.
      */
-    public void addQRToAccount(String qrId) throws IllegalArgumentException {
+    public boolean addQRToAccount(String qrId) throws IllegalArgumentException {
 
         playerCollection = new PlayerCollection(null);
         UserState state = UserState.getInstance();
@@ -106,15 +110,18 @@ public class QRGenerator {
             //Check if the qr is already added to the player's profile.
             ArrayList<String> codeList = Objects.requireNonNull((ArrayList<String>) data.get("qr_code_ids"));
             if(codeList.contains(qrId)) {
-                throw new IllegalArgumentException("QR Code is already in account!");
+                qrAdded = false;
             }
             else {
                 // Add the QR to the player database.
                 playerCollection.add_QR_to_players(userId, qrId);
+                qrAdded = true;
             }
         }, error -> {
             Log.e(TAG, "Error when reading Player from database.");
         });
+
+        return qrAdded;
     }
 
     /**

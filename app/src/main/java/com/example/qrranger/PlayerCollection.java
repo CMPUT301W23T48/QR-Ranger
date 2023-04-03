@@ -13,20 +13,18 @@ import com.google.android.gms.tasks.Task;
 import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
-import com.google.firebase.firestore.FieldValue;
-import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.Query;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
-import com.google.protobuf.FieldMask;
 
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Objects;
 import java.util.concurrent.CompletableFuture;
+import java.util.concurrent.atomic.AtomicInteger;
 import java.util.function.Consumer;
 
 public class PlayerCollection extends Database_Controls {
@@ -313,34 +311,64 @@ public class PlayerCollection extends Database_Controls {
      * Retrieves the rank of a player based on their user ID.
      *
      * @param userID The user ID of the player.
-     * @return A CompletableFuture that will provide the player's rank when completed.
+     * @return A CompletableFuture that will provide the player's rank based on their highest scoring QR code when completed.
      */
     public CompletableFuture<Integer> getPlayerRank(String userID) {
         CompletableFuture<Integer> futureRank = new CompletableFuture<>();
 
-        // Query for the player document with the given userID field
         Query query = collection.whereEqualTo("userID", userID);
+        Database db = Database.getInstance();
+        CollectionReference qrCodesCollection = db.getCollection("qr_codes");
 
-        // Get the player's totalScore from the document
         query.get().addOnSuccessListener(queryDocumentSnapshots -> {
             if (queryDocumentSnapshots.size() == 0) {
-                // Player not found
                 futureRank.completeExceptionally(new IllegalArgumentException("Player not found with userID " + userID));
             } else {
                 DocumentSnapshot documentSnapshot = queryDocumentSnapshots.getDocuments().get(0);
-                Long playerScore = documentSnapshot.getLong("totalScore");
-                System.out.println("totalScore " + playerScore);
+                Object qrCodeIdsObj = documentSnapshot.get("qr_code_ids");
 
-                // Query for all players with a higher totalScore
-                Query scoreQuery = collection.whereGreaterThan("totalScore", playerScore);
+                if (qrCodeIdsObj instanceof List) {
+                    List<String> qrCodeIds = (List<String>) qrCodeIdsObj;
 
-                // Count the number of players with a higher totalScore to determine the rank
-                scoreQuery.get().addOnSuccessListener(scoreQueryDocumentSnapshots -> {
-                    int rank = scoreQueryDocumentSnapshots.size() + 1;
-                    futureRank.complete(rank);
-                }).addOnFailureListener(e -> {
-                    futureRank.completeExceptionally(e);
-                });
+                    if (qrCodeIds.isEmpty()) {
+                        futureRank.complete(-1);
+                    } else {
+                        List<Integer> pointsList = new ArrayList<>();
+                        int totalQrCodes = qrCodeIds.size();
+                        AtomicInteger processedQrCodes = new AtomicInteger();
+
+                        for (String qrCodeId : qrCodeIds) {
+                            Query qrCodeQuery = qrCodesCollection.whereEqualTo("qr_id", qrCodeId);
+                            qrCodeQuery.get().addOnSuccessListener(qrCodeQueryDocumentSnapshots -> {
+                                if (!qrCodeQueryDocumentSnapshots.isEmpty()) {
+                                    DocumentSnapshot qrCodeDocument = qrCodeQueryDocumentSnapshots.getDocuments().get(0);
+                                    Long qrCodePoints = qrCodeDocument.getLong("points");
+                                    if (qrCodePoints == null) {
+                                        pointsList.add(0);
+                                    } else {
+                                        pointsList.add(qrCodePoints.intValue());
+                                    }
+                                }
+                                processedQrCodes.getAndIncrement();
+
+                                if (processedQrCodes.get() == totalQrCodes) {
+                                    int highestPoints = Collections.max(pointsList);
+                                    Query higherPointsQuery = qrCodesCollection.whereGreaterThan("points", highestPoints);
+                                    higherPointsQuery.get().addOnSuccessListener(higherPointsQueryDocumentSnapshots -> {
+                                        int rank = higherPointsQueryDocumentSnapshots.size() + 1;
+                                        futureRank.complete(rank);
+                                    }).addOnFailureListener(e -> {
+                                        futureRank.completeExceptionally(e);
+                                    });
+                                }
+                            }).addOnFailureListener(e -> {
+                                futureRank.completeExceptionally(e);
+                            });
+                        }
+                    }
+                } else {
+                    futureRank.complete(-1);
+                }
             }
         }).addOnFailureListener(e -> {
             futureRank.completeExceptionally(e);
@@ -348,6 +376,11 @@ public class PlayerCollection extends Database_Controls {
 
         return futureRank;
     }
+
+
+
+
+
 
     /**
      * Searches for a user with the given username and provides their data using a callback.
@@ -448,5 +481,82 @@ public class PlayerCollection extends Database_Controls {
         return futureTotal;
     }
 
+    /**
+     * Get a list of users that have the specified QR code ID in their 'qr_code_ids' field.
+     *
+     * @param qr_id The QR code ID to search for.
+     * @return A CompletableFuture that resolves to a list of user data maps containing user fields on successful query,
+     *         or completes exceptionally with an exception on error.
+     */
+    public CompletableFuture<List<String>> getUsersWithQrId(String qr_id) {
+        CompletableFuture<List<String>> future = new CompletableFuture<>();
+        Query query = collection.whereArrayContains("qr_code_ids", qr_id);
+
+        query.get().addOnCompleteListener(task -> {
+            if (task.isSuccessful()) {
+                List<String> usernames = new ArrayList<>();
+                for (QueryDocumentSnapshot document : task.getResult()) {
+                    String username = document.getString("username");
+                    usernames.add(username);
+                }
+                future.complete(usernames);
+            } else {
+                future.completeExceptionally(task.getException());
+            }
+        });
+
+        return future;
+    }
+
+    /**
+     * Calculates the score for a user based on the sum of points from the QR codes they have collected.
+     * The userID is used to fetch the user's QR code ids, which are then used to query the QR codes
+     * and their associated points.
+     *
+     * @param userID     The user's unique identifier for querying the user's document and their collected QR codes.
+     * @param onSuccess  A Consumer<Integer> to be called when the score calculation is successful. The Consumer accepts the calculated score as a parameter.
+     * @param onError    A Consumer<Exception> to be called when an error occurs during the score calculation. The Consumer accepts the Exception as a parameter.
+     */
+    public void calcScore(String userID, Consumer<Integer> onSuccess, Consumer<Exception> onError) {
+        // Get the player document with the given userID
+        Query playerQuery = collection.whereEqualTo("userID", userID);
+        Database db = Database.getInstance();
+        CollectionReference qrCodeCollection = db.getCollection("qr_codes");
+
+        playerQuery.get().addOnCompleteListener(task -> {
+            if (task.isSuccessful()) {
+                // Get the player's qr_code_ids
+                List<String> qrCodeIds = new ArrayList<>();
+                for (QueryDocumentSnapshot document : task.getResult()) {
+                    qrCodeIds = (List<String>) document.get("qr_code_ids");
+                }
+
+                // Fetch the QR codes with the given ids
+                AtomicInteger score = new AtomicInteger(0);
+                AtomicInteger counter = new AtomicInteger(qrCodeIds.size());
+
+                for (String qrCodeId : qrCodeIds) {
+                    qrCodeCollection.whereEqualTo("qr_id", qrCodeId).get().addOnCompleteListener(qrCodeTask -> {
+                        if (qrCodeTask.isSuccessful()) {
+                            QuerySnapshot qrCodeQuerySnapshot = qrCodeTask.getResult();
+                            if (!qrCodeQuerySnapshot.isEmpty()) {
+                                DocumentSnapshot qrCodeDocument = qrCodeQuerySnapshot.getDocuments().get(0);
+                                int points = qrCodeDocument.getLong("points").intValue();
+                                score.addAndGet(points);
+                            }
+
+                            if (counter.decrementAndGet() == 0) {
+                                onSuccess.accept(score.get());
+                            }
+                        } else {
+                            onError.accept(qrCodeTask.getException());
+                        }
+                    });
+                }
+            } else {
+                onError.accept(task.getException());
+            }
+        });
+    }
 
 }

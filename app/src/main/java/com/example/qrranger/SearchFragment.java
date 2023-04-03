@@ -9,8 +9,6 @@ import android.view.ViewGroup;
 import android.widget.EditText;
 import android.widget.ImageButton;
 
-import com.example.qrranger.PlayerCollection;
-
 import java.io.Serializable;
 import java.util.List;
 import java.util.Map;
@@ -24,7 +22,7 @@ public class SearchFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        View view = inflater.inflate(R.layout.fragment_search, container, false);
+        View view = inflater.inflate(R.layout.search_view, container, false);
         confirmButton = view.findViewById(R.id.SearchSubmitButton);
         searchInput = view.findViewById(R.id.SearchInput);
 

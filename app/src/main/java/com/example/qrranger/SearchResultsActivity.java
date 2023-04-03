@@ -16,7 +16,7 @@ public class SearchResultsActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_search_results);
+        setContentView(R.layout.search_results_view);
 
         ListView listView = findViewById(R.id.search_results_list_view);
         Button backButton = findViewById(R.id.search_results_back_button);
@@ -58,7 +58,11 @@ public class SearchResultsActivity extends AppCompatActivity {
             }
         });
     }
+/**
 
+ This method starts the OtherUserProfileActivity with the details of the user whose data is passed as a parameter.
+ @param data a Map containing the details of the user whose profile is being accessed. The keys for the Map are:
+ **/
     private void startOtherUserProfileActivity(Map<String, Object> data){
         Intent intent = new Intent(SearchResultsActivity.this, OtherUserProfileActivity.class);
         intent.putExtra("username", data.get("username").toString());
@@ -67,7 +71,7 @@ public class SearchResultsActivity extends AppCompatActivity {
         intent.putExtra("userID", data.get("userID").toString());
         intent.putExtra("totalQRCode", data.get("totalQRCode").toString());
         intent.putExtra("totalScore", data.get("totalScore").toString());
-        intent.putStringArrayListExtra("qr_code_ids", (ArrayList<String>) data.get("qr_code_ids"));
+        intent.putExtra("qr_code_ids", (ArrayList<String>)data.get("qr_code_ids"));
         startActivity(intent);
     }
 }

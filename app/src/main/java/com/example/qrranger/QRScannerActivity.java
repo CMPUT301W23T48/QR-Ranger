@@ -2,7 +2,6 @@ package com.example.qrranger;
 
 import static android.content.ContentValues.TAG;
 
-import android.Manifest;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
@@ -24,9 +23,13 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.StorageReference;
+import com.google.firebase.storage.UploadTask;
 import com.google.zxing.integration.android.IntentIntegrator;
 import com.google.zxing.integration.android.IntentResult;
 
+import java.io.ByteArrayOutputStream;
 import java.util.ArrayList;
 
 /**
@@ -51,7 +54,7 @@ public class QRScannerActivity extends AppCompatActivity{
     @Override
     protected void onCreate(Bundle SavedInstanceBundle) {
         super.onCreate(SavedInstanceBundle);
-        setContentView(R.layout.activity_qr_scanner);
+        setContentView(R.layout.qr_scanner_view);
 
         // Populate view properties.
         rejectButton = findViewById(R.id.button_reject);
@@ -62,8 +65,8 @@ public class QRScannerActivity extends AppCompatActivity{
         backgroundColor = findViewById(R.id.backgroundColor);
         gemBorder = findViewById(R.id.borderType);
         gemLustre = findViewById(R.id.lusterLevel);
-
         generator = new QRGenerator();
+
 
         scanQR();
 
@@ -84,12 +87,21 @@ public class QRScannerActivity extends AppCompatActivity{
                     public void onActivityResult(ActivityResult result) {
                         if (result.getResultCode() == RESULT_OK) {
                             if (result.getData() != null) {
+                                //Compress and upload location image to Firestorage
                                 locationImage = (Bitmap) result.getData().getExtras().get("data");
-
+                                ByteArrayOutputStream baos = new ByteArrayOutputStream();
+                                locationImage.compress(Bitmap.CompressFormat.JPEG, 70, baos);
+                                byte[] data = baos.toByteArray();
+                                FirebaseStorage storage = FirebaseStorage.getInstance();
+                                StorageReference storageRef = storage.getReference();
+                                StorageReference geoImagesRef = storageRef.child("geoImages/"+qrCode.getId());
+                                UploadTask uploadTask = geoImagesRef.putBytes(data);
                                 // Return to the main activity with the image data.
                                 Intent returnIntent = new Intent(getBaseContext(), MainActivity.class);
+
                                 startActivity(returnIntent);
                             }
+
                         }
                     }
                 });

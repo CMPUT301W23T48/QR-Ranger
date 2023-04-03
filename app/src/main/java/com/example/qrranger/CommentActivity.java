@@ -1,9 +1,5 @@
 package com.example.qrranger;
 
-import androidx.annotation.NonNull;
-import androidx.appcompat.app.AlertDialog;
-import androidx.appcompat.app.AppCompatActivity;
-
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
@@ -15,6 +11,10 @@ import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.ListView;
 
+import androidx.annotation.NonNull;
+import androidx.appcompat.app.AlertDialog;
+import androidx.appcompat.app.AppCompatActivity;
+
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.firestore.FirebaseFirestore;
@@ -25,6 +25,7 @@ import com.google.firebase.firestore.QuerySnapshot;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 
 /**
  * CommentActivity allows users to view, add, and delete comments related to a specific QR code.
@@ -47,7 +48,7 @@ public class CommentActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_comments);
+        setContentView(R.layout.comments_view);
 
         Intent intent = getIntent();
         QR_ID = intent.getStringExtra("qr_id");
@@ -65,9 +66,7 @@ public class CommentActivity extends AppCompatActivity {
 
         backButton.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onClick(View view) {
-                finish();
-            }
+            public void onClick(View view) {finish();}
         });
 
         addButton.setOnClickListener(new View.OnClickListener() {
@@ -81,12 +80,7 @@ public class CommentActivity extends AppCompatActivity {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 Comment clickedComment = commentsList.get(position);
-                UserState us = UserState.getInstance();
-                String userID = us.getUserID();
-
-                if (clickedComment.getAuthorID().equals(userID)) {
-                    showDeleteCommentDialog(clickedComment);
-                }
+                showDeleteCommentDialog(clickedComment);
             }
         });
     }
@@ -102,12 +96,17 @@ public class CommentActivity extends AppCompatActivity {
             public void onComplete(@NonNull Task<QuerySnapshot> task) {
                 if (task.isSuccessful()) {
                     for (QueryDocumentSnapshot document : task.getResult()) {
-                        Comment comment = document.toObject(Comment.class);
+                        Comment comment = new Comment();
+                        comment.setQr_id(document.get("QR_ID").toString());
+                        comment.setAuthor(document.get("author").toString());
+                        comment.setAuthorID(document.get("author_id").toString());
+                        comment.setComment(document.get("comment").toString());
+
                         commentsList.add(comment);
                     }
                     commentListAdapter.notifyDataSetChanged();
                 } else {
-                    // Handle the error
+                    System.out.println("ERROR: cannot find comment.");
                 }
             }
         });
@@ -119,7 +118,7 @@ public class CommentActivity extends AppCompatActivity {
     private void showAddCommentDialog() {
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
         LayoutInflater inflater = getLayoutInflater();
-        View view = inflater.inflate(R.layout.popup_comment_input, null);
+        View view = inflater.inflate(R.layout.popup_comment_input_view, null);
         final EditText commentInput = view.findViewById(R.id.comment_input);
 
         builder.setView(view)
@@ -130,7 +129,6 @@ public class CommentActivity extends AppCompatActivity {
                         String commentText = commentInput.getText().toString().trim();
                         if (!commentText.isEmpty()) {
                             // Save the comment to the database
-                            // have QR_ID
                             saveComment(commentText);
                         }
                     }
@@ -205,11 +203,31 @@ public class CommentActivity extends AppCompatActivity {
      * @param comment The Comment object to be deleted.
      */
     private void deleteComment(Comment comment) {
-        CommentCollection cc = new CommentCollection(null);
-        cc.delete(comment.getAuthorID());
-        commentsList.remove(comment);
-        commentListAdapter.notifyDataSetChanged();
+        UserState us = UserState.getInstance();
+        String userID = us.getUserID();
+        String authorID = comment.getAuthorID();
+        Database db = Database.getInstance();
+        CommentCollection cc = new CommentCollection(db);
+        if (Objects.equals(authorID, userID)){
+            System.out.println(comment.getQR_id() + comment.getAuthor() + comment.getComment());
+            Query query = db.getCollection("comments")
+                    .whereEqualTo("QR_ID", comment.getQR_id())
+                    .whereEqualTo("author_id", comment.getAuthorID())
+                    .whereEqualTo("comment", comment.getComment());
+
+            query.get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                @Override
+                public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                    if (task.isSuccessful()) {
+                        for (QueryDocumentSnapshot document : task.getResult()) {
+                            cc.delete(document.getId());
+                            commentsList.remove(comment);
+                            commentListAdapter.notifyDataSetChanged();}
+                    } else {
+                        System.out.println("Error finding comment: " + task.getException());
+                    }
+                }
+            });
+        }
     }
-
-
 }

@@ -41,7 +41,7 @@ public class OtherUserProfileActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_otheruser);
+        setContentView(R.layout.otheruser_view);
         Intent intent = getIntent();
 
         LinearLayout linearLayout = findViewById(R.id.OtherUserLL1);
@@ -65,12 +65,12 @@ public class OtherUserProfileActivity extends AppCompatActivity {
 
         qrList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
-            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                runOnUiThread(new Runnable() {
+            public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+                OtherUserProfileActivity.this.runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
-                        String name = parent.getItemAtPosition(position).toString();
-                        startGemActivity(name, (Integer) position);
+                        String name = adapterView.getItemAtPosition(i).toString();
+                        startGemActivity(name, i);
                     }
                 });
             }
@@ -94,14 +94,14 @@ public class OtherUserProfileActivity extends AppCompatActivity {
         myUser.setPhoneNumber(intent.getStringExtra("phoneNumber"));
 
         totalScoreView.setText(intent.getStringExtra("totalScore"));
-        myUser.setTotalScore(Long.parseLong(intent.getStringExtra("totalScore")));
+//        myUser.setTotalScore(intent.getStringExtra("totalScore"));
 
         totalQRNumView.setText(intent.getStringExtra("totalQRCode"));
-        myUser.setTotalQRCode(Long.parseLong(intent.getStringExtra("totalQRCode")));
+//        myUser.setTotalQRCode(intent.getStringExtra("totalQRCode"));
         myUser.setPlayerId(intent.getStringExtra("userID"));
         myUser.setQrCodeCollection(intent.getStringArrayListExtra("qr_code_ids"));
 
-        getAndSetList(myUser);
+        getAndSetList(myUser.getPlayerId());
         getAndSetRank(intent.getStringExtra("userID"));
     }
 
@@ -121,44 +121,39 @@ public class OtherUserProfileActivity extends AppCompatActivity {
             return null;
         });
     }
+    /**
 
-    public void getAndSetList(Player user){
+     This method retrieves the QR code collection associated with the given user ID and sets it in the
+
+     ListView of QR codes in the Other User Profile activity.
+
+     @param userID the ID of the user whose QR code collection is to be retrieved and displayed
+     */
+
+    public void getAndSetList(String userID){
         OtherUserProfileActivity.this.runOnUiThread(new Runnable() {
             @Override
             public void run() {
-
                 // code that modifies the adapter
-                ArrayList<String> qrCodeCollection = user.getQrCodeCollection();
-                ArrayList<String> qrNames = new ArrayList<>();
-                QRCollection qrc = new QRCollection(null);
-                for (String qrCode : qrCodeCollection) {
-                    qrc.read(qrCode, data -> {
-                        // qr found
-                        qrNames.add(data.get("name").toString());
-                        if (qrNames.size() == qrCodeCollection.size()) {
-                            // All QR names retrieved, update list view
-                            ArrayAdapter<String> adapter = new ArrayAdapter<>(OtherUserProfileActivity.this,
-                                    android.R.layout.simple_list_item_1, qrNames);
-                            adapter.notifyDataSetChanged();
-                            qrList.setAdapter(adapter);
-                        }
-                    }, error -> {
-                        // qr not found, cannot set values
-                        System.out.println("Error getting player data: " + error);
-                    });
-                }
-            }
+                ArrayList<String> qrCodeCollection = myUser.getQrCodeCollection();
+
+                ArrayAdapter<String> adapter = new QRLIstArrayAdapter(OtherUserProfileActivity.this, qrCodeCollection);
+                qrList.setAdapter(adapter);}
+
         });
-
     }
+    /**
 
+     Starts the OtherUserGemView activity with the QR code ID of the selected gem.
+     @param name The name of the selected gem (unused).
+     @param index The index of the selected gem in the QR code collection.
+     */
     private void startGemActivity(String name, Integer index)
     {
-        Intent intent = new Intent(getBaseContext(), GemActivity.class);
+        Intent intent = new Intent(OtherUserProfileActivity.this, OtherUserGemView.class);
         String qr_id = myUser.getQrCodeCollection().get(index);
         intent.putExtra("qr_id", qr_id);
-        intent.putExtra("name", name);
+        //intent.putExtra("name", name);
         startActivity(intent);
     }
-
 }

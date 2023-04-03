@@ -19,7 +19,7 @@
         app:layout_constraintVertical_bias="0.799" />
 
     <ImageView
-        android:id="@+id/imageView"
+        android:id="@+id/geoImageView"
         android:layout_width="415dp"
         android:layout_height="366dp"
         app:layout_constraintBottom_toBottomOf="parent"

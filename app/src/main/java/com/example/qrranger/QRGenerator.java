@@ -59,6 +59,7 @@ public class QRGenerator {
                     qr.setName(name);
                     qr.setPoints(points);
                     qr.setGemId(gem);
+                    qr.setGeoLocation("");
                 }, error -> {
                     // Send error message.
                     Log.e(TAG, "Error loading QR database entry.");
@@ -76,9 +77,10 @@ public class QRGenerator {
                 qr.setName(gem.gemName(qrData));
                 qr.setPoints(QRCode.calculateScore(qrData));
                 qr.setGemId(qr.getGemID());
+                qr.setGeoLocation("");
 
                 // Add the new QR to the database:
-                Map values = qrCollection.createValues(hash, qr.getName(), qr.getPoints(), qr.getGemID());
+                Map values = qrCollection.createValues(hash, qr.getName(), qr.getPoints(), qr.getGemID(), qr.getGeoLocation());
                 qrCollection.create(values);
             }
         });

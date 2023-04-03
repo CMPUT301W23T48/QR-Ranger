@@ -280,7 +280,6 @@ public class ProfileFragment extends Fragment {
         getActivity().runOnUiThread(new Runnable() {
             @Override
             public void run() {
-                // code that modifies the adapter
                 ArrayList<String> qrCodeCollection = myUser.getQrCodeCollection();
                             adapter = new QRLIstArrayAdapter(getContext(), qrCodeCollection);
                             listView.setAdapter(adapter);}

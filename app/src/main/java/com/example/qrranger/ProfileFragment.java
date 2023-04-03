@@ -224,12 +224,18 @@ public class ProfileFragment extends Fragment {
      * Sets the user's information to the views.
      */
     public void setViews(){
-        playerName.setText(myUser.getUserName());
-        playerEmail.setText(myUser.getEmail());
-        playerPhoneNumb.setText(myUser.getPhoneNumber());
-        playerTotalScore.setText(myUser.getTotalScore().toString());
-        playerTotalQRCodes.setText(myUser.getTotalQRCode().toString());
+        getActivity().runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                playerName.setText(myUser.getUserName());
+                playerEmail.setText(myUser.getEmail());
+                playerPhoneNumb.setText(myUser.getPhoneNumber());
+                playerTotalScore.setText(myUser.getTotalScore().toString());
+                playerTotalQRCodes.setText(myUser.getTotalQRCode().toString());
+            }
+        });
     }
+
 
     /**
      * Starts the SettingsActivity and passes the user data to it.
@@ -263,12 +269,18 @@ public class ProfileFragment extends Fragment {
         CompletableFuture<Integer> rankFuture = myPlayerCollection.getPlayerRank(userID);
         rankFuture.thenAccept(rank -> {
             System.out.println("Player rank: " + rank);
-            profileRank.setText(rank.toString());
+            getActivity().runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+                    profileRank.setText(rank.toString());
+                }
+            });
         }).exceptionally(e -> {
             System.err.println("Failed to get player rank: " + e.getMessage());
             return null;
         });
     }
+
 
     /**
      * Gets and sets the list of collected QR codes for the user.
@@ -278,8 +290,8 @@ public class ProfileFragment extends Fragment {
             @Override
             public void run() {
                 ArrayList<String> qrCodeCollection = myUser.getQrCodeCollection();
-                            adapter = new QRLIstArrayAdapter(getContext(), qrCodeCollection);
-                            listView.setAdapter(adapter);}
+                adapter = new QRLIstArrayAdapter(getContext(), qrCodeCollection);
+                listView.setAdapter(adapter);}
         });
     }
 
@@ -325,46 +337,66 @@ public class ProfileFragment extends Fragment {
 
                         int currentCount = completed.incrementAndGet();
                         if (currentCount == count) {
-                            highestPointsTextView.setText(highestName[0] + " (" + highestPoints[0] + ")");
-                            lowestPointsTextView.setText(lowestName[0] + " (" + lowestPoints[0] + ")");
+                            getActivity().runOnUiThread(new Runnable() {
+                                @Override
+                                public void run() {
+                                    highestPointsTextView.setText(highestName[0] + " (" + highestPoints[0] + ")");
+                                    lowestPointsTextView.setText(lowestName[0] + " (" + lowestPoints[0] + ")");
 
-                            myHighestImage[0].setImageResource((int) (long) gem_data[0].get("bgColor"));
-                            myHighestImage[1].setImageResource((int) (long) gem_data[0].get("boarder"));
-                            myHighestImage[2].setImageResource((int) (long) gem_data[0].get("lusterLevel"));
-                            myHighestImage[3].setImageResource((int) (long) gem_data[0].get("gemType"));
+                                    myHighestImage[0].setImageResource((int) (long) gem_data[0].get("bgColor"));
+                                    myHighestImage[1].setImageResource((int) (long) gem_data[0].get("boarder"));
+                                    myHighestImage[2].setImageResource((int) (long) gem_data[0].get("lusterLevel"));
+                                    myHighestImage[3].setImageResource((int) (long) gem_data[0].get("gemType"));
 
-                            myLowestImage[0].setImageResource((int) (long) gem_data[1].get("bgColor"));
-                            myLowestImage[1].setImageResource((int) (long) gem_data[1].get("boarder"));
-                            myLowestImage[2].setImageResource((int) (long) gem_data[1].get("lusterLevel"));
-                            myLowestImage[3].setImageResource((int) (long) gem_data[1].get("gemType"));
+                                    myLowestImage[0].setImageResource((int) (long) gem_data[1].get("bgColor"));
+                                    myLowestImage[1].setImageResource((int) (long) gem_data[1].get("boarder"));
+                                    myLowestImage[2].setImageResource((int) (long) gem_data[1].get("lusterLevel"));
+                                    myLowestImage[3].setImageResource((int) (long) gem_data[1].get("gemType"));
+                                }
+                            });
                         }
                     }, e -> {
                         // handle error
                         int currentCount = completed.incrementAndGet();
                         if (currentCount == count) {
-                            highestPointsTextView.setText("N/A");
-                            lowestPointsTextView.setText("N/A");
+                            getActivity().runOnUiThread(new Runnable() {
+                                @Override
+                                public void run() {
+                                    highestPointsTextView.setText("N/A");
+                                    lowestPointsTextView.setText("N/A");
 
-                            myLowestImage[3].setImageResource(R.drawable.sadfaceemoji);
-                            myHighestImage[0].setImageResource(R.drawable.sadfaceemoji);
+                                    myLowestImage[3].setImageResource(R.drawable.sadfaceemoji);
+                                    myHighestImage[0].setImageResource(R.drawable.sadfaceemoji);
+                                }
+                            });
                         }
                     });
                 }
             } else {
                 // handle case where user has no qr ids
-                highestPointsTextView.setText("N/A");
-                lowestPointsTextView.setText("N/A");
+                getActivity().runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        highestPointsTextView.setText("N/A");
+                        lowestPointsTextView.setText("N/A");
 
-                myLowestImage[3].setImageResource(R.drawable.sadfaceemoji);
-                myHighestImage[0].setImageResource(R.drawable.sadfaceemoji);
+                        myLowestImage[3].setImageResource(R.drawable.sadfaceemoji);
+                        myHighestImage[0].setImageResource(R.drawable.sadfaceemoji);
+                    }
+                });
             }
         }, e -> {
             // handle error
-            highestPointsTextView.setText("N/A");
-            lowestPointsTextView.setText("N/A");
+            getActivity().runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+                    highestPointsTextView.setText("N/A");
+                    lowestPointsTextView.setText("N/A");
 
-            myLowestImage[3].setImageResource(R.drawable.sadfaceemoji);
-            myHighestImage[0].setImageResource(R.drawable.sadfaceemoji);
+                    myLowestImage[3].setImageResource(R.drawable.sadfaceemoji);
+                    myHighestImage[0].setImageResource(R.drawable.sadfaceemoji);
+                }
+            });
         });
     }
 
@@ -379,7 +411,12 @@ public class ProfileFragment extends Fragment {
         CompletableFuture<Integer> futureCount = myPlayerCollection.countTotalQRCodes(userID);
         futureCount.thenAccept(count -> {
             System.out.println("Player rank: " + count);
-            playerTotalQRCodes.setText(count.toString());
+            getActivity().runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+                    playerTotalQRCodes.setText(count.toString());
+                }
+            });
             myUser.setTotalQRCode(count.longValue());
 
         }).exceptionally(e -> {
@@ -400,7 +437,12 @@ public class ProfileFragment extends Fragment {
             System.out.println("Total score for user " + userID + ": " + score);
 
             // Set the score in the UI
-            playerTotalScore.setText(String.valueOf(score));
+            getActivity().runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+                    playerTotalScore.setText(String.valueOf(score));
+                }
+            });
 
             // Update the user object
             myUser.setTotalScore((long) score);

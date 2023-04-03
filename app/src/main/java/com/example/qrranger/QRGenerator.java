@@ -27,6 +27,10 @@ public class QRGenerator {
         qr = new QRCode("12345689");
     }
 
+    public QRCode getQr() {
+        return this.qr;
+    }
+
     /**
      * Checks if the QR exists in the database:
      * - If it does, pull it and populate the QR.
@@ -39,13 +43,13 @@ public class QRGenerator {
      *      The generated or retrieved QRCode instance.
      *
      */
-    public QRCode generateQR(String qrData) {
+    public CompletableFuture<Void> generateQR(String qrData) {
         qrCollection = new QRCollection(null);
 
 
         // Generate a new QR if it doesn't already exist or pull the existing one from the db.
         CompletableFuture<Boolean> future = qrCollection.checkQRExists(qrData);
-        future.thenAccept(qrExists -> {
+        CompletableFuture<Void> secondFuture = future.thenAccept(qrExists -> {
             if (qrExists) {
                 // Pull existing QR from the DB.
                 qrCollection.read(qrData, data -> {
@@ -84,8 +88,7 @@ public class QRGenerator {
                 qrCollection.create(values);
             }
         });
-
-        return qr;
+        return secondFuture;
     }
 
     /**

@@ -226,7 +226,6 @@ public class QRScannerActivityView extends AppCompatActivity {
      * Initiates the scan of a QR code using the ZXing Open Source API.
      */
     public void scanQR() {
-        super.onResume();
         // Check to get location permission.
         if (ActivityCompat.checkSelfPermission(this, android.Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, android.Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
             // TODO: Consider calling
@@ -246,7 +245,7 @@ public class QRScannerActivityView extends AppCompatActivity {
                 qrLocation = location;
             }
         });
-        
+
         // Set up Intent Integrator Settings.
         IntentIntegrator intentIntegrator = new IntentIntegrator(this);
         intentIntegrator.setBeepEnabled(false);

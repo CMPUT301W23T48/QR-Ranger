@@ -34,7 +34,6 @@
         android:id="@+id/backgroundColor"
         android:layout_width="150dp"
         android:layout_height="150dp"
-        android:background="#007C7777"
         android:contentDescription="@string/app_name"
         android:cropToPadding="true"
         app:layout_constraintBottom_toBottomOf="parent"
@@ -42,14 +41,12 @@
         app:layout_constraintHorizontal_bias="0.498"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.126"
-        app:srcCompat="@drawable/bgblue" />
+        app:layout_constraintVertical_bias="0.126" />
 
     <ImageView
         android:id="@+id/borderType"
         android:layout_width="150dp"
         android:layout_height="150dp"
-        android:background="#007C7777"
         android:contentDescription="@string/app_name"
         android:cropToPadding="false"
         app:layout_constraintBottom_toBottomOf="parent"
@@ -57,14 +54,12 @@
         app:layout_constraintHorizontal_bias="0.498"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.126"
-        app:srcCompat="@drawable/blackborder" />
+        app:layout_constraintVertical_bias="0.126" />
 
     <ImageView
         android:id="@+id/gem"
         android:layout_width="150dp"
         android:layout_height="150dp"
-        android:background="#007C7777"
         android:contentDescription="@string/app_name"
         android:cropToPadding="false"
         app:layout_constraintBottom_toBottomOf="parent"
@@ -72,14 +67,12 @@
         app:layout_constraintHorizontal_bias="0.498"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.126"
-        app:srcCompat="@drawable/bluegem2" />
+        app:layout_constraintVertical_bias="0.126" />
 
     <ImageView
         android:id="@+id/lusterLevel"
         android:layout_width="150dp"
         android:layout_height="150dp"
-        android:background="#007C7777"
         android:contentDescription="@string/app_name"
         android:cropToPadding="false"
         app:layout_constraintBottom_toBottomOf="parent"
@@ -87,9 +80,7 @@
         app:layout_constraintHorizontal_bias="0.498"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.126"
-        app:srcCompat="@drawable/lusterlevel3"
-        tools:srcCompat="@drawable/lusterlevel3" />
+        app:layout_constraintVertical_bias="0.126" />
 
     <Button
         android:id="@+id/delete"

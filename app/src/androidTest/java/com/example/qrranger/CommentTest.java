@@ -40,7 +40,9 @@ public class CommentTest {
     @Rule
     public ActivityScenarioRule<MainActivity> mActivityScenarioRule =
             new ActivityScenarioRule<>(MainActivity.class);
-
+    /**
+     * Tests to comment functionality of gems
+     */
     @Test
     public void commentTest() {
         ViewInteraction bottomNavigationItemView = onView(

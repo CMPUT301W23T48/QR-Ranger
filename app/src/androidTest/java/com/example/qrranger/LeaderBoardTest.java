@@ -36,6 +36,9 @@ public class LeaderBoardTest {
     public ActivityScenarioRule<MainActivity> mActivityScenarioRule =
             new ActivityScenarioRule<>(MainActivity.class);
 
+    /**
+     * Tests leaderboard, and other user profile views
+     */
     @Test
     public void leaderBoardTest() {
         ViewInteraction bottomNavigationItemView = onView(

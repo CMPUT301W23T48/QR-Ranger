@@ -30,7 +30,9 @@ import org.hamcrest.TypeSafeMatcher;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-
+/**
+ * Tests the search view
+ */
 @LargeTest
 @RunWith(AndroidJUnit4.class)
 public class SearchTest {

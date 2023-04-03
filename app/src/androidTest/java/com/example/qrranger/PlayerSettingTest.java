@@ -28,7 +28,9 @@ import org.hamcrest.TypeSafeMatcher;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-
+/**
+ * Tests if changing player settings can be done
+ */
 @LargeTest
 @RunWith(AndroidJUnit4.class)
 public class PlayerSettingTest {

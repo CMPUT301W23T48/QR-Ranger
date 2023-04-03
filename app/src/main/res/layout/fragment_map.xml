@@ -5,20 +5,17 @@
     android:layout_height="match_parent"
     android:id="@+id/MapFragment"
     tools:context=".MapFragment">
-
     <LinearLayout
-        android:id="@+id/MapLL1"
         android:layout_width="wrap_content"
-        android:layout_height="653dp"
-        android:orientation="vertical">
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:id="@+id/MapLL1">
 
         <LinearLayout
-            android:id="@+id/MapLL2"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:orientation="horizontal">
-
-
+            android:orientation="horizontal"
+            android:id="@+id/MapLL2">
 
             <EditText
                 android:id="@+id/MapSearch"
@@ -35,24 +32,41 @@
                 android:id="@+id/MapFindButton"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_margin="10dp"
-                android:text="Find" />
+                android:text="Find"
+                android:layout_margin="10dp"/>
 
         </LinearLayout>
 
         <LinearLayout
-            android:id="@+id/MapLL3"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:orientation="horizontal"
             android:layout_gravity="right"
-            android:orientation="horizontal" />
+            android:id="@+id/MapLL3">
 
-        <com.google.android.gms.maps.MapView
-            android:id="@+id/mapView"
-            android:layout_width="match_parent"
-            android:layout_height="578dp"
-            android:layout_marginTop="5dp" />
+            <Button
+                android:id="@+id/MapZoomInButton"
+                android:layout_width="47dp"
+                android:layout_height="wrap_content"
+                android:layout_margin="10dp"
+                android:text="+"
+                android:textSize="20dp"/>
+
+            <Button
+                android:id="@+id/MapZoomOutButton"
+                android:layout_width="49dp"
+                android:layout_height="wrap_content"
+                android:layout_margin="10dp"
+                android:text="-"
+                android:textSize="20dp"/>
+
+        </LinearLayout>
+
+        <org.osmdroid.views.MapView
+            android:id="@+id/map"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content">
+        </org.osmdroid.views.MapView>
 
     </LinearLayout>
 </FrameLayout>
-

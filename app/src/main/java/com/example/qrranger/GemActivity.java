@@ -93,6 +93,7 @@ public class GemActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 Intent intent = new Intent(GemActivity.this, geoLocationView.class);
+                intent.putExtra("qr_id", qr_id);
                 startActivity(intent);
             }
         });

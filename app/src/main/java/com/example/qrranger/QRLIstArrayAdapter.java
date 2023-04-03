@@ -50,13 +50,13 @@ public class QRLIstArrayAdapter extends ArrayAdapter<String> {
             view = convertView;
         }
         String id = getItem(position);
-
+        // find views
         TextView qrName = view.findViewById(R.id.qrName);
         ImageView qrShape = view.findViewById(R.id.shape);
         ImageView qrLustre = view.findViewById(R.id.luster);
         ImageView qrBorder = view.findViewById(R.id.border);
         ImageView qrBackGround = view.findViewById(R.id.background);
-
+        // set views based on data from db
         qrCollection.read(id, data ->{
             String qrId = Objects.requireNonNull(data.get("name").toString());
             qrCode.setName(qrId);

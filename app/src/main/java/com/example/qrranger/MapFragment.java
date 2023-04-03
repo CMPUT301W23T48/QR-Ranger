@@ -34,12 +34,12 @@ import android.widget.Toast;
 
 public class MapFragment extends Fragment implements OnMapReadyCallback{
 
+
     //Initialize Variables
     public MapView mapView;
     private GoogleMap gMap;
 
     private boolean isPermissionGranted;
-
 
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);

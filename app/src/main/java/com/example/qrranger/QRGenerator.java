@@ -81,7 +81,7 @@ public class QRGenerator {
                 qr.setID(hash);
                 qr.setName(gem.gemName(qrData));
                 qr.setPoints(QRCode.calculateScore(qrData));
-                qr.setGemId(qr.getGemID());
+                qr.setGemId(gem);
                 qr.setGeoLocation("");
 
                 // Add the new QR to the database:

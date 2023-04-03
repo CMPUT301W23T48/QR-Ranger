@@ -253,7 +253,6 @@ public class ProfileFragment extends Fragment {
         getActivity().runOnUiThread(new Runnable() {
             @Override
             public void run() {
-                // code that modifies the adapter
                 ArrayList<String> qrCodeCollection = myUser.getQrCodeCollection();
                 //ArrayList<String> qrNames = new ArrayList<>();
                 //QRCollection qrc = new QRCollection(null);

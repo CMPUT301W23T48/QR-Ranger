@@ -13,10 +13,12 @@ import android.location.LocationManager;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.Settings;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import androidx.annotation.NonNull;
 import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 
@@ -27,6 +29,13 @@ import com.google.android.gms.maps.MapView;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
+import com.google.firebase.firestore.CollectionReference;
+import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.GeoPoint;
+import com.google.firebase.firestore.QuerySnapshot;
 import com.karumi.dexter.Dexter;
 import com.karumi.dexter.PermissionToken;
 import com.karumi.dexter.listener.PermissionDeniedResponse;
@@ -77,6 +86,9 @@ public class MapFragment extends Fragment implements OnMapReadyCallback{
                 searchLocation(locationName);
             }
         });
+
+        // Load the QR codes and add markers for each of them
+        loadQRCodes();
 
         return view;
     }
@@ -220,6 +232,41 @@ public class MapFragment extends Fragment implements OnMapReadyCallback{
         } catch (IOException e) {
             e.printStackTrace();
         }
+    }
+
+    private void loadQRCodes() {
+        Database db = Database.getInstance();
+        CollectionReference qrc = db.getCollection("qr_codes");
+        qrc.get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+            @Override
+            public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                if (task.isSuccessful()) {
+                    for (DocumentSnapshot document : task.getResult()) {
+                        if (document.contains("geolocation")) {
+                            // Get the geolocation field and create a LatLng object
+                            GeoPoint geoPoint = document.getGeoPoint("geolocation");
+                            LatLng qrCodeLocation = new LatLng(geoPoint.getLatitude(), geoPoint.getLongitude());
+
+                            // Get the name and points information
+                            String qrCodeName = document.getString("name");
+                            String qrCodePoints = document.get("points").toString(); // Assuming points are stored as a String
+                            // If points are stored as a number (e.g., Long), use this instead:
+                            // String qrCodePoints = String.valueOf(document.getLong("points"));
+
+                            // Build the marker title
+                            String markerTitle = qrCodeName + " - " + qrCodePoints + " points";
+
+                            // Add a marker for the QR code
+                            gMap.addMarker(new MarkerOptions()
+                                    .position(qrCodeLocation)
+                                    .title(markerTitle));
+                        }
+                    }
+                } else {
+                    Log.e("MapFragment", "Error getting QR codes: ", task.getException());
+                }
+            }
+        });
     }
 
 }

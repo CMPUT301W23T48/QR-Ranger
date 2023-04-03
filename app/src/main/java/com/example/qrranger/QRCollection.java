@@ -6,6 +6,7 @@ import android.util.Log;
 
 import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.GeoPoint;
 import com.google.firebase.firestore.Query;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
@@ -146,7 +147,13 @@ public class QRCollection extends Database_Controls{
         values.put("name", name);
         values.put("points", points);
         values.put("gem_id", gem);
-        values.put("geolocation", geolocation);
+        // Convert geolocation string to GeoPoint
+        String[] latLng = geolocation.split(",");
+        double latitude = Double.parseDouble(latLng[0].trim());
+        double longitude = Double.parseDouble(latLng[1].trim());
+        GeoPoint geoPoint = new GeoPoint(latitude, longitude);
+
+        values.put("geolocation", geoPoint);
         return values;
     }
 

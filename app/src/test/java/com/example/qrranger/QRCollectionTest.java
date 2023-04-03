@@ -14,8 +14,8 @@ public class QRCollectionTest extends TestCase {
     private static final int TIMEOUT_SECONDS = 5;
     @Test
     public void testCreate() throws InterruptedException{
-        Database db = Database.getInstance();
-        QRCollection qrCollection = new QRCollection(db);
+        DatabaseModel db = DatabaseModel.getInstance();
+        QRCollectionController qrCollection = new QRCollectionController(db);
 
         // Create a Map of field-value pairs for the new document
         Map<String, Object> values = new HashMap<>();

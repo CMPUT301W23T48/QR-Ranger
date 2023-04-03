@@ -9,7 +9,7 @@ public class GemIDGenerationTest {
     @Test
     public void testGemGeneratingIDArray(){
 
-        gemID ID = new gemID();
+        gemIDModel ID = new gemIDModel();
         System.out.println(ID.getBgColor());
         System.out.println(ID.getBoarder());
         System.out.println(ID.getGemType());

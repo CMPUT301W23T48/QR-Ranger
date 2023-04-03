@@ -16,19 +16,19 @@ import java.util.concurrent.CompletableFuture;
  * Also responsible for saving QRCodes to the database and linking them to the user profile.
  */
 public class QRGenerator {
-    private QRCollection qrCollection;
+    private QRCollectionController qrCollection;
     private PlayerCollection playerCollection;
-    private QRCode qr;
     private boolean qrAdded;
+    private QRCodeModel qr;
 
     public QRGenerator() {
-        qrCollection = new QRCollection(null);
+        qrCollection = new QRCollectionController(null);
         playerCollection = new PlayerCollection(null);
-        qr = new QRCode("12345689", "None");
+        qr = new QRCodeModel("12345689");
         qrAdded = false;
     }
 
-    public QRCode getQr() {
+    public QRCodeModel getQr() {
         return this.qr;
     }
 
@@ -44,29 +44,27 @@ public class QRGenerator {
      *      The generated or retrieved QRCode instance.
      *
      */
-    public void generateQR(String qrData) {
-        qrCollection = new QRCollection(null);
-
-        // Hash the data to get the QR ID.
+    public CompletableFuture<Void> generateQR(String qrData) {
+        qrCollection = new QRCollectionController(null);
         String hash = SHA256Hash(qrData);
 
         // Generate a new QR if it doesn't already exist or pull the existing one from the db.
         CompletableFuture<Boolean> future = qrCollection.checkQRExists(hash);
-        future.thenAccept(qrExists -> {
+        CompletableFuture<Void> secondFuture = future.thenAccept(qrExists -> {
             if (qrExists) {
                 // Pull existing QR from the DB.
-                qrCollection.read(hash, data -> {
+                qrCollection.read(qrData, data -> {
                     String qrId = Objects.requireNonNull(data.get("qr_id").toString());
                     String name = Objects.requireNonNull(data.get("name").toString());
-                    String url = Objects.requireNonNull(data.get("url").toString());
-                    int points = (int) (long) data.get("points");
-                    gemID gem = (gemID) data.get("gem_id");
+                    Integer points = (Integer) data.get("points");
+                    gemIDModel gem = (gemIDModel) data.get("gem_id");
 
+//                  qr = new QRCode(qrId, gem);
                     qr.setID(qrId);
                     qr.setName(name);
-                    qr.setUrl(url);
                     qr.setPoints(points);
                     qr.setGemId(gem);
+                    qr.setGeoLocation("0,0");
                 }, error -> {
                     // Send error message.
                     Log.e(TAG, "Error loading QR database entry.");
@@ -74,20 +72,22 @@ public class QRGenerator {
             }
             else {
                 // QR doesn't exist, so generate a new one!
+                gemIDModel gem = new gemIDModel();
 
-                gemID gem = new gemID();
-
+                // Create the QRCode object.
+                // qr = new QRCode(hash, qrData);
                 qr.setID(hash);
-                qr.setName(gem.gemName(hash));
-                qr.setUrl(qrData);
-                qr.setPoints(QRCode.calculateScore(hash));
-                qr.setGemId(gem);
+                qr.setName(gem.gemName(qrData));
+                qr.setPoints(QRCode.calculateScore(qrData));
+                qr.setGemId(qr.getGemID());
+                qr.setGeoLocation("0,0");
 
                 // Add the new QR to the database:
-                Map values = qrCollection.createValues(hash, qr.getName(), qrData, qr.getPoints(), qr.getGemID());
+                Map values = qrCollection.createValues(hash, qr.getName(), qr.getPoints(), qr.getGemID(), qr.getGeoLocation());
                 qrCollection.create(values);
             }
         });
+        return secondFuture;
     }
 
     /**
@@ -98,10 +98,10 @@ public class QRGenerator {
      * @throws IllegalArgumentException
      *      Thrown when QR being added is already linked to the account.
      */
-    public boolean addQRToAccount(String qrId) {
+    public boolean addQRToAccount(String qrId) throws IllegalArgumentException {
 
         playerCollection = new PlayerCollection(null);
-        UserState state = UserState.getInstance();
+        UserStateModel state = UserStateModel.getInstance();
         String userId = state.getUserID();
 
         playerCollection.read(userId, data -> {

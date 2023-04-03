@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:id="@+id/MapFragment"
+    tools:context=".MapFragmentView">
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:id="@+id/MapLL1">
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:id="@+id/MapLL2">
+
+            <EditText
+                android:id="@+id/MapSearch"
+                android:layout_width="291dp"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="10dp"
+                android:layout_marginTop="10dp"
+                android:background="@android:color/background_light"
+                android:hint="Enter Location Name"
+                android:padding="10dp"
+                android:textSize="15dp" />
+
+            <Button
+                android:id="@+id/MapFindButton"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Find"
+                android:layout_margin="10dp"/>
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:layout_gravity="right"
+            android:id="@+id/MapLL3">
+
+        </LinearLayout>
+
+        <com.google.android.gms.maps.MapView
+            android:id="@+id/mapView"
+            android:layout_width="match_parent"
+            android:layout_height="602dp"
+            android:apiKey="YOUR_API_KEY"
+            android:clickable="true"
+            android:enabled="true" />
+
+    </LinearLayout>
+</FrameLayout>

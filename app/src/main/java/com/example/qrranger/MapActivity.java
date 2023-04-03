@@ -1,20 +1,17 @@
 package com.example.qrranger;
 
-
-import android.Manifest;
+import androidx.core.content.ContextCompat;
+import androidx.fragment.app.FragmentActivity;
 
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.Settings;
-import android.view.LayoutInflater;
 import android.view.View;
-import android.view.ViewGroup;
 
-import androidx.core.content.ContextCompat;
-import androidx.fragment.app.Fragment;
-
+import android.Manifest;
+import android.widget.Toast;
 
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
@@ -28,43 +25,37 @@ import com.karumi.dexter.listener.PermissionDeniedResponse;
 import com.karumi.dexter.listener.PermissionGrantedResponse;
 import com.karumi.dexter.listener.PermissionRequest;
 import com.karumi.dexter.listener.single.PermissionListener;
-import android.content.Context;
-import android.widget.Button;
-import android.widget.Toast;
 
-public class MapFragment extends Fragment implements OnMapReadyCallback{
 
+public class MapActivity extends FragmentActivity implements OnMapReadyCallback{
 
     //Initialize Variables
     public MapView mapView;
     private GoogleMap gMap;
+    public Bundle publicSavedInstanceState;
 
     private boolean isPermissionGranted;
 
-    public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-    }
-    @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
-        // Inflate the layout for this fragment
-        View view = inflater.inflate(R.layout.fragment_map, container, false);
 
-        mapView = (MapView) view.findViewById(R.id.mapView);
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_map);
+
+        //MapView Variable
+        mapView = (MapView) findViewById(R.id.mapView);
+
+        //Check if Location permission is granted
+        checkPermission();
+        publicSavedInstanceState = savedInstanceState;
         mapView.onCreate(savedInstanceState);
 
-        //Checks if user gives permission to track device
-        /*
-        If permission is given, then google maps can track user location
-         */
-        deviceLocationCheckPermission();
-
-
-
-        // Call the init method and pass the inflated View as a parameter
-        return view;
     }
 
+    /*
+    Important for getting the map function working
+    Uses Google maps to get location markers
+     */
     @Override
     public void onMapReady(GoogleMap googleMap) {
         gMap = googleMap;
@@ -79,43 +70,46 @@ public class MapFragment extends Fragment implements OnMapReadyCallback{
         Checks if the Permission is granted
          */
 
-        if (ContextCompat.checkSelfPermission(this.getContext(), Manifest.permission.ACCESS_FINE_LOCATION)
-                == PackageManager.PERMISSION_GRANTED){
+
+        if (ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION)
+            == PackageManager.PERMISSION_GRANTED){
             gMap.setMyLocationEnabled(true);
         }
+
 
     }
 
     public void initMap(){
         mapView.getMapAsync(this);
+
     }
 
     @Override
-    public void onStart() {
+    protected void onStart() {
         super.onStart();
         mapView.onStart();
     }
 
     @Override
-    public void onStop() {
+    protected void onStop() {
         super.onStop();
         mapView.onStop();
     }
 
     @Override
-    public void onResume() {
+    protected void onResume() {
         super.onResume();
         mapView.onResume();
     }
 
     @Override
-    public void onPause() {
+    protected void onPause() {
         super.onPause();
         mapView.onPause();
     }
 
     @Override
-    public void onDestroy() {
+    protected void onDestroy() {
         super.onDestroy();
         mapView.onDestroy();
     }
@@ -127,24 +121,18 @@ public class MapFragment extends Fragment implements OnMapReadyCallback{
     }
 
     @Override
-    public void onSaveInstanceState(Bundle outState) {
+    protected void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
         mapView.onSaveInstanceState(outState);
     }
 
     //Check user Permission to access the map
-
-
-    public void init(View view){
-
-    }
-
-    //Function for getting device location permission
-    private void deviceLocationCheckPermission(){
-        Dexter.withContext(this.getContext()).withPermission(Manifest.permission.ACCESS_FINE_LOCATION).withListener(new PermissionListener() {
+    private void checkPermission(){
+        Dexter.withContext(this).withPermission(Manifest.permission.ACCESS_FINE_LOCATION).withListener(new PermissionListener() {
             @Override
             public void onPermissionGranted(PermissionGrantedResponse permissionGrantedResponse) {
-                //Initialize the map on permissionGranted
+                isPermissionGranted = true;
+                Toast.makeText(MapActivity.this, "Permission Granted", Toast.LENGTH_SHORT).show();
                 initMap();
 
             }
@@ -153,10 +141,11 @@ public class MapFragment extends Fragment implements OnMapReadyCallback{
             public void onPermissionDenied(PermissionDeniedResponse permissionDeniedResponse) {
                 Intent intent = new Intent();
                 intent.setAction(Settings.ACTION_APPLICATION_DETAILS_SETTINGS);
-                Uri uri=Uri.fromParts("package", getContext().getPackageName(),"");
+                Uri uri=Uri.fromParts("package", getPackageName(),"");
                 intent.setData(uri);
                 startActivity(intent);
             }
+
             @Override
             public void onPermissionRationaleShouldBeShown(PermissionRequest permissionRequest, PermissionToken permissionToken) {
                 permissionToken.continuePermissionRequest();
@@ -164,8 +153,22 @@ public class MapFragment extends Fragment implements OnMapReadyCallback{
         }).check();
     }
 
+
+    //Update Location
+
+
+    //Using the Search fragment
+    public void onClick(View view){
+        //Implement search function
+    }
+
+
     //Search Location Function
     public void searchLocation(){
 
     }
+
+    //Get all QR code longitude and latitude location
+
+
 }
